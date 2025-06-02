@@ -1,6 +1,6 @@
 package com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter;
 
-import com.foodcourt.usersmanagment.domain.model.GetRolModel;
+import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.spi.IRolPersistencePort;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.RolEntity;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.mapper.IRolEntityMapper;
@@ -18,9 +18,19 @@ public class RolAdapter implements IRolPersistencePort {
     private final IRolEntityMapper rolEntityMapper;
 
     @Override
-    public GetRolModel findByName(String name) {
+    public RolModel findByName(String name) {
 
         RolEntity rolEntity = rolRepository.findByName(name);
         return rolEntityMapper.toGetRolModel(rolEntity);
     }
+
+    @Override
+    public RolModel findById(Long id) {
+        return rolEntityMapper.toGetRolModel(
+                rolRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Rol not found with id: " + id))
+        );
+    }
+
+
 }

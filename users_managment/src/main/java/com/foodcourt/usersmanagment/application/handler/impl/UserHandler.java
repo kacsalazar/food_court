@@ -1,10 +1,12 @@
 package com.foodcourt.usersmanagment.application.handler.impl;
 
 import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
+import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
 import com.foodcourt.usersmanagment.application.mapper.IUserRequestMapper;
 import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
 import com.foodcourt.usersmanagment.domain.model.OwnerModel;
+import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.infrastructure.configuration.PasswordEncoderConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,5 +30,16 @@ public class UserHandler implements IUserHandler {
         ownerModel.setPassword(passwordEncoderConfig.passwordEncoder().encode(ownerModel.getPassword()));
         log.info("User Handler: {}" + ownerModel);
         userServicePort.saveOwner(ownerModel);
+    }
+
+    @Override
+    public UserResponseDto getUserById(Long idOwner) {
+        UserModel userModel = userServicePort.findUserById(idOwner);
+        return userRequestMapper.toUserResponseDto(userModel);
+    }
+
+    @Override
+    public Boolean verifyUserRol(Long idOwner, String rol) {
+        return userServicePort.verifyUserRol(idOwner, rol);
     }
 }

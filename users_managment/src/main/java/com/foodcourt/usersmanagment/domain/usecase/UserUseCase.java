@@ -2,6 +2,7 @@ package com.foodcourt.usersmanagment.domain.usecase;
 
 import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
 import com.foodcourt.usersmanagment.domain.model.OwnerModel;
+import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import lombok.AllArgsConstructor;
 
@@ -13,5 +14,15 @@ public class UserUseCase implements IUserServicePort {
     @Override
     public void saveOwner(OwnerModel ownerModel) {
         userPersistencePort.saveOwner(ownerModel);
+    }
+
+    @Override
+    public UserModel findUserById(Long id) {
+        return userPersistencePort.findUserById(id);
+    }
+
+    @Override
+    public Boolean verifyUserRol(Long id, String role) {
+        return userPersistencePort.verifyUserRol(id, role);
     }
 }

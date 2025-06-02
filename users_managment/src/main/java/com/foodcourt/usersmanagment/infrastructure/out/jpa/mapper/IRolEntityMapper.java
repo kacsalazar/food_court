@@ -1,6 +1,6 @@
 package com.foodcourt.usersmanagment.infrastructure.out.jpa.mapper;
 
-import com.foodcourt.usersmanagment.domain.model.GetRolModel;
+import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.RolEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -11,6 +11,6 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface IRolEntityMapper {
 
-    GetRolModel toGetRolModel(RolEntity rolEntity);
+    RolModel toGetRolModel(RolEntity rolEntity);
 
 }

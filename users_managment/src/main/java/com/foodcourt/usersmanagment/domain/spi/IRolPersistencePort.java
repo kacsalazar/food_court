@@ -1,8 +1,9 @@
 package com.foodcourt.usersmanagment.domain.spi;
 
-import com.foodcourt.usersmanagment.domain.model.GetRolModel;
+import com.foodcourt.usersmanagment.domain.model.RolModel;
 
 public interface IRolPersistencePort {
 
-    GetRolModel findByName(String name);
+    RolModel findByName(String name);
+    RolModel findById(Long id);
 }
