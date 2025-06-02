@@ -16,12 +16,13 @@ public class UserAdapter implements IUserPersistencePort {
 
     private final IUserRepository userRepository;
     private final IUserEntityMapper userEntityMapper;
+    private final RolAdapter rolAdapter;
 
     @Override
     public OwnerModel saveOwner(OwnerModel ownerModel) {
 
         UserEntity userEntity = userEntityMapper.toUserEntity(ownerModel);
-        userEntity.setId_rol(2L);
+        userEntity.setIdRol(rolAdapter.findByName("ROLE_OWNER").getId());
         userRepository.save(userEntity);
         log.info("User saved: {}" + userEntity);
         return userEntityMapper.toOwnerModel(userEntity);
