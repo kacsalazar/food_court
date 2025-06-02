@@ -17,7 +17,7 @@ import jakarta.persistence.Column;
 @NoArgsConstructor
 @Data
 @Builder
-@Table(name = "roles")
+@Table(name = "restaurants")
 @Entity
 public class RestaurantEntity {
 
@@ -27,8 +27,11 @@ public class RestaurantEntity {
     @Column(length = 50)
     private String name;
     private String address;
-    private Long id_owner;
+    @Column(name = "id_owner")
+    private Long idOwner;
+    @Column(name = "phone_number")
     private String phoneNumber;
+    @Column(name = "url_logo")
     private String urlLogo;
     private String nit;
 }

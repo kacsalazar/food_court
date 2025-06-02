@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/restaurant")
 public class RestaurantRestController {
 
-    private final IUserHandler userHandler;
     private final IRestaurantHandler restaurantHandler;
 
     @PostMapping("/")

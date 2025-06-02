@@ -1,6 +1,10 @@
 INSERT INTO roles (name, description)
 VALUES
-('ROLE_ADMIN', 'Administrator role with full access')
+('ROLE_ADMIN', 'Administrator role with full access'),
+('ROLE_CLIENT', 'Standard user role with limited access')
+('ROLE_OWNER', 'Owner role with access to manage their own resources'),
+('ROLE_USER', 'Standard user role with limited access')
+ON CONFLICT (name) DO NOTHING;
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO users (id_rol, name, last_name, dni, phone_number,

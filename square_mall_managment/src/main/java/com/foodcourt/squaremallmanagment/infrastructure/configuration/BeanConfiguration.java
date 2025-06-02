@@ -1,22 +1,17 @@
 package com.foodcourt.squaremallmanagment.infrastructure.configuration;
 
+import com.foodcourt.squaremallmanagment.domain.spi.IRestaurantPersistencePort;
+import com.foodcourt.squaremallmanagment.domain.usecase.RestaurantUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
 public class BeanConfiguration {
-    //private final IObjectRepository objectRepository;
-    //private final IObjectEntityMapper objectEntityMapper;
 
-    /*@Bean
-    public IObjectPersistencePort objectPersistencePort() {
-        //return new ObjectJpaAdapter(objectRepository, objectEntityMapper);
-        return null;
-    }*/
-
-    //@Bean
-    //public IObjectServicePort objectServicePort() {
-        //return new ObjectUseCase(objectPersistencePort());
-    //}
+    @Bean
+    public RestaurantUseCase restaurantServicePort(IRestaurantPersistencePort irestaurantPersistencePort) {
+        return new RestaurantUseCase(irestaurantPersistencePort);
+    }
 }
