@@ -26,14 +26,14 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "id_role")
-    private Long id_role;
+    private Long id_rol;
     private String name;
     @Column(name = "last_name")
     private String lastName;
     private String dni;
     @Column(name = "phone_number")
     private String phoneNumber;
-    @Column(name = "birthdayDate")
+    @Column(name = "birthday_date")
     private Date birthdayDate;
     private String email;
     private String password;

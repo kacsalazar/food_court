@@ -46,6 +46,7 @@ dependencies {
 	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 	implementation group: 'jakarta.persistence', name: 'jakarta.persistence-api', version: '3.1.0'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	// OpenAPI
 	implementation "org.springdoc:springdoc-openapi-ui:${openApiVersion}"

@@ -1,15 +1,18 @@
-CREATE TABLE users(
-    id                 BIGINIT NOT NULL,
-    id_rol             BIGINIT NOT NULL,
-    name               varchar(20),
-    last_name          varchar(20),
-    dni                varchar(20),
-    phone_number       varchar(20),
-    birthday_date      varchar(20),
-    email              varchar(20),
-    password           varchar(20),
+CREATE TABLE users (
+    id               BIGINT NOT NULL,
+    id_rol           BIGINT NOT NULL,
+    name             VARCHAR(20),
+    last_name        VARCHAR(20),
+    dni              VARCHAR(20),
+    phone_number     VARCHAR,
+    birthday_date    DATE,
+    email            VARCHAR(50),
+    password         VARCHAR(100),
     CONSTRAINT pk_user PRIMARY KEY (id),
-    CONSTRAINT fk_role_r FOREIGN KEY ( id_rol ) REFERENCES roles (id) ON DELETE NO ACTION
+    CONSTRAINT fk_role_r FOREIGN KEY (id_rol) REFERENCES roles (id) ON DELETE NO ACTION,
+    CONSTRAINT chk_dni_only_digits CHECK (dni ~ '^[0-9]+$'),
+    CONSTRAINT chk_phone_number CHECK (phone_number ~ '^\+?[0-9]{1,13}$'),
+    CONSTRAINT chk_email_valid CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
 );
 
 CREATE TABLE roles(
