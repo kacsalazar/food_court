@@ -21,7 +21,7 @@ public class UserAdapter implements IUserPersistencePort {
     public OwnerModel saveOwner(OwnerModel ownerModel) {
 
         UserEntity userEntity = userEntityMapper.toUserEntity(ownerModel);
-        userEntity.setId_rol(1L);
+        userEntity.setId_rol(2L);
         userRepository.save(userEntity);
         log.info("User saved: {}" + userEntity);
         return userEntityMapper.toOwnerModel(userEntity);

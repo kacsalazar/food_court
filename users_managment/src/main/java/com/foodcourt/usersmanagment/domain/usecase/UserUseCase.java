@@ -4,9 +4,7 @@ import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
 import com.foodcourt.usersmanagment.domain.model.OwnerModel;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @AllArgsConstructor
 public class UserUseCase implements IUserServicePort {
 

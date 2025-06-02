@@ -1,5 +1,6 @@
 package com.foodcourt.usersmanagment.domain.usecase;
 
+import com.foodcourt.usersmanagment.CreatorMocks;
 import com.foodcourt.usersmanagment.domain.model.OwnerModel;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,6 @@ public class UserUseCaseTest {
 
     @Test
     void testSaveUser() {
-        // Aquí puedes implementar el test para guardar un usuario
 
         OwnerModel ownerModel = CreatorMocks.createOwnerModel();
 

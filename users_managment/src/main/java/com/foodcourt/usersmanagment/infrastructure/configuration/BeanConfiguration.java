@@ -1,22 +1,17 @@
 package com.foodcourt.usersmanagment.infrastructure.configuration;
 
+import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
+import com.foodcourt.usersmanagment.domain.usecase.UserUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
 public class BeanConfiguration {
-    //private final IObjectRepository objectRepository;
-    //private final IObjectEntityMapper objectEntityMapper;
 
-    /*@Bean
-    public IObjectPersistencePort objectPersistencePort() {
-        //return new ObjectJpaAdapter(objectRepository, objectEntityMapper);
-        return null;
-    }*/
-
-    //@Bean
-    //public IObjectServicePort objectServicePort() {
-        //return new ObjectUseCase(objectPersistencePort());
-    //}
+    @Bean
+    public UserUseCase userServicePort(IUserPersistencePort iUserPersistencePort) {
+        return new UserUseCase(iUserPersistencePort);
+    }
 }
