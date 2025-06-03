@@ -34,7 +34,7 @@ public class CreatorMocks {
     public static UserEntity createUserEntity() {
         return UserEntity.builder()
                 .id(1L)
-                .id_rol(2L)
+                .idRol(2L)
                 .name("John Doe")
                 .lastName("Martinez")
                 .dni("123")

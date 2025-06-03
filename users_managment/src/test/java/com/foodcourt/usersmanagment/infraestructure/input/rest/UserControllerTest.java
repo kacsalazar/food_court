@@ -33,11 +33,10 @@ public class UserControllerTest {
     void testSaveUser() {
 
         OwnerRequestDto ownerRequestDto = CreatorMocks.createOwnerRequestDto();
+
         ResponseEntity<Void> response = userRestController.saveUser(ownerRequestDto);
 
-        userRestController.saveUser(ownerRequestDto);
-
-        verify(userHandler, times(2)).saveUser(ownerRequestDto);
+        verify(userHandler, times(1)).saveUser(ownerRequestDto);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
     }
