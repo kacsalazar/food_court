@@ -44,9 +44,7 @@ public class UserAdapter implements IUserPersistencePort {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         RolModel rol = rolAdapter.findByName(role);
 
-        if (user.getIdRol() == rol.getId()) {
-            return true;
-        }
+        if (user.getIdRol() == rol.getId()) return true;
         return false;
     }
 

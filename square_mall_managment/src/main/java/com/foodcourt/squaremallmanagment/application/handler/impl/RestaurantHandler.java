@@ -21,7 +21,11 @@ public class RestaurantHandler implements IRestaurantHandler {
 
 
     @Override
-    public void saveRestaurant(RestaurantRequestDto restaurantRequestDto) {
+    public void saveRestaurant(RestaurantRequestDto restaurantRequestDto, Boolean isValidUser) {
+        if (!isValidUser) {
+            log.error("Invalid user role for restaurant creation");
+            throw new RuntimeException("Invalid user role for restaurant creation");
+        }
         RestaurantModel restaurantModel = restaurantMapper.toRestaurant(restaurantRequestDto);
         restaurantServicePort.saveRestaurant(restaurantModel);
     }
