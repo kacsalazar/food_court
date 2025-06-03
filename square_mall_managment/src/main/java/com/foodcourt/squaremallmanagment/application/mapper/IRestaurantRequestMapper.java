@@ -10,5 +10,6 @@ import org.mapstruct.ReportingPolicy;
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IRestaurantRequestMapper {
 
+    // Cambiar nombre a toModel.
     RestaurantModel toRestaurant(RestaurantRequestDto restaurantRequestDto);
 }

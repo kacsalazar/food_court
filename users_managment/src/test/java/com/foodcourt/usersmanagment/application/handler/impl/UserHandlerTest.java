@@ -1,10 +1,12 @@
 package com.foodcourt.usersmanagment.application.handler.impl;
 
 import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
+import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.mapper.IUserRequestMapper;
 import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
 import com.foodcourt.usersmanagment.domain.model.OwnerModel;
 import com.foodcourt.usersmanagment.CreatorMocks;
+import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.infrastructure.configuration.PasswordEncoderConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,44 +15,87 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class UserHandlerTest {
 
     @Mock
-    IUserServicePort userServicePort;
+    private IUserRequestMapper userRequestMapper;
 
     @Mock
-    IUserRequestMapper userRequestMapper;
+    private IUserServicePort userServicePort;
 
     @Mock
-    PasswordEncoderConfig passwordEncoderConfig;
+    private PasswordEncoderConfig passwordEncoderConfig;
 
     @Mock
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    UserHandler userHandler;
+    private UserHandler userHandler;
 
     @BeforeEach
-    void init(){
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testCreateOwner() {
-        //given
-        OwnerModel ownerModel = CreatorMocks.createOwnerModel();
-        OwnerRequestDto ownerRequestDto = CreatorMocks.createOwnerRequestDto();
+    void testSaveUser() {
+        // Given
+        OwnerRequestDto ownerRequestDto = new OwnerRequestDto();
+        ownerRequestDto.setPassword("plainPassword");
+        OwnerModel ownerModel = new OwnerModel();
+        ownerModel.setPassword("plainPassword");
 
-        //when
         when(userRequestMapper.toOwner(ownerRequestDto)).thenReturn(ownerModel);
         when(passwordEncoderConfig.passwordEncoder()).thenReturn(passwordEncoder);
-        when(passwordEncoder.encode(ownerModel.getPassword())).thenReturn("encodedPassword");
+        when(passwordEncoder.encode("plainPassword")).thenReturn("encodedPassword");
 
-        //Then
+        // When
         userHandler.saveUser(ownerRequestDto);
 
+        // Then
+        verify(userRequestMapper, times(1)).toOwner(ownerRequestDto);
+        verify(passwordEncoderConfig, times(1)).passwordEncoder();
+        verify(passwordEncoder, times(1)).encode("plainPassword");
         verify(userServicePort, times(1)).saveOwner(ownerModel);
+        assertEquals("encodedPassword", ownerModel.getPassword());
+    }
+
+    @Test
+    void getUserByIdTest() {
+        // Given
+        Long idOwner = 1L;
+        UserModel userModel = CreatorMocks.createUserModel();
+        UserResponseDto userResponseDto = CreatorMocks.createUserResponseDto();
+
+        when(userServicePort.findUserById(idOwner)).thenReturn(userModel);
+        when(userRequestMapper.toUserResponseDto(userModel)).thenReturn(userResponseDto);
+
+        // When
+        UserResponseDto result = userHandler.getUserById(idOwner);
+
+        // Then
+        verify(userServicePort, times(1)).findUserById(idOwner);
+        verify(userRequestMapper, times(1)).toUserResponseDto(userModel);
+        assertEquals(userResponseDto, result);
+    }
+
+    @Test
+    void verifyUserRolTest() {
+        // Given
+        Long idOwner = 1L;
+        String rol = "ROLE_ADMIN";
+
+        when(userServicePort.verifyUserRol(idOwner, rol)).thenReturn(true);
+
+        // When
+        Boolean result = userHandler.verifyUserRol(idOwner, rol);
+
+        // Then
+        verify(userServicePort, times(1)).verifyUserRol(idOwner, rol);
+        assertTrue(result);
     }
 }

@@ -4,6 +4,7 @@ import com.foodcourt.squaremallmanagment.CreatorMocks;
 import com.foodcourt.squaremallmanagment.application.dto.request.RestaurantRequestDto;
 import com.foodcourt.squaremallmanagment.application.mapper.IRestaurantRequestMapper;
 import com.foodcourt.squaremallmanagment.domain.api.IRestaurantServicePort;
+import com.foodcourt.squaremallmanagment.domain.api.IUserClientServicePort;
 import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,11 +16,15 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RestaurantHandlerTest {
+
     @Mock
     IRestaurantRequestMapper restaurantMapper;
 
     @Mock
     IRestaurantServicePort restaurantServicePort;
+
+    @Mock
+    IUserClientServicePort userClientServicePort;
 
     @InjectMocks
     RestaurantHandler restaurantHandler;
@@ -30,27 +35,42 @@ class RestaurantHandlerTest {
     }
 
     @Test
-    void saveRestaurant_validUser_savesRestaurant() {
-        RestaurantRequestDto dto = mock(RestaurantRequestDto.class);
-        RestaurantModel model = mock(RestaurantModel.class);
+    void saveRestaurant_usuarioValido_guardaRestaurante() {
+        RestaurantRequestDto dto = new RestaurantRequestDto();
+        dto.setIdOwner(1L);
+        dto.setName("Restaurante Prueba");
+        dto.setAddress("Calle 123");
+        // ... setea otros campos si es necesario
 
+        RestaurantModel model = new RestaurantModel();
+        model.setIdOwner(1L);
+        model.setName("Restaurante Prueba");
+        model.setAddress("Calle 123");
+        // ... setea otros campos si es necesario
+
+        when(userClientServicePort.isValidUser(1L, "ROLE_OWNER")).thenReturn(true);
         when(restaurantMapper.toRestaurant(dto)).thenReturn(model);
 
-        restaurantHandler.saveRestaurant(dto, true);
+        restaurantHandler.saveRestaurant(dto);
 
-        verify(restaurantMapper, times(1)).toRestaurant(dto);
-        verify(restaurantServicePort, times(1)).saveRestaurant(model);
+        verify(userClientServicePort).isValidUser(1L, "ROLE_OWNER");
+        verify(restaurantMapper).toRestaurant(dto);
+        verify(restaurantServicePort).saveRestaurant(model);
     }
 
     @Test
-    void saveRestaurant_invalidUser_throwsException() {
-        RestaurantRequestDto dto = mock(RestaurantRequestDto.class);
+    void saveRestaurant_usuarioInvalido_lanzaExcepcion() {
+        RestaurantRequestDto dto = new RestaurantRequestDto();
+        dto.setIdOwner(2L);
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            restaurantHandler.saveRestaurant(dto, false);
+        when(userClientServicePort.isValidUser(2L, "ROLE_OWNER")).thenReturn(false);
+
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+            restaurantHandler.saveRestaurant(dto);
         });
 
-        assertEquals("Invalid user role for restaurant creation", exception.getMessage());
+        assertEquals("Invalid user role for restaurant creation", ex.getMessage());
+        verify(userClientServicePort).isValidUser(2L, "ROLE_OWNER");
         verify(restaurantMapper, never()).toRestaurant(any());
         verify(restaurantServicePort, never()).saveRestaurant(any());
     }

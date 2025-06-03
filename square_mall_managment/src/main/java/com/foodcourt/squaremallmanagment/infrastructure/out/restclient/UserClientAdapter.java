@@ -1,21 +1,21 @@
-package com.foodcourt.squaremallmanagment.infrastructure.configuration;
+package com.foodcourt.squaremallmanagment.infrastructure.out.restclient;
 
+import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+@Component
 @AllArgsConstructor
-@Service
-public class UserClient {
+@Slf4j
+public class UserClientAdapter implements IUserClientPort {
 
     private final RestTemplate restTemplate;
     private final String USER_SERVICE_URL = "http://localhost:8081/api/v1/user/";
 
-    public Boolean verifyUserRol(Long id, String role) {
+    public Boolean isValidUser(Long id, String role) {
         String url = USER_SERVICE_URL + "verify/" + id + "/" + role;
         return restTemplate.getForObject(url, Boolean.class);
     }
-
-
-
 }

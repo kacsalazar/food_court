@@ -1,5 +1,6 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 
+import com.foodcourt.squaremallmanagment.CreatorMocks;
 import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.RestaurantEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IRestaurantEntityMapper;
@@ -33,19 +34,18 @@ class RestaurantAdapterTest {
 
     @Test
     void saveRestaurantTest() {
-        RestaurantModel inputModel = mock(RestaurantModel.class);
-        RestaurantEntity entity = mock(RestaurantEntity.class);
-        RestaurantModel outputModel = mock(RestaurantModel.class);
+        RestaurantModel restaurantModel = CreatorMocks.createRestaurantModel();
+        RestaurantEntity restaurantEntity = CreatorMocks.createRestaurantEntity();
 
-        when(restaurantMapper.toRestaurantEntity(inputModel)).thenReturn(entity);
-        when(restaurantMapper.toRestaurantModel(entity)).thenReturn(outputModel);
+        when(restaurantMapper.toRestaurantEntity(restaurantModel)).thenReturn(restaurantEntity);
+        when(restaurantMapper.toRestaurantModel(restaurantEntity)).thenReturn(restaurantModel);
 
-        RestaurantModel result = restaurantAdapter.saveRestaurant(inputModel);
+        RestaurantModel result = restaurantAdapter.saveRestaurant(restaurantModel);
 
-        verify(restaurantMapper).toRestaurantEntity(inputModel);
-        verify(restaurantRepository).save(entity);
-        verify(restaurantMapper).toRestaurantModel(entity);
-        assertEquals(outputModel, result);
+        verify(restaurantMapper).toRestaurantEntity(restaurantModel);
+        verify(restaurantRepository).save(restaurantEntity);
+        verify(restaurantMapper).toRestaurantModel(restaurantEntity);
+        assertEquals(restaurantModel, result);
     }
 
 }

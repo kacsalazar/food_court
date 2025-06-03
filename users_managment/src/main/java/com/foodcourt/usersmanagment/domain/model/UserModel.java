@@ -18,6 +18,6 @@ public class UserModel {
     private String dni;
     private String phoneNumber;
     private Date birthdayDate;
-    private String idRol;
+    private Long idRol;
 
 }

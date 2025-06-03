@@ -1,16 +1,16 @@
 package com.foodcourt.squaremallmanagment.infrastructure.input.rest;
 
 import com.foodcourt.squaremallmanagment.CreatorMocks;
-import com.foodcourt.squaremallmanagment.application.dto.request.RestaurantRequestDto;
-import com.foodcourt.squaremallmanagment.application.handler.IRestaurantHandler;
-import com.foodcourt.squaremallmanagment.infrastructure.configuration.UserClient;
+import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
+import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter.RestaurantAdapter;
+import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.RestaurantEntity;
+import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IRestaurantEntityMapper;
+import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.IRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -18,14 +18,15 @@ import static org.mockito.Mockito.when;
 
 class RestaurantRestControllerTest {
 
-    @Mock
-    IRestaurantHandler restaurantHandler;
 
     @Mock
-    UserClient userClient;
+    IRestaurantRepository restaurantRepository;
+
+    @Mock
+    IRestaurantEntityMapper restaurantMapper;
 
     @InjectMocks
-    RestaurantRestController restaurantRestController;
+    RestaurantAdapter restaurantAdapter;
 
     @BeforeEach
     void setUp() {
@@ -33,16 +34,19 @@ class RestaurantRestControllerTest {
     }
 
     @Test
-    void saveRestaurant_callsHandlerAndReturnsCreated() {
-        RestaurantRequestDto dto = mock(RestaurantRequestDto.class);
-        Long ownerId = 1L;
-        when(dto.getIdOwner()).thenReturn(ownerId);
-        when(userClient.verifyUserRol(ownerId, "ROLE_OWNER")).thenReturn(true);
+    void saveRestaurantTest() {
+        RestaurantModel restaurantModel = CreatorMocks.createRestaurantModel();
+        RestaurantEntity restaurantEntity = mock(RestaurantEntity.class);
 
-        ResponseEntity<Void> response = restaurantRestController.saveRestaurant(dto);
 
-        verify(userClient, times(1)).verifyUserRol(ownerId, "ROLE_OWNER");
-        verify(restaurantHandler, times(1)).saveRestaurant(dto, true);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        when(restaurantMapper.toRestaurantEntity(restaurantModel)).thenReturn(restaurantEntity);
+        when(restaurantMapper.toRestaurantModel(restaurantEntity)).thenReturn(restaurantModel);
+
+        RestaurantModel result = restaurantAdapter.saveRestaurant(restaurantModel);
+
+        verify(restaurantMapper).toRestaurantEntity(restaurantModel);
+        verify(restaurantRepository).save(restaurantEntity);
+        verify(restaurantMapper).toRestaurantModel(restaurantEntity);
+        assertEquals(restaurantModel, result);
     }
 }
