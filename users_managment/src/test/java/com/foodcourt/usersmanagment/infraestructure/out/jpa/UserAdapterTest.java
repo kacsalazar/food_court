@@ -2,6 +2,9 @@ package com.foodcourt.usersmanagment.infraestructure.out.jpa;
 
 import com.foodcourt.usersmanagment.domain.model.OwnerModel;
 import com.foodcourt.usersmanagment.CreatorMocks;
+import com.foodcourt.usersmanagment.domain.model.RolModel;
+import com.foodcourt.usersmanagment.domain.model.UserModel;
+import com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter.RolAdapter;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter.UserAdapter;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.mapper.IUserEntityMapper;
@@ -13,39 +16,91 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class UserAdapterTest {
 
     @Mock
-    IUserRepository userRepository;
+    private IUserRepository userRepository;
 
     @Mock
-    IUserEntityMapper userEntityMapper;
+    private IUserEntityMapper userEntityMapper;
+
+    @Mock
+    private RolAdapter rolAdapter;
 
     @InjectMocks
-    UserAdapter userAdapter;
+    private UserAdapter userAdapter;
 
     @BeforeEach
-    void init(){
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void testSaveOwner() {
-
-        UserEntity userEntity = CreatorMocks.createUserEntity();
-        OwnerModel ownerModel = CreatorMocks.createOwnerModel();
+        // Given
+        OwnerModel ownerModel = new OwnerModel();
+        UserEntity userEntity = new UserEntity();
+        RolModel rolModel = new RolModel();
+        rolModel.setId(1L);
 
         when(userEntityMapper.toUserEntity(ownerModel)).thenReturn(userEntity);
+        when(rolAdapter.findByName("ROLE_OWNER")).thenReturn(rolModel);
         when(userRepository.save(userEntity)).thenReturn(userEntity);
         when(userEntityMapper.toOwnerModel(userEntity)).thenReturn(ownerModel);
 
-        OwnerModel model = userAdapter.saveOwner(ownerModel);
+        // When
+        OwnerModel result = userAdapter.saveOwner(ownerModel);
 
-        assertEquals(ownerModel, model);
+        // Then
         verify(userEntityMapper, times(1)).toUserEntity(ownerModel);
-        verify(userEntityMapper, times(1)).toOwnerModel(userEntity);
+        verify(rolAdapter, times(1)).findByName("ROLE_OWNER");
         verify(userRepository, times(1)).save(userEntity);
+        verify(userEntityMapper, times(1)).toOwnerModel(userEntity);
+        assertEquals(ownerModel, result);
+    }
+
+    @Test
+    void testFindUserById() {
+        // Given
+        Long id = 1L;
+        UserEntity userEntity = new UserEntity();
+        UserModel userModel = new UserModel();
+
+        when(userRepository.findById(id)).thenReturn(java.util.Optional.of(userEntity));
+        when(userEntityMapper.toUserModel(userEntity)).thenReturn(userModel);
+
+        // When
+        UserModel result = userAdapter.findUserById(id);
+
+        // Then
+        verify(userRepository, times(1)).findById(id);
+        verify(userEntityMapper, times(1)).toUserModel(userEntity);
+        assertEquals(userModel, result);
+    }
+
+    @Test
+    void testVerifyUserRol() {
+        // Given
+        Long id = 1L;
+        String role = "ROLE_ADMIN";
+        UserEntity userEntity = CreatorMocks.createUserEntity();
+        userEntity.setIdRol(1L);
+        RolModel rolModel = CreatorMocks.createRolModel()
+                ;
+        rolModel.setId(1L);
+
+        when(userRepository.findById(id)).thenReturn(java.util.Optional.of(userEntity));
+        when(rolAdapter.findByName(role)).thenReturn(rolModel);
+
+        // When
+        Boolean result = userAdapter.verifyUserRol(id, role);
+
+        // Then
+        verify(userRepository, times(1)).findById(id);
+        verify(rolAdapter, times(1)).findByName(role);
+        assertTrue(result);
     }
 }

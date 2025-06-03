@@ -1,6 +1,7 @@
 package com.foodcourt.usersmanagment.infrastructure.out.jpa.mapper;
 
 import com.foodcourt.usersmanagment.domain.model.OwnerModel;
+import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -13,4 +14,5 @@ public interface IUserEntityMapper {
 
     UserEntity toUserEntity(OwnerModel ownerModel);
     OwnerModel toOwnerModel(UserEntity userEntity);
+    UserModel toUserModel(UserEntity userEntity);
 }

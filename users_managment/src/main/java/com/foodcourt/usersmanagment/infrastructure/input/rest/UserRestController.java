@@ -1,14 +1,12 @@
 package com.foodcourt.usersmanagment.infrastructure.input.rest;
 
 import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
+import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
@@ -21,5 +19,17 @@ public class UserRestController {
     public ResponseEntity<Void> saveUser(@RequestBody OwnerRequestDto ownerRequestDto) {
         userHandler.saveUser(ownerRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
+        UserResponseDto userResponseDto = userHandler.getUserById(id);
+        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/verify/{id}/{rol}")
+    public ResponseEntity<Boolean> verifyUserRol(@PathVariable Long id, @PathVariable String rol) {
+        boolean isVerified = userHandler.verifyUserRol(id, rol);
+        return new ResponseEntity<>(isVerified, HttpStatus.OK);
     }
 }
