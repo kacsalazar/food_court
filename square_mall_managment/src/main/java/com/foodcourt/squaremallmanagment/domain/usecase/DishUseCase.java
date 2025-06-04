@@ -2,6 +2,7 @@ package com.foodcourt.squaremallmanagment.domain.usecase;
 
 import com.foodcourt.squaremallmanagment.domain.api.IDishServicePort;
 import com.foodcourt.squaremallmanagment.domain.model.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import lombok.AllArgsConstructor;
 
@@ -13,5 +14,10 @@ public class DishUseCase implements IDishServicePort {
     @Override
     public void saveDish(DishModel dishModel) {
         dishPersistencePort.saveDish(dishModel);
+    }
+
+    @Override
+    public DishModel updateDish(Long id, DishUpdateModel dishUpdateModel) {
+        return dishPersistencePort.updateDish(id, dishUpdateModel);
     }
 }
