@@ -2,6 +2,8 @@ package com.foodcourt.squaremallmanagment.infrastructure.input.rest;
 
 import com.foodcourt.squaremallmanagment.CreatorMocks;
 import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestDto;
+import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpdateDto;
+import com.foodcourt.squaremallmanagment.application.dto.response.DishResponseDto;
 import com.foodcourt.squaremallmanagment.application.handler.IDishHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,8 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class DishRestControllerTest {
 
@@ -39,4 +40,17 @@ class DishRestControllerTest {
         assert response.getBody() == null;
     }
 
+    void updateDish() {
+        Long id = 1L;
+        DishRequestUpdateDto updateDto = CreatorMocks.createDishRequestUpdateDto();
+        DishResponseDto responseDto = CreatorMocks.createDishResponseDto();
+
+        when(dishHandler.updateDish(id, updateDto)).thenReturn(responseDto);
+
+        ResponseEntity<DishResponseDto> response = controller.updateDish(id, updateDto);
+
+        verify(dishHandler).updateDish(id, updateDto);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(responseDto, response.getBody());
+    }
 }

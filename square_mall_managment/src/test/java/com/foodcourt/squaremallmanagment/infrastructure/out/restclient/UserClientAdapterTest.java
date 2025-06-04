@@ -24,7 +24,7 @@ public class UserClientAdapterTest {
     }
 
     @Test
-    void isValidUser_llamaRestTemplateConUrlCorrecta_yRetornaResultado() {
+    void isValidUser() {
         Long userId = 7L;
         String role = "ROLE_OWNER";
         String expectedUrl = "http://localhost:8081/api/v1/user/verify/7/ROLE_OWNER";

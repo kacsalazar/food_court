@@ -1,10 +1,12 @@
 package com.foodcourt.squaremallmanagment;
 
 import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestDto;
+import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpdateDto;
 import com.foodcourt.squaremallmanagment.application.dto.request.RestaurantRequestDto;
+import com.foodcourt.squaremallmanagment.application.dto.response.DishResponseDto;
 import com.foodcourt.squaremallmanagment.domain.model.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
-import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter.DishAdapter;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.RestaurantEntity;
 
@@ -73,6 +75,32 @@ public class CreatorMocks {
                 .price(10.0)
                 .idRestaurant(2L)
                 .imageUrl("http://example.com/pizza.png")
+                .build();
+    }
+
+    public static DishRequestUpdateDto createDishRequestUpdateDto() {
+        return DishRequestUpdateDto.builder()
+                .description("Updated delicious pizza")
+                .price(12.0)
+                .build();
+    }
+
+    public static DishResponseDto createDishResponseDto() {
+        return DishResponseDto.builder()
+                .name("Pizza")
+                .idCategory(1L)
+                .description("Delicious pizza")
+                .price(10.0)
+                .idRestaurant(2L)
+                .imageUrl("http://example.com/pizza.png")
+                .build();
+
+    }
+
+    public static DishUpdateModel createDishUpdateModel() {
+        return DishUpdateModel.builder()
+                .description("Updated delicious pizza")
+                .price(12.0)
                 .build();
     }
 }

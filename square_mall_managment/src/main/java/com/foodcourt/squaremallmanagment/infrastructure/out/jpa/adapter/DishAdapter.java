@@ -1,6 +1,7 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 
 import com.foodcourt.squaremallmanagment.domain.model.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IDishEntityMapper;
@@ -23,5 +24,20 @@ public class DishAdapter implements IDishPersistencePort {
         DishEntity dishEntity = dishMapper.toDishEntity(dishModel);
         dishEntity.setIsActive(Boolean.TRUE);
         dishRepository.save(dishEntity);
+    }
+
+    @Override
+    public DishModel findDishById(Long id) {
+        return dishMapper.toDishModel(
+                dishRepository.findById(id).get()
+                        //.orElseThrow(() -> new IllegalArgumentException("Dish with id " + id + " not found."))
+        );
+    }
+
+    public DishModel updateDish(Long id, DishUpdateModel dishUpdateModel) {
+        DishEntity dishEntity = dishRepository.findById(id).get();
+        dishEntity.setDescription(dishUpdateModel.getDescription());
+        dishEntity.setPrice(dishUpdateModel.getPrice());
+        return dishMapper.toDishModel(dishRepository.save(dishEntity));
     }
 }
