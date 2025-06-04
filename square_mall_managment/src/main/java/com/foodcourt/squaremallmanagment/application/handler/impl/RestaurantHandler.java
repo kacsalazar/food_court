@@ -30,7 +30,7 @@ public class RestaurantHandler implements IRestaurantHandler {
             throw new RuntimeException("Invalid user role for restaurant creation");
         }
 
-        RestaurantModel restaurantModel = restaurantMapper.toRestaurant(restaurantRequestDto);
+        RestaurantModel restaurantModel = restaurantMapper.toRestaurantModel(restaurantRequestDto);
         restaurantServicePort.saveRestaurant(restaurantModel);
     }
 }

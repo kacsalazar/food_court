@@ -11,5 +11,5 @@ import org.mapstruct.ReportingPolicy;
 public interface IRestaurantRequestMapper {
 
     // Cambiar nombre a toModel.
-    RestaurantModel toRestaurant(RestaurantRequestDto restaurantRequestDto);
+    RestaurantModel toRestaurantModel(RestaurantRequestDto restaurantRequestDto);
 }

@@ -1,7 +1,9 @@
 package com.foodcourt.squaremallmanagment.infrastructure.configuration;
 
+import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IRestaurantPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
+import com.foodcourt.squaremallmanagment.domain.usecase.DishUseCase;
 import com.foodcourt.squaremallmanagment.domain.usecase.RestaurantUseCase;
 import com.foodcourt.squaremallmanagment.domain.usecase.UserClientUseCase;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +22,10 @@ public class BeanConfiguration {
     @Bean
     public UserClientUseCase userClientUseCase(IUserClientPort iuserClientPort) {
         return new UserClientUseCase(iuserClientPort);
+    }
+
+    @Bean
+    public DishUseCase dishUseCase(IDishPersistencePort iDishPersistencePort) {
+        return new DishUseCase(iDishPersistencePort);
     }
 }
