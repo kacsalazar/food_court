@@ -7,9 +7,10 @@ import com.foodcourt.usersmanagment.application.mapper.IUserRequestMapper;
 import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
 import com.foodcourt.usersmanagment.domain.model.OwnerModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
-import com.foodcourt.usersmanagment.infrastructure.configuration.PasswordEncoderConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +22,12 @@ public class UserHandler implements IUserHandler {
 
     private final IUserRequestMapper userRequestMapper;
     private final IUserServicePort userServicePort;
-    private final PasswordEncoderConfig passwordEncoderConfig;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void saveUser(OwnerRequestDto ownerRequestDto) {
-
         OwnerModel ownerModel = userRequestMapper.toOwner(ownerRequestDto);
-        ownerModel.setPassword(passwordEncoderConfig.passwordEncoder().encode(ownerModel.getPassword()));
+        ownerModel.setPassword(passwordEncoder.encode(ownerModel.getPassword()));
         log.info("User Handler: {}" + ownerModel);
         userServicePort.saveOwner(ownerModel);
     }

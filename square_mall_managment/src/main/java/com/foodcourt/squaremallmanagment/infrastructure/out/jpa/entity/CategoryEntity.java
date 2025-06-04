@@ -1,6 +1,6 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity;
 
-public class Category {
+public class CategoryEntity {
 
     private Long id;
     private String name;

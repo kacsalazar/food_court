@@ -44,13 +44,12 @@ public class UserHandlerTest {
     @Test
     void testSaveUser() {
         // Given
-        OwnerRequestDto ownerRequestDto = new OwnerRequestDto();
+        OwnerRequestDto ownerRequestDto = CreatorMocks.createOwnerRequestDto();
         ownerRequestDto.setPassword("plainPassword");
-        OwnerModel ownerModel = new OwnerModel();
+        OwnerModel ownerModel = CreatorMocks.createOwnerModel();
         ownerModel.setPassword("plainPassword");
 
         when(userRequestMapper.toOwner(ownerRequestDto)).thenReturn(ownerModel);
-        when(passwordEncoderConfig.passwordEncoder()).thenReturn(passwordEncoder);
         when(passwordEncoder.encode("plainPassword")).thenReturn("encodedPassword");
 
         // When
@@ -58,7 +57,6 @@ public class UserHandlerTest {
 
         // Then
         verify(userRequestMapper, times(1)).toOwner(ownerRequestDto);
-        verify(passwordEncoderConfig, times(1)).passwordEncoder();
         verify(passwordEncoder, times(1)).encode("plainPassword");
         verify(userServicePort, times(1)).saveOwner(ownerModel);
         assertEquals("encodedPassword", ownerModel.getPassword());

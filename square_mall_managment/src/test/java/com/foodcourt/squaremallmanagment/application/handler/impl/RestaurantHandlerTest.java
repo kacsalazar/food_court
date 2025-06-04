@@ -1,6 +1,5 @@
 package com.foodcourt.squaremallmanagment.application.handler.impl;
 
-import com.foodcourt.squaremallmanagment.CreatorMocks;
 import com.foodcourt.squaremallmanagment.application.dto.request.RestaurantRequestDto;
 import com.foodcourt.squaremallmanagment.application.mapper.IRestaurantRequestMapper;
 import com.foodcourt.squaremallmanagment.domain.api.IRestaurantServicePort;
@@ -49,12 +48,12 @@ class RestaurantHandlerTest {
         // ... setea otros campos si es necesario
 
         when(userClientServicePort.isValidUser(1L, "ROLE_OWNER")).thenReturn(true);
-        when(restaurantMapper.toRestaurant(dto)).thenReturn(model);
+        when(restaurantMapper.toRestaurantModel(dto)).thenReturn(model);
 
         restaurantHandler.saveRestaurant(dto);
 
         verify(userClientServicePort).isValidUser(1L, "ROLE_OWNER");
-        verify(restaurantMapper).toRestaurant(dto);
+        verify(restaurantMapper).toRestaurantModel(dto);
         verify(restaurantServicePort).saveRestaurant(model);
     }
 
@@ -71,7 +70,7 @@ class RestaurantHandlerTest {
 
         assertEquals("Invalid user role for restaurant creation", ex.getMessage());
         verify(userClientServicePort).isValidUser(2L, "ROLE_OWNER");
-        verify(restaurantMapper, never()).toRestaurant(any());
+        verify(restaurantMapper, never()).toRestaurantModel(any());
         verify(restaurantServicePort, never()).saveRestaurant(any());
     }
 
