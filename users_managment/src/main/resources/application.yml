@@ -1,6 +1,9 @@
 server:
   port: 8081
 
+jwt:
+  secret: claveSuperSecreta12345678901234567890
+
 spring:
   #datasource:
     #url: jdbc:postgresql://localhost:5432/users
