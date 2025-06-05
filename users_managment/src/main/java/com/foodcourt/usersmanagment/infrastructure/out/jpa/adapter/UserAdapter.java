@@ -10,6 +10,7 @@ import com.foodcourt.usersmanagment.infrastructure.out.jpa.mapper.IUserEntityMap
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.repository.IUserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -46,6 +47,15 @@ public class UserAdapter implements IUserPersistencePort {
 
         if (user.getIdRol() == rol.getId()) return true;
         return false;
+    }
+
+    public UserModel findUserByEmail(String email) {
+        log.info("Finding user by email: {}", email);
+        UserEntity userEntity = userRepository.findUserByEmail(email);
+        if (userEntity == null) {
+            return null;
+        }
+        return userEntityMapper.toUserModel(userEntity);
     }
 
 
