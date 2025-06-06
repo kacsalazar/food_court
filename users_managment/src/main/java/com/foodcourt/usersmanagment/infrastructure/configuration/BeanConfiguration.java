@@ -4,6 +4,7 @@ import com.foodcourt.usersmanagment.domain.spi.IAuthPort;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import com.foodcourt.usersmanagment.domain.usecase.AuthUseCase;
 import com.foodcourt.usersmanagment.domain.usecase.UserUseCase;
+import com.foodcourt.usersmanagment.domain.util.UseValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +14,9 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfiguration {
 
     @Bean
-    public UserUseCase userServicePort(IUserPersistencePort iUserPersistencePort) {
-        return new UserUseCase(iUserPersistencePort);
+    public UserUseCase userServicePort(IUserPersistencePort iUserPersistencePort,
+                                        UseValidationUtil useValidationUtil) {
+        return new UserUseCase(useValidationUtil, iUserPersistencePort);
     }
 
     @Bean
