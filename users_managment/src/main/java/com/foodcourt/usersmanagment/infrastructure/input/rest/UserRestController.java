@@ -3,15 +3,23 @@ package com.foodcourt.usersmanagment.infrastructure.input.rest;
 import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
+import com.foodcourt.usersmanagment.infrastructure.documentation.IUserRestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/user")
-public class UserRestController {
+public class UserRestController implements IUserRestController {
 
     private final IUserHandler userHandler;
 
@@ -21,11 +29,13 @@ public class UserRestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
         UserResponseDto userResponseDto = userHandler.getUserById(id);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
+
 
     @GetMapping("/verify/{id}/{rol}")
     public ResponseEntity<Boolean> verifyUserRol(@PathVariable Long id, @PathVariable String rol) {
