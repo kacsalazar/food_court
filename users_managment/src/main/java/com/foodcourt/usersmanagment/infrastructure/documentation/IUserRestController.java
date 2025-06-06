@@ -25,10 +25,6 @@ public interface IUserRestController {
     )
 
     @ApiResponses(value = {
-            /*@ApiResponse(responseCode = "200", description = "User by id returned",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = UserResponseDto.class))),
-            @ApiResponse(responseCode = "404", description = "No data found", content = @Content)*/
             @ApiResponse(responseCode = "201", description = "Owner created", content = @Content),
             @ApiResponse(responseCode = "409", description = "Owner already exists", content = @Content)
 
