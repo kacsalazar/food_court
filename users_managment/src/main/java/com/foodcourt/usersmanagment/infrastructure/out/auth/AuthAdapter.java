@@ -4,6 +4,7 @@ import com.foodcourt.usersmanagment.domain.model.AuthModel;
 import com.foodcourt.usersmanagment.domain.model.ClaimUserModel;
 import com.foodcourt.usersmanagment.domain.model.TokenModel;
 import com.foodcourt.usersmanagment.domain.spi.IAuthPort;
+import com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter.RolAdapter;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.repository.IUserRepository;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class AuthAdapter implements IAuthPort {
     private final PasswordEncoder passwordEncoder;
     private final IUserRepository userRepository;
     private final JwtService jwtService;
+    private final RolAdapter rolAdapter;
 
     @Override
     public TokenModel userLogin(AuthModel authModel) {
@@ -33,6 +35,8 @@ public class AuthAdapter implements IAuthPort {
                 .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
+                .roleName(rolAdapter.findById(user.getIdRol()).getName())
+                .idRole(user.getIdRol())
                 .build());
 
         return TokenModel.builder().token(token).build();

@@ -33,11 +33,6 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>();
         try {
             claims.put("User", objectMapper.writeValueAsString(token));
-            /*Map<String, Object> claims = Map.of(
-                "id", user.getId(),
-                "email", user.getEmail(),
-                "name", user.getName()
-            );*/
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error serializing user to JSON", e);
         }
@@ -66,7 +61,6 @@ public class JwtService {
 
     public UserEntity getUserFromToken(String token) {
         Claims claims = validateToken(token);
-        //String userJson = (String) claims.get("User");
         try {
             return objectMapper.readValue(claims.get("User", String.class), UserEntity.class);
         } catch (JsonProcessingException e) {

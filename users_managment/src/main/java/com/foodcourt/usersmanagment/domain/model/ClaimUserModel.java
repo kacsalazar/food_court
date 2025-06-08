@@ -14,4 +14,6 @@ public class ClaimUserModel {
     private String email;
     private String name;
     private Long id;
+    private Long idRole;
+    private String roleName;
 }
