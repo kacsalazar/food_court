@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class UserRestController implements IUserRestController {
 
     private final IUserHandler userHandler;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<Void> saveUser(@RequestBody OwnerRequestDto ownerRequestDto) {
         userHandler.saveUser(ownerRequestDto);
@@ -30,6 +32,7 @@ public class UserRestController implements IUserRestController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
         UserResponseDto userResponseDto = userHandler.getUserById(id);
@@ -37,6 +40,7 @@ public class UserRestController implements IUserRestController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/verify/{id}/{rol}")
     public ResponseEntity<Boolean> verifyUserRol(@PathVariable String dni, @PathVariable String rol) {
         boolean isVerified = userHandler.verifyUserRol(dni, rol);

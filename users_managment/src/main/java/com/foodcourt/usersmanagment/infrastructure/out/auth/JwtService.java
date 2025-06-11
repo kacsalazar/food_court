@@ -6,6 +6,7 @@ import com.foodcourt.usersmanagment.application.handler.ITokenValidator;
 import com.foodcourt.usersmanagment.domain.model.ClaimUserModel;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -23,7 +26,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtService implements ITokenValidator {
 
-    //verificar esta importación
     @Value("${jwt.secret}")
     private String jwtSecret;
 
@@ -42,26 +44,21 @@ public class JwtService implements ITokenValidator {
                 .compact();
     }
 
-
-    public Claims validateToken(String token) {
+    public Boolean isValidToken(String token) {
         try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(jwtSecret.getBytes())
+            Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            throw new RuntimeException("Invalid JWT token", e);
-        }
-    }
-
-    public UserEntity getUserFromToken(String token) {
-        Claims claims = validateToken(token);
-        try {
-            return objectMapper.readValue(claims.get("User", String.class), UserEntity.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error deserializing user from JWT token", e);
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
         }
 
     }
+
+    private Key getSignKey() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    }
+
 }

@@ -4,5 +4,5 @@ import io.jsonwebtoken.Claims;
 
 public interface ITokenValidator {
 
-    Claims validateToken(String token);
+    Boolean isValidToken(String token);
 }
