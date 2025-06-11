@@ -1,4 +1,4 @@
-package com.foodcourt.squaremallmanagment.infrastructure.out.auth;
+package com.foodcourt.squaremallmanagment.infrastructure.input.rest.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

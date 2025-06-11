@@ -27,7 +27,7 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public Boolean verifyUserRol(Long id, String role) {
-        return userPersistencePort.verifyUserRol(id, role);
+    public Boolean verifyUserRol(String dni, String role) {
+        return userPersistencePort.verifyUserRol(dni, role);
     }
 }

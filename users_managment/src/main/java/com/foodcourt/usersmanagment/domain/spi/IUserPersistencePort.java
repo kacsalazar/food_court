@@ -7,6 +7,7 @@ public interface IUserPersistencePort {
 
     OwnerModel saveOwner(OwnerModel ownerModel);
     UserModel findUserById(Long id);
-    Boolean verifyUserRol(Long id, String role);
+    Boolean verifyUserRol(String dni, String role);
     UserModel findUserByEmail(String email);
+    UserModel findUserByDni(String dni);
 }

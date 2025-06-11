@@ -39,18 +39,15 @@ public class UserAdapter implements IUserPersistencePort {
     }
 
     @Override
-    public Boolean verifyUserRol(Long id, String role) {
+    public Boolean verifyUserRol(String dni, String role) {
 
-        UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        UserEntity user = userRepository.findUserByDni(dni);
         RolModel rol = rolAdapter.findByName(role);
 
-        log.info("Verifying user role: userId={}, roleName={}", user.getIdRol() == rol.getId());
-
-        if (user.getIdRol() == rol.getId()) return true;
-        return false;
+        return user.getIdRol().equals(rol.getId());
     }
 
+    @Override
     public UserModel findUserByEmail(String email) {
         log.info("Finding user by email: {}", email);
         UserEntity userEntity = userRepository.findUserByEmail(email);
@@ -58,6 +55,11 @@ public class UserAdapter implements IUserPersistencePort {
             return null;
         }
         return userEntityMapper.toUserModel(userEntity);
+    }
+
+    @Override
+    public UserModel findUserByDni(String dni) {
+        return userEntityMapper.toUserModel(userRepository.findUserByDni(dni));
     }
 
 

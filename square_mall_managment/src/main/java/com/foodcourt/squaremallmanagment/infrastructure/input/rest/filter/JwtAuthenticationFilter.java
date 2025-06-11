@@ -1,6 +1,8 @@
-package com.foodcourt.squaremallmanagment.infrastructure.out.auth;
+package com.foodcourt.squaremallmanagment.infrastructure.input.rest.filter;
 
-import com.foodcourt.squaremallmanagment.domain.api.IUserClientServicePort;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.foodcourt.squaremallmanagment.application.handler.ITokenValidator;
+import com.foodcourt.squaremallmanagment.domain.model.ClaimsUserModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,9 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
-    private final IUserClientServicePort userClientServicePort; // esta es tu clase que consulta a /user
-
+    private final ITokenValidator tokenValidator;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -39,33 +39,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         final String token = authHeader.substring(7);
-        if (!jwtService.isValidToken(token)) {
+        if (!tokenValidator.isValidToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
-        Long userId = jwtService.extractUserId(token);
-        Long roleId = jwtService.extractRoleId(token);
-        String roleName = jwtService.extractRoleName(token);
-
-        log.info("User ID: {}, Role Name: {}", userId, roleName);
-
-        log.info("Validating user with ID: {} and role: {}", userClientServicePort.isValidUser(userId, roleName));
-        if (!userClientServicePort.isValidUser(userId, roleName)) {
-            log.info("ENTRA");
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            return;
+        String [] parts = token.split("\\.");
+        if(parts.length < 2) {
+            throw new IllegalArgumentException("Invalid JWT token format");
         }
 
-        log.info("POR FUERA DEL MÉTODO");
-        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(roleName));
+        String payload = new String (java.util.Base64.getDecoder().decode(parts[1]));
+        ObjectMapper mapper = new ObjectMapper();
+        ClaimsUserModel claims = mapper.readValue(payload, ClaimsUserModel.class);
+
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(claims.getAuthorization().getRoleName()));
 
         UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(userId, null, authorities);
-        log.info("POR FUERA DEL MÉTODO 2");
+                new UsernamePasswordAuthenticationToken(claims.getIdentity().getId(), null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authToken);
-        log.info("POR FUERA DEL MÉTODO 3");
         filterChain.doFilter(request, response);
-        log.info("Filter chain executed successfully");
     }
 }

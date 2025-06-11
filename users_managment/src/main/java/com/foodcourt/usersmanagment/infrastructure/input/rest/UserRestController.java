@@ -38,8 +38,8 @@ public class UserRestController implements IUserRestController {
 
 
     @GetMapping("/verify/{id}/{rol}")
-    public ResponseEntity<Boolean> verifyUserRol(@PathVariable Long id, @PathVariable String rol) {
-        boolean isVerified = userHandler.verifyUserRol(id, rol);
+    public ResponseEntity<Boolean> verifyUserRol(@PathVariable String dni, @PathVariable String rol) {
+        boolean isVerified = userHandler.verifyUserRol(dni, rol);
         return new ResponseEntity<>(isVerified, HttpStatus.OK);
     }
 }

@@ -1,6 +1,6 @@
-package com.foodcourt.usersmanagment.infrastructure.input.rest;
+package com.foodcourt.usersmanagment.infrastructure.input.rest.config;
 
-import com.foodcourt.usersmanagment.infrastructure.out.auth.JwtAuthenticationFilter;
+import com.foodcourt.usersmanagment.infrastructure.input.rest.filter.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,16 +25,4 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /*
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }*/
 }

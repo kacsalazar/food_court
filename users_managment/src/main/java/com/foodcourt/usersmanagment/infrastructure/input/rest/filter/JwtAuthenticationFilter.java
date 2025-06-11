@@ -1,5 +1,6 @@
-package com.foodcourt.usersmanagment.infrastructure.out.auth;
+package com.foodcourt.usersmanagment.infrastructure.input.rest.filter;
 
+import com.foodcourt.usersmanagment.infrastructure.out.auth.JwtService;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

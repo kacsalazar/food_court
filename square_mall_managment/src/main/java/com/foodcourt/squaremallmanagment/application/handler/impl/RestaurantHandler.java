@@ -19,7 +19,6 @@ public class RestaurantHandler implements IRestaurantHandler {
 
     private final IRestaurantRequestMapper restaurantMapper;
     private final IRestaurantServicePort restaurantServicePort;
-    private final IUserClientServicePort userClientServicePort;
 
 
     @Override

@@ -10,7 +10,7 @@ public class UserClientUseCase implements IUserClientServicePort {
     private final IUserClientPort userClientPort;
 
     @Override
-    public Boolean isValidUser(Long userId, String rol) {
-        return userClientPort.isValidUser(userId, rol);
+    public Boolean isValidUser(String dni, String rol) {
+        return userClientPort.isValidUser(dni, rol);
     }
 }

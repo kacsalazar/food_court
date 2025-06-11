@@ -31,25 +31,23 @@ public class AuthAdapter implements IAuthPort {
              throw new RuntimeException("Invalid password");
         }
 
-        String token = jwtService.generateToken(ClaimUserModel.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .name(user.getName())
-                .roleName(rolAdapter.findById(user.getIdRol()).getName())
-                .idRole(user.getIdRol())
-                .build());
+        ClaimUserModel claimUserModel = new ClaimUserModel(
+                new ClaimUserModel.Identity(user.getEmail(), user.getName(),user.getId(), user.getDni()),
+                new ClaimUserModel.Authorization(
+                        user.getIdRol(),
+                        rolAdapter.findById(user.getIdRol()).getName()
+                ), 1L
+        );
+
+        String token = jwtService.generateToken(claimUserModel);
 
         return TokenModel.builder().token(token).build();
-
 
     }
 
     public UserEntity findUserByEmail(String email) {
         log.info("Finding user by email: {}", email);
-        UserEntity userEntity = userRepository.findUserByEmail(email);
-        if (userEntity == null) {
-            return null;
-        }
-        return userEntity;
+        return userRepository.findUserByEmail(email);
     }
+
 }

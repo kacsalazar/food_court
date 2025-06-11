@@ -21,7 +21,7 @@ public class RestaurantAdapter implements IRestaurantPersistencePort {
     public RestaurantModel saveRestaurant(RestaurantModel restaurantModel) {
 
         RestaurantEntity restaurantEntity = restaurantMapper.toRestaurantEntity(restaurantModel);
-        restaurantRepository.save(restaurantEntity);
+        RestaurantEntity r  = restaurantRepository.save(restaurantEntity);
         return restaurantMapper.toRestaurantModel(restaurantEntity);
     }
 }

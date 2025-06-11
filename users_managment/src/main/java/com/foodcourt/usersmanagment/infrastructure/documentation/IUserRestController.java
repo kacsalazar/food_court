@@ -98,7 +98,7 @@ public interface IUserRestController {
     })
     ResponseEntity<Boolean> verifyUserRol(
             @Parameter(description = "ID of the user to verify", required = true)
-            @PathVariable Long id,
+            @PathVariable String dni,
             @Parameter(description = "Role to verify for the user", required = true)
             @PathVariable String rol
     );

@@ -1,4 +1,4 @@
-package com.foodcourt.usersmanagment.domain.model;
+package com.foodcourt.squaremallmanagment.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ClaimUserModel {
+public class ClaimsUserModel {
 
 
     private Identity identity;
@@ -33,7 +33,7 @@ public class ClaimUserModel {
     @AllArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Authorization {
-        private Long idRole;
+        private String idRole;
         private String roleName;
     }
 

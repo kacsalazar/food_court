@@ -47,12 +47,12 @@ class RestaurantHandlerTest {
         model.setAddress("Calle 123");
         // ... setea otros campos si es necesario
 
-        when(userClientServicePort.isValidUser(1L, "ROLE_OWNER")).thenReturn(true);
+        when(userClientServicePort.isValidUser("1", "ROLE_OWNER")).thenReturn(true);
         when(restaurantMapper.toRestaurantModel(dto)).thenReturn(model);
 
         restaurantHandler.saveRestaurant(dto);
 
-        verify(userClientServicePort).isValidUser(1L, "ROLE_OWNER");
+        verify(userClientServicePort).isValidUser("1", "ROLE_OWNER");
         verify(restaurantMapper).toRestaurantModel(dto);
         verify(restaurantServicePort).saveRestaurant(model);
     }
@@ -62,14 +62,14 @@ class RestaurantHandlerTest {
         RestaurantRequestDto dto = new RestaurantRequestDto();
         dto.setIdOwner(2L);
 
-        when(userClientServicePort.isValidUser(2L, "ROLE_OWNER")).thenReturn(false);
+        when(userClientServicePort.isValidUser("2L", "ROLE_OWNER")).thenReturn(false);
 
         RuntimeException ex = assertThrows(RuntimeException.class, () -> {
             restaurantHandler.saveRestaurant(dto);
         });
 
         assertEquals("Invalid user role for restaurant creation", ex.getMessage());
-        verify(userClientServicePort).isValidUser(2L, "ROLE_OWNER");
+        verify(userClientServicePort).isValidUser("2L", "ROLE_OWNER");
         verify(restaurantMapper, never()).toRestaurantModel(any());
         verify(restaurantServicePort, never()).saveRestaurant(any());
     }

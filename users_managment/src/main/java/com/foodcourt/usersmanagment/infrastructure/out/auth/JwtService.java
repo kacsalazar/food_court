@@ -2,6 +2,7 @@ package com.foodcourt.usersmanagment.infrastructure.out.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.foodcourt.usersmanagment.application.handler.ITokenValidator;
 import com.foodcourt.usersmanagment.domain.model.ClaimUserModel;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
 import io.jsonwebtoken.Claims;
@@ -20,7 +21,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class JwtService {
+public class JwtService implements ITokenValidator {
 
     //verificar esta importación
     @Value("${jwt.secret}")
@@ -28,18 +29,13 @@ public class JwtService {
 
     private final ObjectMapper objectMapper;
 
-    public String generateToken(ClaimUserModel token){
+    public String generateToken(ClaimUserModel claimUserModel){
 
-        Map<String, Object> claims = new HashMap<>();
-        try {
-            claims.put("User", objectMapper.writeValueAsString(token));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error serializing user to JSON", e);
-        }
+        Map<String, Object> claims = new HashMap<String, Object>(objectMapper.convertValue(claimUserModel, Map.class));
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(token.getEmail())
+                .setSubject(claimUserModel.getIdentity().getEmail())
                 .setIssuedAt(new java.util.Date(System.currentTimeMillis()))
                 .setExpiration(Date.from(Instant.now().plus(1, ChronoUnit.HOURS)))
                 .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS256)

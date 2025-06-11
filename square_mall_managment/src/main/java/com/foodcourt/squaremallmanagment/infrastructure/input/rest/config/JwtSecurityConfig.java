@@ -1,5 +1,6 @@
-package com.foodcourt.squaremallmanagment.infrastructure.out.auth;
+package com.foodcourt.squaremallmanagment.infrastructure.input.rest.config;
 
+import com.foodcourt.squaremallmanagment.infrastructure.input.rest.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,24 +20,12 @@ public class JwtSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        /*return http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/public/**")).permitAll()
-                                //.requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
-                                .requestMatchers(new AntPathRequestMatcher("/restaurant/**"))
-                                //.hasRole("OWNER")// ejemplo: endpoints sin seguridad
-                                .permitAll().anyRequest().authenticated()
-                        //.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()// todo lo demás requiere token
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();*/
 
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll() // permite login u otras rutas públicas
-                        .anyRequest().authenticated() // el resto requiere token válido
+                        .requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

@@ -3,10 +3,8 @@ package com.foodcourt.squaremallmanagment.domain.usecase;
 import com.foodcourt.squaremallmanagment.domain.api.IRestaurantServicePort;
 import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IRestaurantPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.util.RestaurantValidationUtil;
-import lombok.AllArgsConstructor;
+import com.foodcourt.squaremallmanagment.domain.usecase.util.RestaurantValidationUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 
 @RequiredArgsConstructor
