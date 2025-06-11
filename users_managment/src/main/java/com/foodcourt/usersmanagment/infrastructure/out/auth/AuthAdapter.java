@@ -4,6 +4,7 @@ import com.foodcourt.usersmanagment.domain.model.AuthModel;
 import com.foodcourt.usersmanagment.domain.model.ClaimUserModel;
 import com.foodcourt.usersmanagment.domain.model.TokenModel;
 import com.foodcourt.usersmanagment.domain.spi.IAuthPort;
+import com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter.RolAdapter;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.repository.IUserRepository;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class AuthAdapter implements IAuthPort {
     private final PasswordEncoder passwordEncoder;
     private final IUserRepository userRepository;
     private final JwtService jwtService;
+    private final RolAdapter rolAdapter;
 
     @Override
     public TokenModel userLogin(AuthModel authModel) {
@@ -29,23 +31,23 @@ public class AuthAdapter implements IAuthPort {
              throw new RuntimeException("Invalid password");
         }
 
-        String token = jwtService.generateToken(ClaimUserModel.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .name(user.getName())
-                .build());
+        ClaimUserModel claimUserModel = new ClaimUserModel(
+                new ClaimUserModel.Identity(user.getEmail(), user.getName(),user.getId(), user.getDni()),
+                new ClaimUserModel.Authorization(
+                        user.getIdRol(),
+                        rolAdapter.findById(user.getIdRol()).getName()
+                ), 1L
+        );
+
+        String token = jwtService.generateToken(claimUserModel);
 
         return TokenModel.builder().token(token).build();
-
 
     }
 
     public UserEntity findUserByEmail(String email) {
         log.info("Finding user by email: {}", email);
-        UserEntity userEntity = userRepository.findUserByEmail(email);
-        if (userEntity == null) {
-            return null;
-        }
-        return userEntity;
+        return userRepository.findUserByEmail(email);
     }
+
 }

@@ -14,8 +14,8 @@ public class UserClientAdapter implements IUserClientPort {
     private final RestTemplate restTemplate;
     private final String USER_SERVICE_URL = "http://localhost:8081/api/v1/user/";
 
-    public Boolean isValidUser(Long id, String role) {
-        String url = USER_SERVICE_URL + "verify/" + id + "/" + role;
+    public Boolean isValidUser(String dni, String role) {
+        String url = USER_SERVICE_URL + "verify/" + dni + "/" + role;
         return restTemplate.getForObject(url, Boolean.class);
     }
 }

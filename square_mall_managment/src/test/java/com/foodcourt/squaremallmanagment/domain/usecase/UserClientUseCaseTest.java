@@ -26,7 +26,7 @@ public class UserClientUseCaseTest {
 
     @Test
     void isValidUserTest() {
-        Long userId = 10L;
+        String userId = "10L";
         String rol = "ROLE_OWNER";
         when(userClientPort.isValidUser(userId, rol)).thenReturn(true);
 

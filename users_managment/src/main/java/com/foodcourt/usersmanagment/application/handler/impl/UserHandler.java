@@ -39,7 +39,7 @@ public class UserHandler implements IUserHandler {
     }
 
     @Override
-    public Boolean verifyUserRol(Long idOwner, String rol) {
-        return userServicePort.verifyUserRol(idOwner, rol);
+    public Boolean verifyUserRol(String dni, String rol) {
+        return userServicePort.verifyUserRol(dni, rol);
     }
 }

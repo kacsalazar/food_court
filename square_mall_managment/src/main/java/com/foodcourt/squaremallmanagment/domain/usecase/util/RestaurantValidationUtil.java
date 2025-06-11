@@ -1,4 +1,4 @@
-package com.foodcourt.squaremallmanagment.domain.util;
+package com.foodcourt.squaremallmanagment.domain.usecase.util;
 
 import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
 import org.springframework.stereotype.Component;

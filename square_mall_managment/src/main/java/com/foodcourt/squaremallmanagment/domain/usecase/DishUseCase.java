@@ -4,7 +4,7 @@ import com.foodcourt.squaremallmanagment.domain.api.IDishServicePort;
 import com.foodcourt.squaremallmanagment.domain.model.DishModel;
 import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.util.DishValidationUtil;
+import com.foodcourt.squaremallmanagment.domain.usecase.util.DishValidationUtil;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

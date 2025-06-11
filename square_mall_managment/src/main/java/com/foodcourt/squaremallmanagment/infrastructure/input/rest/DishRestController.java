@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -22,12 +23,14 @@ public class DishRestController implements IDishRestController {
 
     private final IDishHandler dishHandler;
 
+    @PreAuthorize("hasRole('OWNER')")
     @PostMapping("/")
     public ResponseEntity<Void> saveDish(@RequestBody DishRequestDto dishRequestDto) {
         dishHandler.saveDish(dishRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('OWNER')")
     @PatchMapping("/{id}")
     public ResponseEntity<DishResponseDto> updateDish(@PathVariable Long id, @RequestBody DishRequestUpdateDto dishRequestUpdateDto) {
         return ResponseEntity.ok(dishHandler.updateDish(id, dishRequestUpdateDto));
