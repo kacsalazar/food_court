@@ -11,6 +11,7 @@ import com.foodcourt.usersmanagment.infrastructure.out.jpa.repository.IUserRepos
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,29 +22,28 @@ public class UserAdapter implements IUserPersistencePort {
     private final IUserRepository userRepository;
     private final IUserEntityMapper userEntityMapper;
     private final RolAdapter rolAdapter;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public OwnerModel saveOwner(OwnerModel ownerModel) {
 
         UserEntity userEntity = userEntityMapper.toUserEntity(ownerModel);
         userEntity.setIdRol(rolAdapter.findByName("ROLE_OWNER").getId());
+        userEntity.setPassword(passwordEncoder.encode(ownerModel.getPassword()));
         userRepository.save(userEntity);
-        log.info("User saved: {}" + userEntity);
+
         return userEntityMapper.toOwnerModel(userEntity);
     }
 
     @Override
     public UserModel findUserById(Long id) {
-        log.info("Finding owner by id: {}", id);
         return userEntityMapper.toUserModel(userRepository.findById(id).orElse(null));
     }
 
     @Override
     public Boolean verifyUserRol(String dni, String role) {
-
         UserEntity user = userRepository.findUserByDni(dni);
         RolModel rol = rolAdapter.findByName(role);
-
         return user.getIdRol().equals(rol.getId());
     }
 

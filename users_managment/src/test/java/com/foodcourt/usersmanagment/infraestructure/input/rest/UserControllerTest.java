@@ -63,7 +63,7 @@ public class UserControllerTest {
     @Test
     void testVerifyUserRol() {
         // Given
-        Long id = 1L;
+        String id = "1L";
         String rol = "ROLE_ADMIN";
 
         when(userHandler.verifyUserRol(id, rol)).thenReturn(true);

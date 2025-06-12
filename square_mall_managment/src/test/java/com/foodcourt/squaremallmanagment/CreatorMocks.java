@@ -28,9 +28,9 @@ public class CreatorMocks {
                 .name("Pizza Place")
                 .address("123 Main St")
                 .idOwner(1L)
-                .phoneNumber("555-1234")
+                .phoneNumber("5551234")
                 .urlLogo("http://example.com/logo.png")
-                .nit("NIT123456").build();
+                .nit("123456").build();
     }
 
     public static RestaurantEntity createRestaurantEntity() {

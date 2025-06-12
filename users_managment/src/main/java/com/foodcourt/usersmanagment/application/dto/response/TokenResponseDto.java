@@ -1,10 +1,9 @@
 package com.foodcourt.usersmanagment.application.dto.response;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
 public class TokenResponseDto {

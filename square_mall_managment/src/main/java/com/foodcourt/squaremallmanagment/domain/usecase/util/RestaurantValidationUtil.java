@@ -1,14 +1,15 @@
 package com.foodcourt.squaremallmanagment.domain.usecase.util;
 
 import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
+import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 
-@Component
+@UtilityClass
 public class RestaurantValidationUtil {
 
-    public void isValidRestaurant(RestaurantModel restaurantModel) {
+    public static void isValidRestaurant(RestaurantModel restaurantModel) {
 
         if (restaurantModel.getNit() == null || !restaurantModel.getNit().matches("\\d+")) {
             throw new IllegalArgumentException("The NIT must contain only numbers.");

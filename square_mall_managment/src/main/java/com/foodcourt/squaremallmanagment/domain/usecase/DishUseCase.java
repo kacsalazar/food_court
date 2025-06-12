@@ -11,11 +11,10 @@ import lombok.AllArgsConstructor;
 public class DishUseCase implements IDishServicePort {
 
     private final IDishPersistencePort dishPersistencePort;
-    private final DishValidationUtil dishValidationUtil;
 
     @Override
     public void saveDish(DishModel dishModel) {
-        dishValidationUtil.isValidDish(dishModel);
+        DishValidationUtil.isValidDish(dishModel);
         dishPersistencePort.saveDish(dishModel);
     }
 
