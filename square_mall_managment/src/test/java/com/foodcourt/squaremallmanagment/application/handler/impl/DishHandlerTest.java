@@ -15,11 +15,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class DishHandlerTest {
-
 
     @Mock
     private IDishRequestMapper dishMapper;
@@ -35,11 +33,10 @@ class DishHandlerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-
     @Test
     void saveDish() {
-        DishRequestDto dto = CreatorMocks.createDishRequestDto();
-        DishModel model = CreatorMocks.createDishModel();
+        DishRequestDto dto = mock(DishRequestDto.class);
+        DishModel model = mock(DishModel.class);
 
         when(dishMapper.toDishModel(dto)).thenReturn(model);
 
@@ -49,23 +46,22 @@ class DishHandlerTest {
         verify(dishServicePort).saveDish(model);
     }
 
+    @Test
     void updateDish() {
         Long id = 1L;
-        DishRequestUpdateDto requestUpdateDto = CreatorMocks.createDishRequestUpdateDto();
-        DishUpdateModel updateModel = CreatorMocks.createDishUpdateModel();
-        DishModel dishModel = CreatorMocks.createDishModel();
-        DishResponseDto responseDto = CreatorMocks.createDishResponseDto();
+        DishRequestUpdateDto updateDto = mock(DishRequestUpdateDto.class);
+        DishUpdateModel updateModel = mock(DishUpdateModel.class);
+        DishModel dishModel = mock(DishModel.class);
+        DishResponseDto responseDto = mock(DishResponseDto.class);
 
-        when(dishMapper.toDishUpdateModel(requestUpdateDto)).thenReturn(updateModel);
+        when(dishMapper.toDishUpdateModel(updateDto)).thenReturn(updateModel);
         when(dishServicePort.updateDish(id, updateModel)).thenReturn(dishModel);
         when(dishMapper.toDishResponseDto(dishModel)).thenReturn(responseDto);
 
-        DishResponseDto result = dishHandler.updateDish(id, requestUpdateDto);
+        DishResponseDto result = dishHandler.updateDish(id, updateDto);
 
-        verify(dishMapper).toDishUpdateModel(requestUpdateDto);
+        verify(dishMapper).toDishUpdateModel(updateDto);
         verify(dishServicePort).updateDish(id, updateModel);
         verify(dishMapper).toDishResponseDto(dishModel);
         assertEquals(responseDto, result);
-    }
-
-}
+    }}

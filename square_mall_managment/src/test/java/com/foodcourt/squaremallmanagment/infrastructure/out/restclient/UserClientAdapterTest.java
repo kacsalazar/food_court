@@ -24,14 +24,14 @@ public class UserClientAdapterTest {
     }
 
     @Test
-    void isValidUser() {
-        String userId = "7L";
+    void isValidUser_deberiaLlamarAlRestTemplateConUrlCorrecta() {
+        String dni = "7L";
         String role = "ROLE_OWNER";
-        String expectedUrl = "http://localhost:8081/api/v1/user/verify/7/ROLE_OWNER";
+        String expectedUrl = "http://localhost:8081/api/v1/user/verify/7L/ROLE_OWNER";
 
         when(restTemplate.getForObject(expectedUrl, Boolean.class)).thenReturn(true);
 
-        Boolean result = userClientAdapter.isValidUser(userId, role);
+        Boolean result = userClientAdapter.isValidUser(dni, role);
 
         verify(restTemplate).getForObject(expectedUrl, Boolean.class);
         assertTrue(result);

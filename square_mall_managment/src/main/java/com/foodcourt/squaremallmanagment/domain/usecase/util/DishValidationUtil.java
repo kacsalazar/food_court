@@ -1,12 +1,13 @@
 package com.foodcourt.squaremallmanagment.domain.usecase.util;
 
 import com.foodcourt.squaremallmanagment.domain.model.DishModel;
+import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 
-@Component
+@UtilityClass
 public class DishValidationUtil {
 
-    public void isValidDish(DishModel dishModel) {
+    public static void isValidDish(DishModel dishModel) {
 
         if (dishModel.getName() == null || dishModel.getName().isBlank()) {
             throw new IllegalArgumentException("The name of the dish cannot be empty");

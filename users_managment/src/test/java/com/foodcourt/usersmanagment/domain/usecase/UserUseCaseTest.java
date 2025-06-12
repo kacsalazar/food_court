@@ -10,6 +10,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
@@ -18,7 +22,7 @@ public class UserUseCaseTest {
 
     @Mock
     private IUserPersistencePort userPersistencePort;
-
+    
     @InjectMocks
     private UserUseCase userUseCase;
 
@@ -29,13 +33,26 @@ public class UserUseCaseTest {
 
     @Test
     void testSaveOwner() {
+
+        LocalDate localDate = LocalDate.parse("1998-08-12");
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+
         // Given
-        OwnerModel ownerModel = CreatorMocks.createOwnerModel();
+        OwnerModel ownerModel = new OwnerModel();
+        ownerModel.setEmail("test@mail.com");
+        ownerModel.setPhoneNumber("3136871");
+        ownerModel.setPassword("hashedPassword");
+        ownerModel.setName("Test");
+        ownerModel.setDni("123456");
+        ownerModel.setBirthdayDate(date);
+
 
         // When
         userUseCase.saveOwner(ownerModel);
 
         // Then
+        //verify(UseValidationUtil.class, times(1)).isValidUser(ownerModel);
         verify(userPersistencePort, times(1)).saveOwner(ownerModel);
     }
 
@@ -58,7 +75,7 @@ public class UserUseCaseTest {
     @Test
     void testVerifyUserRol() {
         // Given
-        Long id = 1L;
+        String id = "1L";
         String role = "ROLE_ADMIN";
 
         when(userPersistencePort.verifyUserRol(id, role)).thenReturn(true);

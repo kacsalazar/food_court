@@ -11,11 +11,10 @@ import lombok.RequiredArgsConstructor;
 public class RestaurantUseCase implements IRestaurantServicePort {
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
-    private final RestaurantValidationUtil restaurantValidationUtil;
 
     @Override
     public void saveRestaurant(RestaurantModel restaurantModel) {
-        restaurantValidationUtil.isValidRestaurant(restaurantModel);
+        RestaurantValidationUtil.isValidRestaurant(restaurantModel);
         restaurantPersistencePort.saveRestaurant(restaurantModel);
     }
 }

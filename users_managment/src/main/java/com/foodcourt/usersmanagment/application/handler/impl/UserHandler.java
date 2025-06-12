@@ -22,13 +22,10 @@ public class UserHandler implements IUserHandler {
 
     private final IUserRequestMapper userRequestMapper;
     private final IUserServicePort userServicePort;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void saveUser(OwnerRequestDto ownerRequestDto) {
         OwnerModel ownerModel = userRequestMapper.toOwner(ownerRequestDto);
-        ownerModel.setPassword(passwordEncoder.encode(ownerModel.getPassword()));
-        log.info("User Handler: {}" + ownerModel);
         userServicePort.saveOwner(ownerModel);
     }
 

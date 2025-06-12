@@ -17,9 +17,8 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfiguration {
 
     @Bean
-    public RestaurantUseCase restaurantServicePort(IRestaurantPersistencePort irestaurantPersistencePort,
-                                                   RestaurantValidationUtil restaurantValidationUtil) {
-        return new RestaurantUseCase(irestaurantPersistencePort, restaurantValidationUtil);
+    public RestaurantUseCase restaurantServicePort(IRestaurantPersistencePort irestaurantPersistencePort) {
+        return new RestaurantUseCase(irestaurantPersistencePort);
     }
 
     @Bean
@@ -28,7 +27,7 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public DishUseCase dishUseCase(IDishPersistencePort iDishPersistencePort, DishValidationUtil dishValidationUtil) {
-        return new DishUseCase(iDishPersistencePort, dishValidationUtil);
+    public DishUseCase dishUseCase(IDishPersistencePort iDishPersistencePort) {
+        return new DishUseCase(iDishPersistencePort);
     }
 }

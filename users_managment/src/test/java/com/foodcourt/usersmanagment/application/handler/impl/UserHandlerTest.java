@@ -27,12 +27,6 @@ public class UserHandlerTest {
     @Mock
     private IUserServicePort userServicePort;
 
-    @Mock
-    private PasswordEncoderConfig passwordEncoderConfig;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
-
     @InjectMocks
     private UserHandler userHandler;
 
@@ -50,16 +44,16 @@ public class UserHandlerTest {
         ownerModel.setPassword("plainPassword");
 
         when(userRequestMapper.toOwner(ownerRequestDto)).thenReturn(ownerModel);
-        when(passwordEncoder.encode("plainPassword")).thenReturn("encodedPassword");
+
 
         // When
         userHandler.saveUser(ownerRequestDto);
 
         // Then
         verify(userRequestMapper, times(1)).toOwner(ownerRequestDto);
-        verify(passwordEncoder, times(1)).encode("plainPassword");
+
         verify(userServicePort, times(1)).saveOwner(ownerModel);
-        assertEquals("encodedPassword", ownerModel.getPassword());
+        assertEquals("plainPassword", ownerModel.getPassword());
     }
 
     @Test
@@ -84,7 +78,7 @@ public class UserHandlerTest {
     @Test
     void verifyUserRolTest() {
         // Given
-        Long idOwner = 1L;
+        String idOwner = "1L";
         String rol = "ROLE_ADMIN";
 
         when(userServicePort.verifyUserRol(idOwner, rol)).thenReturn(true);
