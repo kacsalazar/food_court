@@ -5,4 +5,5 @@ import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
 public interface IRestaurantPersistencePort {
 
     RestaurantModel saveRestaurant(RestaurantModel restaurantModel);
+    RestaurantModel findRestaurantById(Long id);
 }

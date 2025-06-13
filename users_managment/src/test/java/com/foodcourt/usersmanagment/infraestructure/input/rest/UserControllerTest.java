@@ -1,6 +1,6 @@
 package com.foodcourt.usersmanagment.infraestructure.input.rest;
 
-import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
+import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
 import com.foodcourt.usersmanagment.CreatorMocks;
@@ -33,13 +33,13 @@ public class UserControllerTest {
     @Test
     void testSaveUser() {
         // Given
-        OwnerRequestDto ownerRequestDto = CreatorMocks.createOwnerRequestDto();
+        UserRequestDto userRequestDto = CreatorMocks.createOwnerRequestDto();
 
         // When
-        ResponseEntity<Void> response = userRestController.saveUser(ownerRequestDto);
+        ResponseEntity<Void> response = userRestController.saveUser(userRequestDto);
 
         // Then
-        verify(userHandler, times(1)).saveUser(ownerRequestDto);
+        verify(userHandler, times(1)).saveUser(userRequestDto);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 

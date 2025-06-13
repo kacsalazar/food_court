@@ -1,6 +1,6 @@
 package com.foodcourt.squaremallmanagment;
 
-import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestDto;
+import com.foodcourt.squaremallmanagment.application.dto.request.DishCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpdateDto;
 import com.foodcourt.squaremallmanagment.application.dto.request.RestaurantRequestDto;
 import com.foodcourt.squaremallmanagment.application.dto.response.DishResponseDto;
@@ -67,8 +67,8 @@ public class CreatorMocks {
                 .build();
     }
 
-    public static DishRequestDto createDishRequestDto() {
-        return DishRequestDto.builder()
+    public static DishCreateRequest createDishRequestDto() {
+        return DishCreateRequest.builder()
                 .name("Pizza")
                 .idCategory(1L)
                 .description("Delicious pizza")

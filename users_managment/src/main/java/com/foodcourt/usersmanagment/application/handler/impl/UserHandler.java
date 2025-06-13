@@ -1,16 +1,14 @@
 package com.foodcourt.usersmanagment.application.handler.impl;
 
-import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
+import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
 import com.foodcourt.usersmanagment.application.mapper.IUserRequestMapper;
 import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
-import com.foodcourt.usersmanagment.domain.model.OwnerModel;
+import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +22,9 @@ public class UserHandler implements IUserHandler {
     private final IUserServicePort userServicePort;
 
     @Override
-    public void saveUser(OwnerRequestDto ownerRequestDto) {
-        OwnerModel ownerModel = userRequestMapper.toOwner(ownerRequestDto);
-        userServicePort.saveOwner(ownerModel);
+    public void saveUser(UserRequestDto userRequestDto) {
+        SaveUserModel saveUserModel = userRequestMapper.toUserToSave(userRequestDto);
+        userServicePort.saveOwner(saveUserModel);
     }
 
     @Override
@@ -39,4 +37,17 @@ public class UserHandler implements IUserHandler {
     public Boolean verifyUserRol(String dni, String rol) {
         return userServicePort.verifyUserRol(dni, rol);
     }
+
+    @Override
+    public void createAccountEmployee(UserRequestDto userRequestDto) {
+        SaveUserModel saveUserModel = userRequestMapper.toUserToSave(userRequestDto);
+        userServicePort.createAccountEmployee(saveUserModel);
+    }
+
+    @Override
+    public UserResponseDto getUserByDni(String dni) {
+        UserModel userModel = userServicePort.findUserById(dni);
+        return userRequestMapper.toUserResponseDto(userModel);
+    }
+
 }

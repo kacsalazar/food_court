@@ -7,4 +7,5 @@ public interface IDishServicePort {
 
     void saveDish(DishModel dishModel);
     DishModel updateDish(Long id, DishUpdateModel dishUpdateModel);
+    DishModel disableDish(Long id, Boolean status, String dniOwner);
 }

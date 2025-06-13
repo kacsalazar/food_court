@@ -1,8 +1,8 @@
 package com.foodcourt.usersmanagment;
 
-import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
+import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
-import com.foodcourt.usersmanagment.domain.model.OwnerModel;
+import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
 import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.RolEntity;
@@ -12,8 +12,20 @@ import java.util.Date;
 
 public class CreatorMocks {
 
-    public static OwnerModel createOwnerModel() {
-        return OwnerModel.builder()
+    public static SaveUserModel createOwnerModel() {
+        return SaveUserModel.builder()
+                .name("John Doe")
+                .lastName("Martinez")
+                .dni("123")
+                .phoneNumber("123456789")
+                .password("securePassword")
+                .email("mdoe@mail.com")
+                .birthdayDate(new Date()).build();
+    }
+
+
+    public static UserRequestDto createOwnerRequestDto() {
+        return UserRequestDto.builder()
                 .name("John Doe")
                 .lastName("Martinez")
                 .dni("123")
@@ -23,9 +35,8 @@ public class CreatorMocks {
                 .birthdayDate(new Date()).build();
     }
 
-
-    public static OwnerRequestDto createOwnerRequestDto() {
-        return OwnerRequestDto.builder()
+    public static UserRequestDto createEmployeeRequestDto() {
+        return UserRequestDto.builder()
                 .name("John Doe")
                 .lastName("Martinez")
                 .dni("123")

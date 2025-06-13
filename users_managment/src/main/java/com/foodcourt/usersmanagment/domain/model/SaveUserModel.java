@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 @Builder
-public class OwnerModel {
+public class SaveUserModel {
 
     private String name;
     private String lastName;

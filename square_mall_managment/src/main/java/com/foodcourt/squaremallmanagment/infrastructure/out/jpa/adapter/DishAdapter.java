@@ -5,6 +5,7 @@ import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IDishEntityMapper;
+import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.impl.DishEntityMapperData;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.IDishRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +22,14 @@ public class DishAdapter implements IDishPersistencePort {
     @Override
     public void saveDish(DishModel dishModel) {
 
-        DishEntity dishEntity = dishMapper.toDishEntity(dishModel);
+        DishEntity dishEntity = DishEntityMapperData.toDishEntity(dishModel);
         dishEntity.setIsActive(Boolean.TRUE);
         dishRepository.save(dishEntity);
     }
 
     @Override
     public DishModel findDishById(Long id) {
-        return dishMapper.toDishModel(
+        return DishEntityMapperData.toDishModel(
                 dishRepository.findById(id).get()
                         //.orElseThrow(() -> new IllegalArgumentException("Dish with id " + id + " not found."))
         );
@@ -38,6 +39,13 @@ public class DishAdapter implements IDishPersistencePort {
         DishEntity dishEntity = dishRepository.findById(id).get();
         dishEntity.setDescription(dishUpdateModel.getDescription());
         dishEntity.setPrice(dishUpdateModel.getPrice());
-        return dishMapper.toDishModel(dishRepository.save(dishEntity));
+        return DishEntityMapperData.toDishModel(dishRepository.save(dishEntity));
+    }
+
+    @Override
+    public DishModel disableDish(Long id, Boolean status) {
+        DishEntity dishEntity = dishRepository.findById(id).get();
+        dishEntity.setIsActive(status);
+        return DishEntityMapperData.toDishModel(dishRepository.save(dishEntity));
     }
 }

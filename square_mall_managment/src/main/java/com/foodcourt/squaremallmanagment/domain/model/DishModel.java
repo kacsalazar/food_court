@@ -11,11 +11,36 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DishModel {
 
-    private String name;
-    private Long idCategory;
-    private String description;
-    private Double price;
-    private Long idRestaurant;
-    private String imageUrl;
+    private OwnerInfo ownerInfo;
+    private DishInfo dishInfo;
+    private RestaurantInfo restaurantInfo;
 
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    @Builder
+    public static class OwnerInfo{
+        private String dniOwner;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    @Builder
+    public static class DishInfo {
+        private String name;
+        private Long idCategory;
+        private String description;
+        private Double price;
+        private String imageUrl;
+        private Boolean isActive; // Default value set to true
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    @Builder
+    public static class RestaurantInfo {
+        private Long idRestaurant;
+    }
 }

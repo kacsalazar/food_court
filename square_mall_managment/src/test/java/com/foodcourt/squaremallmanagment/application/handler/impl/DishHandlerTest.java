@@ -1,7 +1,6 @@
 package com.foodcourt.squaremallmanagment.application.handler.impl;
 
-import com.foodcourt.squaremallmanagment.CreatorMocks;
-import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestDto;
+import com.foodcourt.squaremallmanagment.application.dto.request.DishCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpdateDto;
 import com.foodcourt.squaremallmanagment.application.dto.response.DishResponseDto;
 import com.foodcourt.squaremallmanagment.application.mapper.IDishRequestMapper;
@@ -35,7 +34,7 @@ class DishHandlerTest {
 
     @Test
     void saveDish() {
-        DishRequestDto dto = mock(DishRequestDto.class);
+        DishCreateRequest dto = mock(DishCreateRequest.class);
         DishModel model = mock(DishModel.class);
 
         when(dishMapper.toDishModel(dto)).thenReturn(model);

@@ -1,16 +1,14 @@
 package com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter;
 
-import com.foodcourt.usersmanagment.domain.model.OwnerModel;
+import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
 import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
-import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.RolEntity;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.mapper.IUserEntityMapper;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.repository.IUserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +23,11 @@ public class UserAdapter implements IUserPersistencePort {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public OwnerModel saveOwner(OwnerModel ownerModel) {
+    public SaveUserModel saveOwner(SaveUserModel saveUserModel) {
 
-        UserEntity userEntity = userEntityMapper.toUserEntity(ownerModel);
+        UserEntity userEntity = userEntityMapper.toUserEntity(saveUserModel);
         userEntity.setIdRol(rolAdapter.findByName("ROLE_OWNER").getId());
-        userEntity.setPassword(passwordEncoder.encode(ownerModel.getPassword()));
+        userEntity.setPassword(passwordEncoder.encode(saveUserModel.getPassword()));
         userRepository.save(userEntity);
 
         return userEntityMapper.toOwnerModel(userEntity);
@@ -62,5 +60,12 @@ public class UserAdapter implements IUserPersistencePort {
         return userEntityMapper.toUserModel(userRepository.findUserByDni(dni));
     }
 
+    @Override
+    public void createAccountEmployee(SaveUserModel saveUserModel) {
+        UserEntity userEntity = userEntityMapper.toUserEntity(saveUserModel);
+        userEntity.setIdRol(rolAdapter.findByName("ROLE_EMPLOYEE").getId());
+        userEntity.setPassword(passwordEncoder.encode(saveUserModel.getPassword()));
+        userRepository.save(userEntity);
+    }
 
 }

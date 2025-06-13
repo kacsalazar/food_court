@@ -1,6 +1,6 @@
 package com.foodcourt.squaremallmanagment.infrastructure.documentation;
 
-import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestDto;
+import com.foodcourt.squaremallmanagment.application.dto.request.DishCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpdateDto;
 import com.foodcourt.squaremallmanagment.application.dto.response.DishResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,13 +46,13 @@ public interface IDishRestController {
             required = true,
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = DishRequestDto.class),
+                    schema = @Schema(implementation = DishCreateRequest.class),
                     examples = @ExampleObject(
                             name = "Restaurant Request Dto Example",
                             value = SAVE_DISH_EXAMPLE)
             )
     )
-    @RequestBody DishRequestDto dishRequestDto );
+    @RequestBody DishCreateRequest dishCreateRequest);
 
     @Operation(
             summary = "Update a dish by its ID",

@@ -1,7 +1,7 @@
 package com.foodcourt.usersmanagment.domain.usecase;
 
 import com.foodcourt.usersmanagment.CreatorMocks;
-import com.foodcourt.usersmanagment.domain.model.OwnerModel;
+import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,21 +39,20 @@ public class UserUseCaseTest {
 
 
         // Given
-        OwnerModel ownerModel = new OwnerModel();
-        ownerModel.setEmail("test@mail.com");
-        ownerModel.setPhoneNumber("3136871");
-        ownerModel.setPassword("hashedPassword");
-        ownerModel.setName("Test");
-        ownerModel.setDni("123456");
-        ownerModel.setBirthdayDate(date);
+        SaveUserModel saveUserModel = new SaveUserModel();
+        saveUserModel.setEmail("test@mail.com");
+        saveUserModel.setPhoneNumber("3136871");
+        saveUserModel.setPassword("hashedPassword");
+        saveUserModel.setName("Test");
+        saveUserModel.setDni("123456");
+        saveUserModel.setBirthdayDate(date);
 
 
         // When
-        userUseCase.saveOwner(ownerModel);
+        userUseCase.saveOwner(saveUserModel);
 
         // Then
-        //verify(UseValidationUtil.class, times(1)).isValidUser(ownerModel);
-        verify(userPersistencePort, times(1)).saveOwner(ownerModel);
+        verify(userPersistencePort, times(1)).saveOwner(saveUserModel);
     }
 
     @Test
@@ -87,4 +86,34 @@ public class UserUseCaseTest {
         verify(userPersistencePort, times(1)).verifyUserRol(id, role);
         assertEquals(true, result);
     }
+
+
+    @Test
+    void createAccountEmployee() {
+        // Arrange
+        SaveUserModel saveUserModel = CreatorMocks.createOwnerModel();
+        // Puedes mockear UseValidationUtil si es estático usando PowerMockito, aquí solo se verifica la llamada al persistence port
+
+        // Act
+        userUseCase.createAccountEmployee(saveUserModel);
+
+        // Assert
+        verify(userPersistencePort, times(1)).createAccountEmployee(saveUserModel);
+    }
+
+    @Test
+    void findUserById() {
+        // Arrange
+        String dni = "123456";
+        UserModel userModel = new UserModel();
+        when(userPersistencePort.findUserByDni(dni)).thenReturn(userModel);
+
+        // Act
+        UserModel result = userUseCase.findUserById(dni);
+
+        // Assert
+        assertEquals(userModel, result);
+        verify(userPersistencePort, times(1)).findUserByDni(dni);
+    }
+
 }
