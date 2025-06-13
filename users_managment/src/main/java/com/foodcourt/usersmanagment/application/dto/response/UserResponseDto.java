@@ -19,4 +19,5 @@ public class UserResponseDto {
     private String phoneNumber;
     private Date birthdayDate;
     private String idRol;
+    private Long id;
 }

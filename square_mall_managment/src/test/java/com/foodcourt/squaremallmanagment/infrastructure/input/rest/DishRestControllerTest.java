@@ -1,7 +1,7 @@
 package com.foodcourt.squaremallmanagment.infrastructure.input.rest;
 
 import com.foodcourt.squaremallmanagment.CreatorMocks;
-import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestDto;
+import com.foodcourt.squaremallmanagment.application.dto.request.DishCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpdateDto;
 import com.foodcourt.squaremallmanagment.application.dto.response.DishResponseDto;
 import com.foodcourt.squaremallmanagment.application.handler.IDishHandler;
@@ -31,7 +31,7 @@ class DishRestControllerTest {
 
     @Test
     void saveDish() {
-        DishRequestDto dto = CreatorMocks.createDishRequestDto();
+        DishCreateRequest dto = CreatorMocks.createDishRequestDto();
 
         ResponseEntity<Void> response = controller.saveDish(dto);
 

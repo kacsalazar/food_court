@@ -8,5 +8,6 @@ public interface IDishPersistencePort {
     void saveDish(DishModel dishModel);
     DishModel findDishById(Long id);
     DishModel updateDish(Long id, DishUpdateModel dishUpdateModel);
+    DishModel disableDish(Long id, Boolean status);
 
 }

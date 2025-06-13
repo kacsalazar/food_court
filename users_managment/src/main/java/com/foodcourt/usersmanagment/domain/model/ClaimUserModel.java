@@ -24,7 +24,6 @@ public class ClaimUserModel {
     public static class Identity {
         private String email;
         private String name;
-        private Long id;
         private String dni;
     }
 

@@ -1,6 +1,6 @@
 package com.foodcourt.usersmanagment.infraestructure.out.jpa;
 
-import com.foodcourt.usersmanagment.domain.model.OwnerModel;
+import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
 import com.foodcourt.usersmanagment.CreatorMocks;
 import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
@@ -46,25 +46,25 @@ public class UserAdapterTest {
     @Test
     void testSaveOwner() {
         // Given
-        OwnerModel ownerModel = new OwnerModel();
+        SaveUserModel saveUserModel = new SaveUserModel();
         UserEntity userEntity = new UserEntity();
         RolModel rolModel = new RolModel();
         rolModel.setId(1L);
 
-        when(userEntityMapper.toUserEntity(ownerModel)).thenReturn(userEntity);
+        when(userEntityMapper.toUserEntity(saveUserModel)).thenReturn(userEntity);
         when(rolAdapter.findByName("ROLE_OWNER")).thenReturn(rolModel);
         when(userRepository.save(userEntity)).thenReturn(userEntity);
-        when(userEntityMapper.toOwnerModel(userEntity)).thenReturn(ownerModel);
+        when(userEntityMapper.toOwnerModel(userEntity)).thenReturn(saveUserModel);
 
         // When
-        OwnerModel result = userAdapter.saveOwner(ownerModel);
+        SaveUserModel result = userAdapter.saveOwner(saveUserModel);
 
         // Then
-        verify(userEntityMapper, times(1)).toUserEntity(ownerModel);
+        verify(userEntityMapper, times(1)).toUserEntity(saveUserModel);
         verify(rolAdapter, times(1)).findByName("ROLE_OWNER");
         verify(userRepository, times(1)).save(userEntity);
         verify(userEntityMapper, times(1)).toOwnerModel(userEntity);
-        assertEquals(ownerModel, result);
+        assertEquals(saveUserModel, result);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.restclient;
 
+import com.foodcourt.squaremallmanagment.domain.model.UserModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,5 +18,11 @@ public class UserClientAdapter implements IUserClientPort {
     public Boolean isValidUser(String dni, String role) {
         String url = USER_SERVICE_URL + "verify/" + dni + "/" + role;
         return restTemplate.getForObject(url, Boolean.class);
+    }
+
+    public UserModel ownerExists(String dni) {
+        String url = USER_SERVICE_URL + "dni/" + dni;
+        log.info("Checking if owner exists with DNI: {}", restTemplate.getForObject(url, UserModel.class));
+        return restTemplate.getForObject(url, UserModel.class);
     }
 }

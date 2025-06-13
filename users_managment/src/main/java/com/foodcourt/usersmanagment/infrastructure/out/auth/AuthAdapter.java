@@ -32,7 +32,7 @@ public class AuthAdapter implements IAuthPort {
         }
 
         ClaimUserModel claimUserModel = new ClaimUserModel(
-                new ClaimUserModel.Identity(user.getEmail(), user.getName(),user.getId(), user.getDni()),
+                new ClaimUserModel.Identity(user.getEmail(), user.getName(),user.getDni()),
                 new ClaimUserModel.Authorization(
                         user.getIdRol(),
                         rolAdapter.findById(user.getIdRol()).getName()

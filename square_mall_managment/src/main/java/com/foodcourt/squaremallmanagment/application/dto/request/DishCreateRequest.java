@@ -9,14 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class DishRequestDto {
+public class DishCreateRequest {
 
     private String name;
     private String description;
     private Double price;
     private String imageUrl;
     private Long idCategory;
-    private Long idRestaurant;
-    private Long idOwner;
-
+    private Long idRestaurant; // Changed from nitRestaurant to idRestaurant for consistency
 }

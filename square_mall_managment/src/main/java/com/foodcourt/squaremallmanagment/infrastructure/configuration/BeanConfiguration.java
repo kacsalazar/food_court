@@ -27,7 +27,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public DishUseCase dishUseCase(IDishPersistencePort iDishPersistencePort) {
-        return new DishUseCase(iDishPersistencePort);
+    public DishUseCase dishUseCase(IDishPersistencePort iDishPersistencePort, IUserClientPort iUserClientPort,
+                                   IRestaurantPersistencePort restaurantPersistencePort) {
+        return new DishUseCase(iDishPersistencePort, iUserClientPort, restaurantPersistencePort);
     }
 }

@@ -1,8 +1,7 @@
 package com.foodcourt.usersmanagment.domain.usecase.util;
 
-import com.foodcourt.usersmanagment.domain.model.OwnerModel;
+import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
 import lombok.experimental.UtilityClass;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -13,7 +12,7 @@ import java.util.regex.Pattern;
 @UtilityClass
 public class UseValidationUtil {
 
-    public static void isValidUser(OwnerModel user) {
+    public static void isValidUser(SaveUserModel user) {
 
         if (user.getEmail() == null || !Pattern.matches("^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$", user.getEmail())) {
             throw new IllegalArgumentException("The email is invalid");

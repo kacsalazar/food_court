@@ -11,7 +11,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 @Builder
-public class OwnerRequestDto {
+public class UserRequestDto {
 
     private String name;
     private String lastName;

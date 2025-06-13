@@ -1,6 +1,6 @@
 package com.foodcourt.usersmanagment.infrastructure.documentation;
 
-import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
+import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.context.request.WebRequest;
 
 import static com.foodcourt.usersmanagment.infrastructure.documentation.ApiResponsesOKExamples.SAVE_OWNER_EXAMPLE;
 
@@ -34,11 +33,11 @@ public interface IUserRestController {
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = OwnerRequestDto.class),
+                            schema = @Schema(implementation = UserRequestDto.class),
                             examples = @ExampleObject(
                                     name = "OwnerRequestDtoExample",
                                     value = SAVE_OWNER_EXAMPLE)
-                    )) OwnerRequestDto requestDto
+                    )) UserRequestDto requestDto
     );
 
     @Operation(

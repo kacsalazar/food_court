@@ -1,11 +1,9 @@
-package com.foodcourt.usersmanagment.domain.model;
+package com.foodcourt.squaremallmanagment.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,11 +12,6 @@ import java.util.Date;
 public class UserModel {
 
     private String name;
-    private String lastName;
     private String dni;
-    private String phoneNumber;
-    private Date birthdayDate;
-    private Long idRol;
     private Long id;
-
 }
