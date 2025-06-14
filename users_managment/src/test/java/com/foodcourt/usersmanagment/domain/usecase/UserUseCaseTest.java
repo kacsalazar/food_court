@@ -37,7 +37,6 @@ public class UserUseCaseTest {
         LocalDate localDate = LocalDate.parse("1998-08-12");
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-
         // Given
         SaveUserModel saveUserModel = new SaveUserModel();
         saveUserModel.setEmail("test@mail.com");

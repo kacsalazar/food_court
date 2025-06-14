@@ -39,4 +39,10 @@ public class UserUseCase implements IUserServicePort {
         return userPersistencePort.findUserByDni(dni);
     }
 
+    @Override
+    public void createAccountCustomer(SaveUserModel saveUserModel) {
+        UseValidationUtil.isValidUser(saveUserModel);
+        userPersistencePort.createAccountCustomer(saveUserModel);
+    }
+
 }

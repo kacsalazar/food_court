@@ -54,4 +54,10 @@ public class UserRestController implements IUserRestController {
     }
 
 
+    @PostMapping("/customer/")
+    public ResponseEntity<Void> createAccountCustomer(@RequestBody UserRequestDto userRequestDto){
+        userHandler.createAccountCustomer(userRequestDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 }

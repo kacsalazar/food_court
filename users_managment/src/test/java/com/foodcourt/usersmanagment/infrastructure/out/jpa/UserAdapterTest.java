@@ -1,4 +1,4 @@
-package com.foodcourt.usersmanagment.infraestructure.out.jpa;
+package com.foodcourt.usersmanagment.infrastructure.out.jpa;
 
 import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
 import com.foodcourt.usersmanagment.CreatorMocks;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class UserAdapterTest {
+class UserAdapterTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -160,5 +160,50 @@ public class UserAdapterTest {
         assertEquals(userModel, result);
         verify(userRepository).findUserByDni(dni);
         verify(userEntityMapper).toUserModel(userEntity);
+    }
+
+    @Test
+    void testCreateAccountEmployee() {
+        SaveUserModel saveUserModel = new SaveUserModel();
+        saveUserModel.setPassword("plainPassword");
+        UserEntity userEntity = new UserEntity();
+        RolModel rolModel = new RolModel();
+        rolModel.setId(2L);
+
+        when(userEntityMapper.toUserEntity(saveUserModel)).thenReturn(userEntity);
+        when(rolAdapter.findByName("ROLE_EMPLOYEE")).thenReturn(rolModel);
+        when(passwordEncoder.encode("plainPassword")).thenReturn("encodedPassword");
+
+        userAdapter.createAccountEmployee(saveUserModel);
+
+        verify(userEntityMapper).toUserEntity(saveUserModel);
+        verify(rolAdapter).findByName("ROLE_EMPLOYEE");
+        verify(passwordEncoder).encode("plainPassword");
+        verify(userRepository).save(userEntity);
+        // Verifica que los valores se asignaron correctamente
+        assert userEntity.getIdRol().equals(2L);
+        assert userEntity.getPassword().equals("encodedPassword");
+    }
+
+    @Test
+    void testCreateAccountCustomer() {
+        SaveUserModel saveUserModel = new SaveUserModel();
+        saveUserModel.setPassword("plainPassword");
+        UserEntity userEntity = new UserEntity();
+        RolModel rolModel = new RolModel();
+        rolModel.setId(3L);
+
+        when(userEntityMapper.toUserEntity(saveUserModel)).thenReturn(userEntity);
+        when(rolAdapter.findByName("ROLE_CUSTOMER")).thenReturn(rolModel);
+        when(passwordEncoder.encode("plainPassword")).thenReturn("encodedPassword");
+
+        userAdapter.createAccountCustomer(saveUserModel);
+
+        verify(userEntityMapper).toUserEntity(saveUserModel);
+        verify(rolAdapter).findByName("ROLE_CUSTOMER");
+        verify(passwordEncoder).encode("plainPassword");
+        verify(userRepository).save(userEntity);
+        assert userEntity.getIdRol().equals(3L);
+        assert userEntity.getPassword().equals("encodedPassword");
     }
 }

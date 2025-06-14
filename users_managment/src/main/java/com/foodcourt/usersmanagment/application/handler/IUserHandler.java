@@ -10,4 +10,5 @@ public interface IUserHandler {
     Boolean verifyUserRol(String dni, String rol);
     void createAccountEmployee(UserRequestDto userRequestDto);
     UserResponseDto getUserByDni(String dni);
+    void createAccountCustomer(UserRequestDto userRequestDto);
 }

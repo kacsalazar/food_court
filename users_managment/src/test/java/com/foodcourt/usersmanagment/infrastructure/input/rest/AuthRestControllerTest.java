@@ -29,7 +29,7 @@ class AuthRestControllerTest {
     }
 
     @Test
-    void userLogin_ReturnsTokenResponseDto() {
+    void userLogin() {
         // Arrange
         AuthRequestDto authRequestDto = new AuthRequestDto();
         TokenResponseDto tokenResponseDto = new TokenResponseDto();

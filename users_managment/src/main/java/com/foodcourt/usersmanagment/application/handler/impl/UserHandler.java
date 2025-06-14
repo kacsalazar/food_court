@@ -50,4 +50,10 @@ public class UserHandler implements IUserHandler {
         return userRequestMapper.toUserResponseDto(userModel);
     }
 
+    @Override
+    public void createAccountCustomer(UserRequestDto userRequestDto) {
+        SaveUserModel saveUserModel = userRequestMapper.toUserToSave(userRequestDto);
+        userServicePort.createAccountCustomer(saveUserModel);
+    }
+
 }
