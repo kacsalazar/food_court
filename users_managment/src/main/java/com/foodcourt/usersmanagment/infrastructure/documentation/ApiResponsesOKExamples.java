@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ApiResponsesOKExamples {
 
-    public static final String SAVE_OWNER_EXAMPLE = "{\n" +
+    public static final String SAVE_USER_EXAMPLE = "{\n" +
             "  \"name\": \"Ximena\",\n" +
             "  \"lastName\": \"Ortiz\",\n" +
             "  \"dni\": \"456\",\n" +

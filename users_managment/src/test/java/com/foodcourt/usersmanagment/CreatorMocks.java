@@ -8,11 +8,18 @@ import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.RolEntity;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class CreatorMocks {
 
     public static SaveUserModel createOwnerModel() {
+
+        LocalDate localDate = LocalDate.parse("1998-08-12");
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+
         return SaveUserModel.builder()
                 .name("John Doe")
                 .lastName("Martinez")
@@ -20,7 +27,7 @@ public class CreatorMocks {
                 .phoneNumber("123456789")
                 .password("securePassword")
                 .email("mdoe@mail.com")
-                .birthdayDate(new Date()).build();
+                .birthdayDate(date).build();
     }
 
 

@@ -10,4 +10,5 @@ public interface IUserServicePort {
     Boolean verifyUserRol(String dni, String role);
     void createAccountEmployee(SaveUserModel saveUserModel);
     UserModel findUserById(String dni);
+    void createAccountCustomer(SaveUserModel saveUserModel);
 }

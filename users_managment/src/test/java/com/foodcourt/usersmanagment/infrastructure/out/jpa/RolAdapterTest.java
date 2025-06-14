@@ -1,4 +1,4 @@
-package com.foodcourt.usersmanagment.infraestructure.out.jpa;
+package com.foodcourt.usersmanagment.infrastructure.out.jpa;
 
 import com.foodcourt.usersmanagment.CreatorMocks;
 import com.foodcourt.usersmanagment.domain.model.RolModel;

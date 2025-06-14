@@ -68,4 +68,12 @@ public class UserAdapter implements IUserPersistencePort {
         userRepository.save(userEntity);
     }
 
+    @Override
+    public void createAccountCustomer(SaveUserModel saveUserModel) {
+        UserEntity userEntity = userEntityMapper.toUserEntity(saveUserModel);
+        userEntity.setIdRol(rolAdapter.findByName("ROLE_CUSTOMER").getId());
+        userEntity.setPassword(passwordEncoder.encode(saveUserModel.getPassword()));
+        userRepository.save(userEntity);
+    }
+
 }

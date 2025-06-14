@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/v1/user/verify/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/v1/user/dni/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/v1/user/customer/**")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

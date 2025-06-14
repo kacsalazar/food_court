@@ -1,10 +1,9 @@
-package com.foodcourt.usersmanagment.infraestructure.input.rest;
+package com.foodcourt.usersmanagment.infrastructure.input.rest;
 
 import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
 import com.foodcourt.usersmanagment.CreatorMocks;
-import com.foodcourt.usersmanagment.infrastructure.input.rest.UserRestController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
-public class UserControllerTest {
+class UserControllerTest {
 
     @Mock
     private IUserHandler userHandler;
@@ -75,6 +74,40 @@ public class UserControllerTest {
         verify(userHandler, times(1)).verifyUserRol(id, rol);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(true, response.getBody());
+    }
+
+
+    @Test
+    void testCreateAccountEmployee() {
+        UserRequestDto userRequestDto = CreatorMocks.createEmployeeRequestDto();
+
+        ResponseEntity<Void> response = userRestController.createAccountEmployee(userRequestDto);
+
+        verify(userHandler, times(1)).createAccountEmployee(userRequestDto);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    }
+
+    @Test
+    void testGetUserByDni() {
+        String dni = "123";
+        UserResponseDto userResponseDto = CreatorMocks.createUserResponseDto();
+        when(userHandler.getUserByDni(dni)).thenReturn(userResponseDto);
+
+        ResponseEntity<UserResponseDto> response = userRestController.getUserByDni(dni);
+
+        verify(userHandler, times(1)).getUserByDni(dni);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(userResponseDto, response.getBody());
+    }
+
+    @Test
+    void testCreateAccountCustomer() {
+        UserRequestDto userRequestDto = CreatorMocks.createOwnerRequestDto();
+
+        ResponseEntity<Void> response = userRestController.createAccountCustomer(userRequestDto);
+
+        verify(userHandler, times(1)).createAccountCustomer(userRequestDto);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
 }

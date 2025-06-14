@@ -1,10 +1,11 @@
-package com.foodcourt.usersmanagment.infrastructure.out.auth;
+package com.foodcourt.usersmanagment.infrastructure.out.jpa;
 
 import com.foodcourt.usersmanagment.application.handler.ITokenValidator;
 import com.foodcourt.usersmanagment.domain.model.AuthModel;
 import com.foodcourt.usersmanagment.domain.model.ClaimUserModel;
 import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.TokenModel;
+import com.foodcourt.usersmanagment.infrastructure.out.auth.AuthAdapter;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter.RolAdapter;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.repository.IUserRepository;
@@ -73,7 +74,7 @@ class AuthAdapterTest {
     }
 
     @Test
-    void userLogin_InvalidPassword_ThrowsException() {
+    void userLogin() {
         // Arrange
         AuthModel authModel = new AuthModel("wrongPassword", "test@mail.com");
         UserEntity userEntity = new UserEntity();
@@ -94,7 +95,7 @@ class AuthAdapterTest {
     }
 
     @Test
-    void findUserByEmail_ReturnsUser() {
+    void findUserByEmail() {
         // Arrange
         UserEntity userEntity = new UserEntity();
         when(userRepository.findUserByEmail("mail@mail.com")).thenReturn(userEntity);

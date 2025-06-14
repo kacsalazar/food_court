@@ -11,5 +11,6 @@ public interface IUserPersistencePort {
     UserModel findUserByEmail(String email);
     UserModel findUserByDni(String dni);
     void createAccountEmployee(SaveUserModel saveUserModel);
+    void createAccountCustomer(SaveUserModel saveUserModel);
 
 }
