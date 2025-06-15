@@ -1,11 +1,9 @@
 package com.foodcourt.usersmanagment.infrastructure.configuration;
 
-import com.foodcourt.usersmanagment.domain.api.IObjectServicePort;
-import com.foodcourt.usersmanagment.domain.spi.IObjectPersistencePort;
-import com.foodcourt.usersmanagment.domain.usecase.ObjectUseCase;
-import com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter.ObjectJpaAdapter;
-import com.foodcourt.usersmanagment.infrastructure.out.jpa.mapper.IObjectEntityMapper;
-import com.foodcourt.usersmanagment.infrastructure.out.jpa.repository.IObjectRepository;
+import com.foodcourt.usersmanagment.domain.spi.IAuthPort;
+import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
+import com.foodcourt.usersmanagment.domain.usecase.AuthUseCase;
+import com.foodcourt.usersmanagment.domain.usecase.UserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,17 +11,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class BeanConfiguration {
-    //private final IObjectRepository objectRepository;
-    //private final IObjectEntityMapper objectEntityMapper;
 
     @Bean
-    public IObjectPersistencePort objectPersistencePort() {
-        //return new ObjectJpaAdapter(objectRepository, objectEntityMapper);
-        return null;
+    public UserUseCase userServicePort(IUserPersistencePort iUserPersistencePort) {
+        return new UserUseCase( iUserPersistencePort);
     }
 
     @Bean
-    public IObjectServicePort objectServicePort() {
-        return new ObjectUseCase(objectPersistencePort());
+    public AuthUseCase authUseCase(IAuthPort iAuthPort){
+        return new AuthUseCase(iAuthPort);
     }
 }
