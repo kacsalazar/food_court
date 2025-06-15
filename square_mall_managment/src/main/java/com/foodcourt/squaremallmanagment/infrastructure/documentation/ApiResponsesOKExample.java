@@ -26,4 +26,8 @@ public class ApiResponsesOKExample {
             "  \"idRestaurant\": \"9\",\n" +
             "  \"idOwner\": \"33\",\n" +
             "}";
+
+    public static final String CHANGE_DISH_STATUS_EXAMPLE = "{\n" +
+            "  \"status\": \"ACTIVE\"\n" +
+            "}";
 }

@@ -2,6 +2,7 @@ package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 
 import com.foodcourt.squaremallmanagment.domain.model.DishModel;
 import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
+import com.foodcourt.squaremallmanagment.domain.model.ListDishesByRestaurantModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IDishEntityMapper;
@@ -10,6 +11,8 @@ import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.IDish
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -47,5 +50,12 @@ public class DishAdapter implements IDishPersistencePort {
         DishEntity dishEntity = dishRepository.findById(id).get();
         dishEntity.setIsActive(status);
         return DishEntityMapperData.toDishModel(dishRepository.save(dishEntity));
+    }
+
+    @Override
+    public List<ListDishesByRestaurantModel> getDishesByCategory(Long idRestaurant, Long idCategory, Integer page, Integer size) {
+
+        return DishEntityMapperData.toDishesByRestaurantModelList(dishRepository
+                .findDishesByRestaurant(idRestaurant, idCategory, page, size));
     }
 }

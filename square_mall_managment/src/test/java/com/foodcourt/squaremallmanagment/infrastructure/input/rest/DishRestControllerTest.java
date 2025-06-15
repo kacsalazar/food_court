@@ -3,7 +3,7 @@ package com.foodcourt.squaremallmanagment.infrastructure.input.rest;
 import com.foodcourt.squaremallmanagment.CreatorMocks;
 import com.foodcourt.squaremallmanagment.application.dto.request.DishCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpdateDto;
-import com.foodcourt.squaremallmanagment.application.dto.response.DishResponseDto;
+import com.foodcourt.squaremallmanagment.application.dto.response.DishResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IDishHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,11 +43,11 @@ class DishRestControllerTest {
     void updateDish() {
         Long id = 1L;
         DishRequestUpdateDto updateDto = CreatorMocks.createDishRequestUpdateDto();
-        DishResponseDto responseDto = CreatorMocks.createDishResponseDto();
+        DishResponse responseDto = CreatorMocks.createDishResponseDto();
 
         when(dishHandler.updateDish(id, updateDto)).thenReturn(responseDto);
 
-        ResponseEntity<DishResponseDto> response = controller.updateDish(id, updateDto);
+        ResponseEntity<DishResponse> response = controller.updateDish(id, updateDto);
 
         verify(dishHandler).updateDish(id, updateDto);
         assertEquals(HttpStatus.OK, response.getStatusCode());

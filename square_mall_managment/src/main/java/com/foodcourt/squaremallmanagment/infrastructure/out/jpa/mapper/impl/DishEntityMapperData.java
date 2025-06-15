@@ -1,8 +1,11 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.impl;
 
 import com.foodcourt.squaremallmanagment.domain.model.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.ListDishesByRestaurantModel;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 import lombok.experimental.UtilityClass;
+
+import java.util.List;
 
 @UtilityClass
 public class DishEntityMapperData {
@@ -37,5 +40,15 @@ public class DishEntityMapperData {
                 .ownerInfo(DishModel.OwnerInfo.builder()
                         .build())
                 .build();
+    }
+
+    public static List<ListDishesByRestaurantModel> toDishesByRestaurantModelList (List<DishEntity> dishEntities) {
+        return dishEntities.stream()
+                .map(dishEntity -> ListDishesByRestaurantModel.builder()
+                        .name(dishEntity.getName())
+                        .description(dishEntity.getDescription())
+                        .imageUrl(dishEntity.getImageUrl())
+                        .build())
+                .toList();
     }
 }
