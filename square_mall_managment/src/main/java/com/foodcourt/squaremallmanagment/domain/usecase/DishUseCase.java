@@ -2,16 +2,15 @@ package com.foodcourt.squaremallmanagment.domain.usecase;
 
 import com.foodcourt.squaremallmanagment.application.handler.util.UtilClass;
 import com.foodcourt.squaremallmanagment.domain.api.IDishServicePort;
-import com.foodcourt.squaremallmanagment.domain.model.DishModel;
-import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
-import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
-import com.foodcourt.squaremallmanagment.domain.model.UserModel;
+import com.foodcourt.squaremallmanagment.domain.model.*;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IRestaurantPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
 import com.foodcourt.squaremallmanagment.domain.usecase.util.DishValidationUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -48,5 +47,11 @@ public class DishUseCase implements IDishServicePort {
             throw new IllegalArgumentException("User is not allowed to disable this dish.");
         }
         return dishPersistencePort.disableDish(id, status);
+    }
+
+    @Override
+    public List<ListDishesByRestaurantModel> getDishesByCategory(Long idRestaurant, Long idCategory, Integer page, Integer size) {
+        log.info("USE CASE"+ dishPersistencePort.getDishesByCategory(idRestaurant, idCategory, page, size) );
+        return dishPersistencePort.getDishesByCategory(idRestaurant, idCategory, page, size);
     }
 }

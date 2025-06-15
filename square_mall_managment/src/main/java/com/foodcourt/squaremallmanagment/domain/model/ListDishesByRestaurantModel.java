@@ -1,4 +1,4 @@
-package com.foodcourt.squaremallmanagment.application.dto.response;
+package com.foodcourt.squaremallmanagment.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class DishResponseDto {
+public class ListDishesByRestaurantModel {
 
     private String name;
-    private Long idCategory;
     private String description;
-    private Double price;
-    private Long idRestaurant;
     private String imageUrl;
 }

@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 @Slf4j
@@ -29,5 +31,11 @@ public class RestaurantAdapter implements IRestaurantPersistencePort {
     public RestaurantModel findRestaurantById(Long id) {
         return restaurantMapper.toRestaurantModel(restaurantRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Restaurant with id " + id + " not found.")));
+    }
+
+    @Override
+    public List<RestaurantModel> getAllRestaurants(Integer page, Integer size) {
+        return restaurantMapper.toRestaurantModelList(
+                restaurantRepository.findAllByOrderByIdAsc(page, size));
     }
 }

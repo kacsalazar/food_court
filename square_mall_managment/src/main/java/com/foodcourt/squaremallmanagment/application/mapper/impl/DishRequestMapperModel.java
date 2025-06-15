@@ -1,7 +1,7 @@
 package com.foodcourt.squaremallmanagment.application.mapper.impl;
 
 import com.foodcourt.squaremallmanagment.application.dto.request.DishCreateRequest;
-import com.foodcourt.squaremallmanagment.application.dto.response.DishResponseDto;
+import com.foodcourt.squaremallmanagment.application.dto.response.DishResponse;
 import com.foodcourt.squaremallmanagment.application.handler.util.UtilClass;
 import com.foodcourt.squaremallmanagment.domain.model.DishModel;
 import lombok.experimental.UtilityClass;
@@ -27,8 +27,8 @@ public class DishRequestMapperModel {
                 .build();
     }
 
-    public static DishResponseDto toDishResponseDto(DishModel dishModel) {
-        return DishResponseDto.builder()
+    public static DishResponse toDishResponseDto(DishModel dishModel) {
+        return DishResponse.builder()
                 .name(dishModel.getDishInfo().getName())
                 .description(dishModel.getDishInfo().getDescription())
                 .price(dishModel.getDishInfo().getPrice())
