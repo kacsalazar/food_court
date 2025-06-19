@@ -1,6 +1,8 @@
 package com.foodcourt.usersmanagment.domain.usecase;
 
 import com.foodcourt.usersmanagment.CreatorMocks;
+import com.foodcourt.usersmanagment.domain.exception.ConstantException;
+import com.foodcourt.usersmanagment.domain.exception.DomainException;
 import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
@@ -14,7 +16,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
@@ -55,35 +57,54 @@ public class UserUseCaseTest {
     }
 
     @Test
-    void testFindUserById() {
-        // Given
+    void findUserByIdTest() {
         Long id = 1L;
-        UserModel userModel = CreatorMocks.createUserModel();
-
+        UserModel userModel = new UserModel();
         when(userPersistencePort.findUserById(id)).thenReturn(userModel);
 
-        // When
         UserModel result = userUseCase.findUserById(id);
 
-        // Then
-        verify(userPersistencePort, times(1)).findUserById(id);
         assertEquals(userModel, result);
+        verify(userPersistencePort, times(1)).findUserById(id);
     }
 
     @Test
-    void testVerifyUserRol() {
-        // Given
-        String id = "1L";
+    void findUserByIdThrowsExceptionTest() {
+        Long id = 1L;
+        when(userPersistencePort.findUserById(id)).thenReturn(null);
+
+        DomainException exception = assertThrows(DomainException.class, () -> {
+            userUseCase.findUserById(id);
+        });
+
+        assertEquals(ConstantException.USER_NOT_FOUND, exception.getMessage());
+        verify(userPersistencePort, times(1)).findUserById(id);
+    }
+
+    @Test
+    void verifyUserRolTest() {
+        String dni = "123";
         String role = "ROLE_ADMIN";
+        when(userPersistencePort.verifyUserRol(dni, role)).thenReturn(true);
 
-        when(userPersistencePort.verifyUserRol(id, role)).thenReturn(true);
+        Boolean result = userUseCase.verifyUserRol(dni, role);
 
-        // When
-        Boolean result = userUseCase.verifyUserRol(id, role);
+        assertTrue(result);
+        verify(userPersistencePort, times(1)).verifyUserRol(dni, role);
+    }
 
-        // Then
-        verify(userPersistencePort, times(1)).verifyUserRol(id, role);
-        assertEquals(true, result);
+    @Test
+    void verifyUserRolThrowsExceptionTest() {
+        String dni = "123";
+        String role = "ROLE_ADMIN";
+        when(userPersistencePort.verifyUserRol(dni, role)).thenReturn(null);
+
+        DomainException exception = assertThrows(DomainException.class, () -> {
+            userUseCase.verifyUserRol(dni, role);
+        });
+
+        assertEquals(ConstantException.INVALID_USER, exception.getMessage());
+        verify(userPersistencePort, times(1)).verifyUserRol(dni, role);
     }
 
 
@@ -91,7 +112,6 @@ public class UserUseCaseTest {
     void createAccountEmployee() {
         // Arrange
         SaveUserModel saveUserModel = CreatorMocks.createOwnerModel();
-        // Puedes mockear UseValidationUtil si es estático usando PowerMockito, aquí solo se verifica la llamada al persistence port
 
         // Act
         userUseCase.createAccountEmployee(saveUserModel);
@@ -101,17 +121,27 @@ public class UserUseCaseTest {
     }
 
     @Test
-    void findUserById() {
-        // Arrange
+    void getUserByDni() {
         String dni = "123456";
         UserModel userModel = new UserModel();
         when(userPersistencePort.findUserByDni(dni)).thenReturn(userModel);
 
-        // Act
-        UserModel result = userUseCase.findUserById(dni);
+        UserModel result = userUseCase.getUserByDni(dni);
 
-        // Assert
         assertEquals(userModel, result);
+        verify(userPersistencePort, times(1)).findUserByDni(dni);
+    }
+
+    @Test
+    void getUserByDniThrowsException() {
+        String dni = "123456";
+        when(userPersistencePort.findUserByDni(dni)).thenReturn(null);
+
+        DomainException exception = assertThrows(DomainException.class, () -> {
+            userUseCase.getUserByDni(dni);
+        });
+
+        assertEquals(ConstantException.USER_NOT_FOUND, exception.getMessage());
         verify(userPersistencePort, times(1)).findUserByDni(dni);
     }
 

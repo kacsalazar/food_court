@@ -3,6 +3,7 @@ package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 import com.foodcourt.squaremallmanagment.domain.model.DishModel;
 import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.model.ListDishesByRestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.OrderModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IDishEntityMapper;
@@ -34,20 +35,19 @@ public class DishAdapter implements IDishPersistencePort {
     public DishModel findDishById(Long id) {
         return DishEntityMapperData.toDishModel(
                 dishRepository.findById(id).get()
-                        //.orElseThrow(() -> new IllegalArgumentException("Dish with id " + id + " not found."))
         );
     }
 
-    public DishModel updateDish(Long id, DishUpdateModel dishUpdateModel) {
-        DishEntity dishEntity = dishRepository.findById(id).get();
+    public DishModel updateDish(DishModel dish, DishUpdateModel dishUpdateModel) {
+        DishEntity dishEntity = dishMapper.toDishEntity(dish);
         dishEntity.setDescription(dishUpdateModel.getDescription());
         dishEntity.setPrice(dishUpdateModel.getPrice());
         return DishEntityMapperData.toDishModel(dishRepository.save(dishEntity));
     }
 
     @Override
-    public DishModel disableDish(Long id, Boolean status) {
-        DishEntity dishEntity = dishRepository.findById(id).get();
+    public DishModel disableDish(DishModel dish, Boolean status) {
+        DishEntity dishEntity = dishMapper.toDishEntity(dish);
         dishEntity.setIsActive(status);
         return DishEntityMapperData.toDishModel(dishRepository.save(dishEntity));
     }

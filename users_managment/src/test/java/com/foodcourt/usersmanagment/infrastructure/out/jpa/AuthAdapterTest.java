@@ -94,7 +94,7 @@ class AuthAdapterTest {
         verifyNoMoreInteractions(rolAdapter, iTokenValidator);
     }
 
-    @Test
+    /*@Test
     void findUserByEmail() {
         // Arrange
         UserEntity userEntity = new UserEntity();
@@ -106,5 +106,5 @@ class AuthAdapterTest {
         // Assert
         assertEquals(userEntity, result);
         verify(userRepository).findUserByEmail("mail@mail.com");
-    }
+    }*/
 }

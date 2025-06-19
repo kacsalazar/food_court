@@ -1,9 +1,11 @@
 package com.foodcourt.squaremallmanagment.infrastructure.configuration;
 
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
+import com.foodcourt.squaremallmanagment.domain.spi.IOrderPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IRestaurantPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
 import com.foodcourt.squaremallmanagment.domain.usecase.DishUseCase;
+import com.foodcourt.squaremallmanagment.domain.usecase.OrderUseCase;
 import com.foodcourt.squaremallmanagment.domain.usecase.RestaurantUseCase;
 import com.foodcourt.squaremallmanagment.domain.usecase.UserClientUseCase;
 import com.foodcourt.squaremallmanagment.domain.usecase.util.DishValidationUtil;
@@ -30,5 +32,10 @@ public class BeanConfiguration {
     public DishUseCase dishUseCase(IDishPersistencePort iDishPersistencePort, IUserClientPort iUserClientPort,
                                    IRestaurantPersistencePort restaurantPersistencePort) {
         return new DishUseCase(iDishPersistencePort, iUserClientPort, restaurantPersistencePort);
+    }
+
+    @Bean
+    public OrderUseCase orderUseCase(IOrderPersistencePort iOrderPersistencePort, IUserClientPort userClientPort) {
+        return new OrderUseCase(iOrderPersistencePort, userClientPort);
     }
 }

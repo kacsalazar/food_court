@@ -109,7 +109,7 @@ public interface IDishRestController {
     );
 
     @Operation(
-            summary = "Update a dish by its ID",
+            summary = "Disable a dish by its ID",
             description = "Updates an existing dish using the provided ID and updated dish data.",
             tags = {"Dish Management"}
     )

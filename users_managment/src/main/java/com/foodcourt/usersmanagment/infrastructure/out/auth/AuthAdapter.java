@@ -1,6 +1,8 @@
 package com.foodcourt.usersmanagment.infrastructure.out.auth;
 
 import com.foodcourt.usersmanagment.application.handler.ITokenValidator;
+import com.foodcourt.usersmanagment.domain.exception.ConstantException;
+import com.foodcourt.usersmanagment.domain.exception.DomainException;
 import com.foodcourt.usersmanagment.domain.model.AuthModel;
 import com.foodcourt.usersmanagment.domain.model.ClaimUserModel;
 import com.foodcourt.usersmanagment.domain.model.TokenModel;
@@ -12,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -25,17 +29,21 @@ public class AuthAdapter implements IAuthPort {
 
     @Override
     public TokenModel userLogin(AuthModel authModel) {
-        UserEntity user = this.findUserByEmail(authModel.getEmail());
+        UserEntity user = findUserByEmail(authModel.getEmail());
+
+        String rolName = rolAdapter.findById(user.getIdRol()).getName();
+        if (rolName == null)
+            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
+
         boolean validPassword = passwordEncoder.matches(authModel.getPassword(), user.getPassword());
-        if (!validPassword) {
-             throw new RuntimeException("Invalid password");
-        }
+        if (!validPassword)
+             throw new DomainException(ConstantException.INVALID_PASSWORD);
 
         ClaimUserModel claimUserModel = new ClaimUserModel(
                 new ClaimUserModel.Identity(user.getEmail(), user.getName(),user.getDni()),
                 new ClaimUserModel.Authorization(
                         user.getIdRol(),
-                        rolAdapter.findById(user.getIdRol()).getName()
+                       rolName
                 ), 1L
         );
 
@@ -45,9 +53,9 @@ public class AuthAdapter implements IAuthPort {
 
     }
 
-    public UserEntity findUserByEmail(String email) {
-        log.info("Finding user by email: {}", email);
-        return userRepository.findUserByEmail(email);
+    private UserEntity findUserByEmail(String email) {
+        return Optional.ofNullable(userRepository.findUserByEmail(email))
+                .orElseThrow(() -> new DomainException(ConstantException.USER_NOT_FOUND));
     }
 
 }

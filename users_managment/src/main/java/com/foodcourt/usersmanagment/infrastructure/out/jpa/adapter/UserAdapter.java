@@ -1,5 +1,7 @@
 package com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter;
 
+import com.foodcourt.usersmanagment.domain.exception.ConstantException;
+import com.foodcourt.usersmanagment.domain.exception.DomainException;
 import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
 import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
@@ -26,7 +28,11 @@ public class UserAdapter implements IUserPersistencePort {
     public SaveUserModel saveOwner(SaveUserModel saveUserModel) {
 
         UserEntity userEntity = userEntityMapper.toUserEntity(saveUserModel);
-        userEntity.setIdRol(rolAdapter.findByName("ROLE_OWNER").getId());
+        Long idRol = rolAdapter.findByName("ROLE_OWNER").getId();
+        if(idRol == null)
+            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
+
+        userEntity.setIdRol(idRol);
         userEntity.setPassword(passwordEncoder.encode(saveUserModel.getPassword()));
         userRepository.save(userEntity);
 
@@ -39,15 +45,14 @@ public class UserAdapter implements IUserPersistencePort {
     }
 
     @Override
-    public Boolean verifyUserRol(String dni, String role) {
-        UserEntity user = userRepository.findUserByDni(dni);
+    public Boolean verifyUserRol(UserModel user, String role) {
         RolModel rol = rolAdapter.findByName(role);
+        if (rol == null) throw new DomainException(ConstantException.ROLE_NOT_FOUND);
         return user.getIdRol().equals(rol.getId());
     }
 
     @Override
     public UserModel findUserByEmail(String email) {
-        log.info("Finding user by email: {}", email);
         UserEntity userEntity = userRepository.findUserByEmail(email);
         if (userEntity == null) {
             return null;
@@ -63,7 +68,11 @@ public class UserAdapter implements IUserPersistencePort {
     @Override
     public void createAccountEmployee(SaveUserModel saveUserModel) {
         UserEntity userEntity = userEntityMapper.toUserEntity(saveUserModel);
-        userEntity.setIdRol(rolAdapter.findByName("ROLE_EMPLOYEE").getId());
+        Long idRol = rolAdapter.findByName("ROLE_EMPLOYEE").getId();
+        if(idRol == null)
+            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
+
+        userEntity.setIdRol(idRol);
         userEntity.setPassword(passwordEncoder.encode(saveUserModel.getPassword()));
         userRepository.save(userEntity);
     }
@@ -71,7 +80,10 @@ public class UserAdapter implements IUserPersistencePort {
     @Override
     public void createAccountCustomer(SaveUserModel saveUserModel) {
         UserEntity userEntity = userEntityMapper.toUserEntity(saveUserModel);
-        userEntity.setIdRol(rolAdapter.findByName("ROLE_CUSTOMER").getId());
+        Long idRol = rolAdapter.findByName("ROLE_CUSTOMER").getId();
+        if(idRol == null)
+            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
+        userEntity.setIdRol(idRol);
         userEntity.setPassword(passwordEncoder.encode(saveUserModel.getPassword()));
         userRepository.save(userEntity);
     }
