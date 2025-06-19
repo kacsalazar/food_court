@@ -1,11 +1,15 @@
 package com.foodcourt.usersmanagment.domain.usecase;
 
 import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
+import com.foodcourt.usersmanagment.domain.exception.ConstantException;
+import com.foodcourt.usersmanagment.domain.exception.DomainException;
 import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import com.foodcourt.usersmanagment.domain.usecase.util.UseValidationUtil;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class UserUseCase implements IUserServicePort {
@@ -20,12 +24,18 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public UserModel findUserById(Long id) {
-        return userPersistencePort.findUserById(id);
+        return Optional.ofNullable(userPersistencePort.findUserById(id))
+                .orElseThrow(() -> new DomainException(ConstantException.USER_NOT_FOUND));
     }
 
     @Override
     public Boolean verifyUserRol(String dni, String role) {
-        return userPersistencePort.verifyUserRol(dni, role);
+        UserModel user = userPersistencePort.findUserByDni(dni);
+        if (user == null)
+            throw new DomainException(ConstantException.USER_NOT_FOUND);
+
+        return Optional.ofNullable(userPersistencePort.verifyUserRol(user, role))
+                .orElseThrow(() -> new DomainException(ConstantException.INVALID_USER));
     }
 
     @Override
@@ -35,8 +45,9 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public UserModel findUserById(String dni) {
-        return userPersistencePort.findUserByDni(dni);
+    public UserModel getUserByDni(String dni) {
+        return Optional.ofNullable(userPersistencePort.findUserByDni(dni))
+                .orElseThrow(() -> new DomainException(ConstantException.USER_NOT_FOUND));
     }
 
     @Override

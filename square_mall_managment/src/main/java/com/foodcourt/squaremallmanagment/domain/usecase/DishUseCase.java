@@ -2,6 +2,8 @@ package com.foodcourt.squaremallmanagment.domain.usecase;
 
 import com.foodcourt.squaremallmanagment.application.handler.util.UtilClass;
 import com.foodcourt.squaremallmanagment.domain.api.IDishServicePort;
+import com.foodcourt.squaremallmanagment.domain.exception.ConstantException;
+import com.foodcourt.squaremallmanagment.domain.exception.DomainException;
 import com.foodcourt.squaremallmanagment.domain.model.*;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IRestaurantPersistencePort;
@@ -11,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
@@ -24,34 +27,48 @@ public class DishUseCase implements IDishServicePort {
     @Override
     public void saveDish(DishModel dishModel) {
         DishValidationUtil.isValidDish(dishModel);
-
-        if (userClientPort.ownerExists(dishModel.getOwnerInfo().getDniOwner()) == null) {
-            throw new IllegalArgumentException("User is not allowed.");
-        }
+        validateOwner(dishModel.getOwnerInfo().getDniOwner());
         dishPersistencePort.saveDish(dishModel);
     }
 
     @Override
     public DishModel updateDish(Long id, DishUpdateModel dishUpdateModel) {
-        return dishPersistencePort.updateDish(id, dishUpdateModel);
+        DishModel dish = dishPersistencePort.findDishById(id);
+        if (dish == null) throw new DomainException(ConstantException.DISH_NOT_FOUND);
+        return dishPersistencePort.updateDish(dish,dishUpdateModel);
     }
 
     @Override
     public DishModel disableDish(Long id, Boolean status, String dniOwner) {
 
-        Long idRestaurant = dishPersistencePort.findDishById(id).getRestaurantInfo().getIdRestaurant();
-        Long idUser = userClientPort.ownerExists(dniOwner).getId();
-        Long idOwnerRestaurantReturned = restaurantPersistencePort.findRestaurantById(idRestaurant).getIdOwner();
+        DishModel dishToChange = dishPersistencePort.findDishById(id);
+        if (dishToChange == null)
+            throw new DomainException(ConstantException.DISH_NOT_FOUND);
 
-        if (!idOwnerRestaurantReturned.equals(idUser)) {
-            throw new IllegalArgumentException("User is not allowed to disable this dish.");
-        }
-        return dishPersistencePort.disableDish(id, status);
+        Long idDishRestaurantReturned = dishToChange.getRestaurantInfo().getIdRestaurant();
+
+        Long idUser = userClientPort.ownerExists(dniOwner).getId();
+        if (idUser == null)
+            throw new DomainException(ConstantException.USER_NOT_FOUND);
+
+        Long idOwnerRestaurantReturned = restaurantPersistencePort.findRestaurantById(idDishRestaurantReturned).getIdOwner();
+        if (idOwnerRestaurantReturned == null)
+            throw new DomainException(ConstantException.RESTAURANT_NOT_FOUND);
+
+        if (!idOwnerRestaurantReturned.equals(idUser))
+            throw new DomainException(ConstantException.USER_NOT_AUTHORIZED);
+
+        return dishPersistencePort.disableDish(dishToChange, status);
     }
 
     @Override
-    public List<ListDishesByRestaurantModel> getDishesByCategory(Long idRestaurant, Long idCategory, Integer page, Integer size) {
-        log.info("USE CASE"+ dishPersistencePort.getDishesByCategory(idRestaurant, idCategory, page, size) );
+    public List<ListDishesByRestaurantModel>
+    getDishesByCategory(Long idRestaurant, Long idCategory, Integer page, Integer size) {
         return dishPersistencePort.getDishesByCategory(idRestaurant, idCategory, page, size);
+    }
+
+    private void validateOwner(String dniOwner) {
+        Optional.ofNullable(userClientPort.ownerExists(dniOwner))
+                .orElseThrow(() -> new DomainException(ConstantException.USER_NOT_ALLOWED));
     }
 }

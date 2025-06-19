@@ -112,14 +112,14 @@ public class UserHandlerTest {
         UserModel userModel = CreatorMocks.createUserModel();
         UserResponseDto userResponseDto = CreatorMocks.createUserResponseDto();
 
-        when(userServicePort.findUserById(dni)).thenReturn(userModel);
+        when(userServicePort.getUserByDni(dni)).thenReturn(userModel);
         when(userRequestMapper.toUserResponseDto(userModel)).thenReturn(userResponseDto);
 
         // When
         UserResponseDto result = userHandler.getUserByDni(dni);
 
         // Then
-        verify(userServicePort, times(1)).findUserById(dni);
+        verify(userServicePort, times(1)).getUserByDni(dni);
         verify(userRequestMapper, times(1)).toUserResponseDto(userModel);
         assertEquals(userResponseDto, result);
     }

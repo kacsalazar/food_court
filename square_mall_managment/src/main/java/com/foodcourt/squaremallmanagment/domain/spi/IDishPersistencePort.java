@@ -10,8 +10,9 @@ public interface IDishPersistencePort {
 
     void saveDish(DishModel dishModel);
     DishModel findDishById(Long id);
-    DishModel updateDish(Long id, DishUpdateModel dishUpdateModel);
-    DishModel disableDish(Long id, Boolean status);
-    List<ListDishesByRestaurantModel> getDishesByCategory(Long idRestaurant, Long idCategory, Integer page, Integer size);
+    DishModel updateDish(DishModel dish, DishUpdateModel dishUpdateModel);
+    DishModel disableDish(DishModel dish, Boolean status);
+    List<ListDishesByRestaurantModel> getDishesByCategory
+            (Long idRestaurant, Long idCategory, Integer page, Integer size);
 
 }

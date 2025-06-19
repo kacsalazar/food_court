@@ -25,11 +25,12 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/api/v1/user/auth/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/api/v1/user/verify/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/api/v1/user/dni/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/api/v1/user/customer/**")).permitAll()
+                        .requestMatchers( new AntPathRequestMatcher("/api/v1/user/auth/**"),
+                                new AntPathRequestMatcher("/swagger-ui/**"),
+                                new AntPathRequestMatcher("/v3/api-docs/**"),
+                                new AntPathRequestMatcher("/api/v1/user/verify/**"),
+                                new AntPathRequestMatcher("/api/v1/user/dni/**"),
+                                new AntPathRequestMatcher("/api/v1/user/customer/**")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

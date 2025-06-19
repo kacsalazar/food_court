@@ -6,13 +6,14 @@ import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.Restauran
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IRestaurantEntityMapper;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.IRestaurantRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class RestaurantAdapter implements IRestaurantPersistencePort {
 

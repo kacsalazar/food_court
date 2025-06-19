@@ -1,7 +1,11 @@
 package com.foodcourt.squaremallmanagment.domain.exception;
 
 public class DomainException extends RuntimeException {
-    public DomainException(String message) {
-        super(message);
+
+    private ConstantException constant;
+
+    public DomainException(ConstantException exception) {
+        super(exception.getError_message());
+        constant = exception;
     }
 }

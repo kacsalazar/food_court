@@ -46,7 +46,7 @@ public class UserHandler implements IUserHandler {
 
     @Override
     public UserResponseDto getUserByDni(String dni) {
-        UserModel userModel = userServicePort.findUserById(dni);
+        UserModel userModel = userServicePort.getUserByDni(dni);
         return userRequestMapper.toUserResponseDto(userModel);
     }
 
