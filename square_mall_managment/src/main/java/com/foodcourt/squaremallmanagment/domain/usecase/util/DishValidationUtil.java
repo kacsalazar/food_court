@@ -12,11 +12,11 @@ public class DishValidationUtil {
     public static void isValidDish(DishModel dishModel) {
 
         if (dishModel.getDishInfo().getName() == null ||dishModel.getDishInfo().getName().isBlank()) {
-            throw new DomainException(ConstantException.INVALID_NAME);
+            throw new IllegalArgumentException("The name of the dish cannot be empty");
         }
 
         if (dishModel.getDishInfo().getPrice() == null || dishModel.getDishInfo().getPrice() <= 0) {
-            throw new DomainException(ConstantException.INVALID_PRICE_DISH);
+            throw new IllegalArgumentException("The price of the dish must be an integer greater than 0.");
         }
     }
 }

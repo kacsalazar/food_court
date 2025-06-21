@@ -2,7 +2,7 @@ package com.foodcourt.usersmanagment;
 
 import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
-import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
+import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
 import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.RolEntity;
@@ -14,13 +14,13 @@ import java.util.Date;
 
 public class CreatorMocks {
 
-    public static SaveUserModel createOwnerModel() {
+    public static CreateUserModel createOwnerModel() {
 
         LocalDate localDate = LocalDate.parse("1998-08-12");
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 
-        return SaveUserModel.builder()
+        return CreateUserModel.builder()
                 .name("John Doe")
                 .lastName("Martinez")
                 .dni("123")

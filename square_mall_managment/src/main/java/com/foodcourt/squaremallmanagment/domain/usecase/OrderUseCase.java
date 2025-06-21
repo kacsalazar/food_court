@@ -18,13 +18,15 @@ public class OrderUseCase implements IOrderServicePort {
     private final IUserClientPort userClientPort;
 
     @Override
-    public void makeOrder(OrderModel orderModel) {
+    public void makeOrder(OrderModel orderModel, String userDni) {
         List<OrderModelReturn> orders = orderPersistencePort
                 .findOrdersByIdUser(userClientPort.ownerExists(orderModel.getUserDni()).getId());
             if (!orders.isEmpty()) {
                 throw new DomainException(ConstantException.INVALID_ORDER);
             }
 
+        orderModel.setUserDni(userDni);
+        orderModel.setStatus("PENDING");
         orderPersistencePort.makeOrder(orderModel);
     }
 

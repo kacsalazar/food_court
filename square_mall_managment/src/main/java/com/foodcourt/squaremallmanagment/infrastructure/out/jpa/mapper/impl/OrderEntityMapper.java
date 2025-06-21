@@ -16,6 +16,7 @@ public class OrderEntityMapper {
     public static OrderEntity toOrderEntity(OrderModel orderModel) {
         return OrderEntity.builder()
                 .orderDate(new Date())
+                .status(orderModel.getStatus())
                 .idChef(orderModel.getEmployeeId())
                 .idRestaurant(orderModel.getRestaurantId())
                 .build();

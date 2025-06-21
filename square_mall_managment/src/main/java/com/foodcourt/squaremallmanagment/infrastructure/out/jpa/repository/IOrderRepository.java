@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IOrderRepository extends CrudRepository<OrderEntity, Long> {
 
-    @Query("SELECT o FROM OrderEntity o WHERE o.idClient = :idClient AND o.status IN" +
+    @Query("SELECT * FROM orders o WHERE o.id_client = :idClient AND o.status IN" +
             " ('IN_PROGRESS', 'PENDING', 'ALREADY')")
     List<OrderEntity> findOrdersByIdClient(@Param("idClient") Long idClient);
 }

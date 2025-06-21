@@ -14,7 +14,6 @@ import java.util.List;
 public class OrderCreateRequest {
 
     private Long restaurantId;
-    private Long employeeId;
     private List<DishRequest> dishes;
 
     @NoArgsConstructor

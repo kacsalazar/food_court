@@ -5,19 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class SaveUserModel {
+public class RestaurantModel {
 
     private String name;
-    private String lastName;
-    private String dni;
+    private String ownerDni;
+    private Long id;
+    private String address;
     private String phoneNumber;
-    private String password;
-    private String email;
-    private Date birthdayDate;
 }

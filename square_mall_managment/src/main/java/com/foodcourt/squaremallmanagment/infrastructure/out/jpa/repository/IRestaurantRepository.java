@@ -11,4 +11,7 @@ public interface IRestaurantRepository extends CrudRepository<RestaurantEntity, 
     @Query("SELECT * FROM restaurants ORDER BY name ASC LIMIT :size OFFSET :page")
     List<RestaurantEntity> findAllByOrderByIdAsc(Integer page, Integer size);
 
+    @Query("SELECT * FROM restaurants r WHERE r.id_owner = :idOwner")
+    RestaurantEntity findRestaurantByIdOwner(Long idOwner);
+
 }

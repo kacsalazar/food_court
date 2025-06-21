@@ -11,6 +11,6 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface IRolEntityMapper {
 
-    RolModel toGetRolModel(RolEntity rolEntity);
+    RolModel toRolModel(RolEntity rolEntity);
 
 }

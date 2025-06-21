@@ -33,7 +33,6 @@ public class OrderAdapter implements IOrderPersistencePort {
 
     private Long saveOrder(OrderModel orderModel) {
         OrderEntity order = OrderEntityMapper.toOrderEntity(orderModel);
-        order.setStatus("PENDING");
         order.setIdClient(userClientAdapter.ownerExists(orderModel.getUserDni()).getId());
         return orderRepository.save(order).getId();
     }

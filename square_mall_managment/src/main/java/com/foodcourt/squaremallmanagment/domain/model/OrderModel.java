@@ -17,6 +17,7 @@ public class OrderModel {
     private Long employeeId;
     private List<Dish> dishes;
     private String userDni;
+    private String status;
 
     @NoArgsConstructor
     @AllArgsConstructor

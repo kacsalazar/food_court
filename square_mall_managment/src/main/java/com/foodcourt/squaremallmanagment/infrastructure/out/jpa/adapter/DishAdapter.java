@@ -27,7 +27,6 @@ public class DishAdapter implements IDishPersistencePort {
     public void saveDish(DishModel dishModel) {
 
         DishEntity dishEntity = DishEntityMapperData.toDishEntity(dishModel);
-        dishEntity.setIsActive(Boolean.TRUE);
         dishRepository.save(dishEntity);
     }
 
@@ -40,15 +39,12 @@ public class DishAdapter implements IDishPersistencePort {
 
     public DishModel updateDish(DishModel dish, DishUpdateModel dishUpdateModel) {
         DishEntity dishEntity = dishMapper.toDishEntity(dish);
-        dishEntity.setDescription(dishUpdateModel.getDescription());
-        dishEntity.setPrice(dishUpdateModel.getPrice());
         return DishEntityMapperData.toDishModel(dishRepository.save(dishEntity));
     }
 
     @Override
     public DishModel disableDish(DishModel dish, Boolean status) {
         DishEntity dishEntity = dishMapper.toDishEntity(dish);
-        dishEntity.setIsActive(status);
         return DishEntityMapperData.toDishModel(dishRepository.save(dishEntity));
     }
 

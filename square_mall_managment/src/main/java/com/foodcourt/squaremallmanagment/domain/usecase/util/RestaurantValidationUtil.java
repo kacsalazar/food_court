@@ -14,20 +14,20 @@ public class RestaurantValidationUtil {
     public static void isValidRestaurant(RestaurantModel restaurantModel) {
 
         if (restaurantModel.getNit() == null || !restaurantModel.getNit().matches("\\d+")) {
-            throw new DomainException(ConstantException.INVALID_NIT_RESTAURANT);
+            throw new IllegalArgumentException("The NIT must contain only numbers.");
         }
 
         if (restaurantModel.getPhoneNumber() == null ||
                 !Pattern.matches("^\\+?\\d{1,13}$", restaurantModel.getPhoneNumber())) {
-            throw new DomainException(ConstantException.INVALID_PHONE_NUMBER);
+            throw new IllegalArgumentException("The phone number must be a maximum of 13 characters and may begin with '+'.");
         }
 
         if (restaurantModel.getName() == null || restaurantModel.getName().isBlank()) {
-            throw new DomainException(ConstantException.INVALID_NAME);
+            throw new IllegalArgumentException("The name of the restaurant cannot be empty.");
         }
 
         if (restaurantModel.getName().matches("\\d+")) {
-            throw new DomainException(ConstantException.INVALID_RESTAURANT_NAME);
+            throw new IllegalArgumentException("The name of the restaurant cannot contain only numbers.");
         }
     }
 }

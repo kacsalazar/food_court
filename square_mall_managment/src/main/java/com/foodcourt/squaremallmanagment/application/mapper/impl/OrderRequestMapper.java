@@ -11,7 +11,6 @@ public class OrderRequestMapper {
     public static OrderModel toOrderModel(OrderCreateRequest orderCreateRequest) {
         return OrderModel.builder()
                 .restaurantId(orderCreateRequest.getRestaurantId())
-                .employeeId(orderCreateRequest.getEmployeeId())
                 .userDni(UtilClass.getUserDni())
                 .dishes(orderCreateRequest.getDishes().stream()
                         .map(dish -> OrderModel.Dish.builder()

@@ -1,6 +1,8 @@
 package com.foodcourt.usersmanagment.infrastructure.configuration;
 
 import com.foodcourt.usersmanagment.domain.spi.IAuthPort;
+import com.foodcourt.usersmanagment.domain.spi.IRestaurantClientPort;
+import com.foodcourt.usersmanagment.domain.spi.IRolPersistencePort;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import com.foodcourt.usersmanagment.domain.usecase.AuthUseCase;
 import com.foodcourt.usersmanagment.domain.usecase.UserUseCase;
@@ -13,8 +15,11 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfiguration {
 
     @Bean
-    public UserUseCase userServicePort(IUserPersistencePort iUserPersistencePort) {
-        return new UserUseCase( iUserPersistencePort);
+    public UserUseCase userServicePort(IUserPersistencePort iUserPersistencePort,
+                                       IRolPersistencePort iRolPersistencePort,
+                                       IRestaurantClientPort iRestaurantClientPort
+    ) {
+        return new UserUseCase( iUserPersistencePort, iRolPersistencePort, iRestaurantClientPort);
     }
 
     @Bean
