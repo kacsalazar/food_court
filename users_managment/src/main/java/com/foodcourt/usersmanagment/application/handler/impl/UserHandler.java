@@ -3,9 +3,10 @@ package com.foodcourt.usersmanagment.application.handler.impl;
 import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
+import com.foodcourt.usersmanagment.application.handler.util.UtilClass;
 import com.foodcourt.usersmanagment.application.mapper.IUserRequestMapper;
 import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
-import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
+import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,8 @@ public class UserHandler implements IUserHandler {
 
     @Override
     public void saveUser(UserRequestDto userRequestDto) {
-        SaveUserModel saveUserModel = userRequestMapper.toUserToSave(userRequestDto);
-        userServicePort.saveOwner(saveUserModel);
+        CreateUserModel createUserModel = userRequestMapper.toUserToSave(userRequestDto);
+        userServicePort.saveOwner(createUserModel);
     }
 
     @Override
@@ -40,8 +41,8 @@ public class UserHandler implements IUserHandler {
 
     @Override
     public void createAccountEmployee(UserRequestDto userRequestDto) {
-        SaveUserModel saveUserModel = userRequestMapper.toUserToSave(userRequestDto);
-        userServicePort.createAccountEmployee(saveUserModel);
+        CreateUserModel createUserModel = userRequestMapper.toUserToSave(userRequestDto);
+        userServicePort.createAccountEmployee(createUserModel, UtilClass.getUserDni());
     }
 
     @Override
@@ -52,8 +53,8 @@ public class UserHandler implements IUserHandler {
 
     @Override
     public void createAccountCustomer(UserRequestDto userRequestDto) {
-        SaveUserModel saveUserModel = userRequestMapper.toUserToSave(userRequestDto);
-        userServicePort.createAccountCustomer(saveUserModel);
+        CreateUserModel createUserModel = userRequestMapper.toUserToSave(userRequestDto);
+        userServicePort.createAccountCustomer(createUserModel);
     }
 
 }

@@ -3,23 +3,36 @@ package com.foodcourt.usersmanagment.domain.usecase;
 import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
 import com.foodcourt.usersmanagment.domain.exception.ConstantException;
 import com.foodcourt.usersmanagment.domain.exception.DomainException;
-import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
+import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
+import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
+import com.foodcourt.usersmanagment.domain.spi.IRestaurantClientPort;
+import com.foodcourt.usersmanagment.domain.spi.IRolPersistencePort;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import com.foodcourt.usersmanagment.domain.usecase.util.UseValidationUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 public class UserUseCase implements IUserServicePort {
 
     private final IUserPersistencePort userPersistencePort;
+    private final IRolPersistencePort rolPersistencePort;
+    private final IRestaurantClientPort restaurantClientPort;
+
 
     @Override
-    public void saveOwner(SaveUserModel saveUserModel) {
-        UseValidationUtil.isValidUser(saveUserModel);
-        userPersistencePort.saveOwner(saveUserModel);
+    public void saveOwner(CreateUserModel createUserModel) {
+        UseValidationUtil.isValidUser(createUserModel);
+        Long idRol = rolPersistencePort.findByName("ROLE_OWNER").getId();
+        if(idRol == null)
+            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
+
+        createUserModel.setIdRol(idRol);
+        userPersistencePort.saveUser(createUserModel);
     }
 
     @Override
@@ -34,14 +47,25 @@ public class UserUseCase implements IUserServicePort {
         if (user == null)
             throw new DomainException(ConstantException.USER_NOT_FOUND);
 
-        return Optional.ofNullable(userPersistencePort.verifyUserRol(user, role))
+        return Optional.ofNullable(verifyUserRol(user, role))
                 .orElseThrow(() -> new DomainException(ConstantException.INVALID_USER));
     }
 
     @Override
-    public void createAccountEmployee(SaveUserModel saveUserModel) {
-        UseValidationUtil.isValidUser(saveUserModel);
-        userPersistencePort.createAccountEmployee(saveUserModel);
+    public void createAccountEmployee(CreateUserModel createUserModel, String ownerDni) {
+        log.info("Creating account for employee with owner DNI: {}" + ownerDni);
+        log.info("Creating account for employee with owner DNI: {}" + createUserModel);
+        UseValidationUtil.isValidUser(createUserModel);
+        Long idRol = rolPersistencePort.findByName("ROLE_EMPLOYEE").getId();
+        if(idRol == null)
+            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
+
+        Long idRestaurant = restaurantClientPort.getRestaurantIdByOwner(
+                userPersistencePort.findUserByDni(ownerDni).getId()).getId();
+        log.info("Creating account for employee with owner DNI: {}" + idRestaurant);
+        createUserModel.setIdRol(idRol);
+        createUserModel.setIdRestaurant(idRestaurant);
+        userPersistencePort.saveUser(createUserModel);
     }
 
     @Override
@@ -51,9 +75,19 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public void createAccountCustomer(SaveUserModel saveUserModel) {
-        UseValidationUtil.isValidUser(saveUserModel);
-        userPersistencePort.createAccountCustomer(saveUserModel);
+    public void createAccountCustomer(CreateUserModel createUserModel) {
+        UseValidationUtil.isValidUser(createUserModel);
+        Long idRol = rolPersistencePort.findByName("ROLE_CUSTOMER").getId();
+        if(idRol == null)
+            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
+        createUserModel.setIdRol(idRol);
+        userPersistencePort.saveUser(createUserModel);
+    }
+
+    private Boolean verifyUserRol(UserModel user, String role) {
+        RolModel rol = rolPersistencePort.findByName(role);
+        if (rol == null) throw new DomainException(ConstantException.ROLE_NOT_FOUND);
+        return user.getIdRol().equals(rol.getId());
     }
 
 }

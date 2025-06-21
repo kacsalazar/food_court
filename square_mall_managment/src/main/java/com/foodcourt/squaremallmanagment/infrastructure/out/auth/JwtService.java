@@ -4,20 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foodcourt.squaremallmanagment.application.handler.ITokenValidator;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 
-
-@Component
+@Service
+@RequiredArgsConstructor
 public class JwtService implements ITokenValidator {
-    private final String secretKey;
 
-    public JwtService(@Value("${jwt.secret}") String secretKey) {
-        this.secretKey = secretKey;
-    }
+    @Value("${jwt.secret}")
+    private String jwtSecret;
 
     public Boolean isValidToken(String token) {
         try {
@@ -33,7 +33,7 @@ public class JwtService implements ITokenValidator {
     }
 
     private Key getSignKey() {
-        return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
 }

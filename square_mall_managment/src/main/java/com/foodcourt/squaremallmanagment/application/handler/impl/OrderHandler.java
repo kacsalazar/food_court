@@ -2,6 +2,7 @@ package com.foodcourt.squaremallmanagment.application.handler.impl;
 
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.handler.IOrderHandler;
+import com.foodcourt.squaremallmanagment.application.handler.util.UtilClass;
 import com.foodcourt.squaremallmanagment.application.mapper.impl.OrderRequestMapper;
 import com.foodcourt.squaremallmanagment.domain.api.IOrderServicePort;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class OrderHandler implements IOrderHandler {
 
     @Override
     public void makeOrder(OrderCreateRequest orderCreateRequest) {
-        orderServicePort.makeOrder(OrderRequestMapper.toOrderModel(orderCreateRequest));
+        orderServicePort.makeOrder(OrderRequestMapper.toOrderModel(orderCreateRequest), UtilClass.getUserDni());
     }
 
 }

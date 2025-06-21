@@ -46,11 +46,8 @@ public class AuthAdapter implements IAuthPort {
                        rolName
                 ), 1L
         );
-
         String token = iTokenValidator.generateToken(claimUserModel);
-
         return TokenModel.builder().token(token).build();
-
     }
 
     private UserEntity findUserByEmail(String email) {

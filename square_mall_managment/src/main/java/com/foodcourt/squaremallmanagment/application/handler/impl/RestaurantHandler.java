@@ -1,6 +1,7 @@
 package com.foodcourt.squaremallmanagment.application.handler.impl;
 
 import com.foodcourt.squaremallmanagment.application.dto.request.RestaurantRequestDto;
+import com.foodcourt.squaremallmanagment.application.dto.response.GetRestaurantByOwnerResponse;
 import com.foodcourt.squaremallmanagment.application.dto.response.RestaurantResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IRestaurantHandler;
 import com.foodcourt.squaremallmanagment.application.mapper.IRestaurantRequestMapper;
@@ -35,5 +36,11 @@ public class RestaurantHandler implements IRestaurantHandler {
     public List<RestaurantResponse> getAllRestaurants(Integer page, Integer size) {
         return restaurantMapper.toRestaurantResponseList(
                 restaurantServicePort.getAllRestaurants(page, size));
+    }
+
+    @Override
+    public GetRestaurantByOwnerResponse getRestaurantByIdOwner(Long idOwner) {
+        return restaurantMapper.toGetRestaurantByOwnerResponse(
+                restaurantServicePort.getRestaurantByIdOwner(idOwner));
     }
 }

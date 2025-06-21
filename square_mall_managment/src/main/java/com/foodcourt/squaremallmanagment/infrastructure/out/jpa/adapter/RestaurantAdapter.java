@@ -24,8 +24,7 @@ public class RestaurantAdapter implements IRestaurantPersistencePort {
     public RestaurantModel saveRestaurant(RestaurantModel restaurantModel) {
 
         RestaurantEntity restaurantEntity = restaurantMapper.toRestaurantEntity(restaurantModel);
-        RestaurantEntity r  = restaurantRepository.save(restaurantEntity);
-        return restaurantMapper.toRestaurantModel(restaurantEntity);
+        return restaurantMapper.toRestaurantModel( restaurantRepository.save(restaurantEntity));
     }
 
     @Override
@@ -38,5 +37,12 @@ public class RestaurantAdapter implements IRestaurantPersistencePort {
     public List<RestaurantModel> getAllRestaurants(Integer page, Integer size) {
         return restaurantMapper.toRestaurantModelList(
                 restaurantRepository.findAllByOrderByIdAsc(page, size));
+    }
+
+    @Override
+    public RestaurantModel findRestaurantByIdOwner(Long idOwner) {
+        RestaurantModel r = restaurantMapper.toRestaurantModel( restaurantRepository.findRestaurantByIdOwner(idOwner));
+        log.info("Restaurant found by owner id {}: {}"+ r);
+        return r;
     }
 }

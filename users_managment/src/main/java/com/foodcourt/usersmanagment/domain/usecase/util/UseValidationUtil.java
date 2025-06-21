@@ -2,7 +2,7 @@ package com.foodcourt.usersmanagment.domain.usecase.util;
 
 import com.foodcourt.usersmanagment.domain.exception.ConstantException;
 import com.foodcourt.usersmanagment.domain.exception.DomainException;
-import com.foodcourt.usersmanagment.domain.model.SaveUserModel;
+import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
@@ -14,24 +14,23 @@ import java.util.regex.Pattern;
 @UtilityClass
 public class UseValidationUtil {
 
-    public static void isValidUser(SaveUserModel user) {
+    public static void isValidUser(CreateUserModel user) {
 
         if (user.getEmail() == null || !Pattern.matches("^[\\w-.]+@[\\w-]+\\.[a-zA-Z]{2,}$", user.getEmail())) {
-            throw new DomainException(ConstantException.INVALID_EMAIL);
+            throw new IllegalArgumentException("The email is invalid");
         }
 
         if (user.getPhoneNumber() == null || !Pattern.matches("^\\+?\\d{1,13}$", user.getPhoneNumber())) {
-            throw new DomainException(ConstantException.INVALID_PHONE_NUMBER);
+            throw new IllegalArgumentException(" The phone number must have a maximum of 13 characters and can start with +");
         }
 
         if (user.getDni() == null || !user.getDni().matches("\\d+")) {
-            throw new DomainException(ConstantException.INVALID_DNI);
+            throw new IllegalArgumentException("The document must contain only numbers");
         }
 
         if (user.getBirthdayDate() == null || !isValidAge(user.getBirthdayDate())) {
-            throw new DomainException(ConstantException.INVALID_BIRTHDAY_DATE);
+            throw new IllegalArgumentException("The user must be of legal age");
         }
-
     }
 
     private boolean isValidAge(Date date) {

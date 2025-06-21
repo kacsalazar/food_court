@@ -40,14 +40,14 @@ public class RolAdapterTest {
         RolModel rolModel = new RolModel();
 
         when(rolRepository.findByName(name)).thenReturn(rolEntity);
-        when(rolEntityMapper.toGetRolModel(rolEntity)).thenReturn(rolModel);
+        when(rolEntityMapper.toRolModel(rolEntity)).thenReturn(rolModel);
 
         // When
         RolModel result = rolAdapter.findByName(name);
 
         // Then
         verify(rolRepository, times(1)).findByName(name);
-        verify(rolEntityMapper, times(1)).toGetRolModel(rolEntity);
+        verify(rolEntityMapper, times(1)).toRolModel(rolEntity);
         assertEquals(rolModel, result);
     }
 
@@ -59,14 +59,14 @@ public class RolAdapterTest {
         RolModel rolModel = CreatorMocks.createRolModel();
 
         when(rolRepository.findById(id)).thenReturn(java.util.Optional.of(rolEntity));
-        when(rolEntityMapper.toGetRolModel(rolEntity)).thenReturn(rolModel);
+        when(rolEntityMapper.toRolModel(rolEntity)).thenReturn(rolModel);
 
         // When
         RolModel result = rolAdapter.findById(id);
 
         // Then
         verify(rolRepository, times(1)).findById(id);
-        verify(rolEntityMapper, times(1)).toGetRolModel(rolEntity);
+        verify(rolEntityMapper, times(1)).toRolModel(rolEntity);
         assertEquals(rolModel, result);
     }
 }

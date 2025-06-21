@@ -37,4 +37,6 @@ public class UserEntity {
     private Date birthdayDate;
     private String email;
     private String password;
+    @Column(name = "id_restaurant")
+    private Long idRestaurant;
 }

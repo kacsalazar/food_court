@@ -1,6 +1,5 @@
 package com.foodcourt.squaremallmanagment.domain.usecase;
 
-import com.foodcourt.squaremallmanagment.application.handler.util.UtilClass;
 import com.foodcourt.squaremallmanagment.domain.api.IDishServicePort;
 import com.foodcourt.squaremallmanagment.domain.exception.ConstantException;
 import com.foodcourt.squaremallmanagment.domain.exception.DomainException;
@@ -9,6 +8,10 @@ import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IRestaurantPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
 import com.foodcourt.squaremallmanagment.domain.usecase.util.DishValidationUtil;
+import com.foodcourt.squaremallmanagment.infrastructure.exception.DishNotFoundException;
+import com.foodcourt.squaremallmanagment.infrastructure.exception.InvalidUserException;
+import com.foodcourt.squaremallmanagment.infrastructure.exception.RestaurantNotFoundException;
+import com.foodcourt.squaremallmanagment.infrastructure.exception.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,13 +31,16 @@ public class DishUseCase implements IDishServicePort {
     public void saveDish(DishModel dishModel) {
         DishValidationUtil.isValidDish(dishModel);
         validateOwner(dishModel.getOwnerInfo().getDniOwner());
+        dishModel.getDishInfo().setIsActive(Boolean.TRUE);
         dishPersistencePort.saveDish(dishModel);
     }
 
     @Override
     public DishModel updateDish(Long id, DishUpdateModel dishUpdateModel) {
         DishModel dish = dishPersistencePort.findDishById(id);
-        if (dish == null) throw new DomainException(ConstantException.DISH_NOT_FOUND);
+        if (dish == null) throw new DishNotFoundException();
+        dish.getDishInfo().setDescription(dishUpdateModel.getDescription());
+        dish.getDishInfo().setPrice(dishUpdateModel.getPrice());
         return dishPersistencePort.updateDish(dish,dishUpdateModel);
     }
 
@@ -43,21 +49,22 @@ public class DishUseCase implements IDishServicePort {
 
         DishModel dishToChange = dishPersistencePort.findDishById(id);
         if (dishToChange == null)
-            throw new DomainException(ConstantException.DISH_NOT_FOUND);
+            throw new DishNotFoundException();
 
         Long idDishRestaurantReturned = dishToChange.getRestaurantInfo().getIdRestaurant();
 
         Long idUser = userClientPort.ownerExists(dniOwner).getId();
         if (idUser == null)
-            throw new DomainException(ConstantException.USER_NOT_FOUND);
+            throw new UserNotFoundException();
 
         Long idOwnerRestaurantReturned = restaurantPersistencePort.findRestaurantById(idDishRestaurantReturned).getIdOwner();
         if (idOwnerRestaurantReturned == null)
-            throw new DomainException(ConstantException.RESTAURANT_NOT_FOUND);
+            throw new RestaurantNotFoundException();
 
         if (!idOwnerRestaurantReturned.equals(idUser))
-            throw new DomainException(ConstantException.USER_NOT_AUTHORIZED);
+            throw new InvalidUserException();
 
+        dishToChange.getDishInfo().setIsActive(status);
         return dishPersistencePort.disableDish(dishToChange, status);
     }
 
@@ -69,6 +76,6 @@ public class DishUseCase implements IDishServicePort {
 
     private void validateOwner(String dniOwner) {
         Optional.ofNullable(userClientPort.ownerExists(dniOwner))
-                .orElseThrow(() -> new DomainException(ConstantException.USER_NOT_ALLOWED));
+                .orElseThrow(() -> new InvalidUserException());
     }
 }
