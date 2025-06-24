@@ -1,4 +1,4 @@
-package com.foodcourt.squaremallmanagment.domain.model;
+package com.foodcourt.squaremallmanagment.domain.model.dish;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

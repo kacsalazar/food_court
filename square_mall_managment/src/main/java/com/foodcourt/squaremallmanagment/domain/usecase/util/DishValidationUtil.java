@@ -1,10 +1,7 @@
 package com.foodcourt.squaremallmanagment.domain.usecase.util;
 
-import com.foodcourt.squaremallmanagment.domain.exception.ConstantException;
-import com.foodcourt.squaremallmanagment.domain.exception.DomainException;
-import com.foodcourt.squaremallmanagment.domain.model.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
 import lombok.experimental.UtilityClass;
-import org.springframework.stereotype.Component;
 
 @UtilityClass
 public class DishValidationUtil {

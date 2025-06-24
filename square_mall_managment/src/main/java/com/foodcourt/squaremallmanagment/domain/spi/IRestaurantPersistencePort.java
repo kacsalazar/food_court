@@ -1,6 +1,6 @@
 package com.foodcourt.squaremallmanagment.domain.spi;
 
-import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.restaurant.RestaurantModel;
 
 import java.util.List;
 

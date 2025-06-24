@@ -1,7 +1,7 @@
 package com.foodcourt.squaremallmanagment.infrastructure.input.rest;
 
 import com.foodcourt.squaremallmanagment.CreatorMocks;
-import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.restaurant.RestaurantModel;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter.RestaurantAdapter;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.RestaurantEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IRestaurantEntityMapper;

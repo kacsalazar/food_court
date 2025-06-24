@@ -3,7 +3,7 @@ package com.foodcourt.squaremallmanagment.application.mapper.impl;
 import com.foodcourt.squaremallmanagment.application.dto.request.DishCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.response.DishResponse;
 import com.foodcourt.squaremallmanagment.application.handler.util.UtilClass;
-import com.foodcourt.squaremallmanagment.domain.model.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

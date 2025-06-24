@@ -1,7 +1,7 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.impl;
 
-import com.foodcourt.squaremallmanagment.domain.model.DishModel;
-import com.foodcourt.squaremallmanagment.domain.model.ListDishesByRestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesByRestaurantModel;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 import lombok.experimental.UtilityClass;
 

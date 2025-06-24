@@ -2,8 +2,8 @@ package com.foodcourt.squaremallmanagment.domain.usecase;
 
 import com.foodcourt.squaremallmanagment.domain.exception.ConstantException;
 import com.foodcourt.squaremallmanagment.domain.exception.DomainException;
-import com.foodcourt.squaremallmanagment.domain.model.OrderModel;
-import com.foodcourt.squaremallmanagment.domain.model.OrderModelReturn;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderModelReturn;
 import com.foodcourt.squaremallmanagment.domain.model.UserModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IOrderPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;

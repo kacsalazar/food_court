@@ -1,7 +1,8 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 
-import com.foodcourt.squaremallmanagment.domain.model.OrderModel;
-import com.foodcourt.squaremallmanagment.domain.model.OrderModelReturn;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderModelReturn;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IOrderPersistencePort;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.OrderVsDishEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.OrderEntity;
@@ -48,5 +49,24 @@ public class OrderAdapter implements IOrderPersistencePort {
         return OrderEntityMapper.toOrderModelReturn(orderRepository.findOrdersByIdClient(id));
     }
 
+    @Override
+    public OrderUpdateModel findOrderById(Long orderId) {
+        return OrderEntityMapper.toOrderUpdateModel(orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId)));
+    }
+
+    @Override
+    public void updateOrder(OrderUpdateModel orderModel) {
+        OrderEntity entity = OrderEntityMapper.toOrderEntityUpdate(orderModel);
+        orderRepository.save(entity);
+    }
+
+    @Override
+    public List<OrderModel> getOrdersByEmployee(String status, Integer page, Integer size, Long idEmployee) {
+        List<OrderEntity> orders = orderRepository.findOrdersByStatus(idEmployee, status, size, page);
+        return orders.stream().map(order -> OrderEntityMapper.toOrderModel(order,
+                        orderDishRepository.findByOrderId(order.getId())))
+                .toList();
+    }
 
 }

@@ -1,6 +1,6 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper;
 
-import com.foodcourt.squaremallmanagment.domain.model.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

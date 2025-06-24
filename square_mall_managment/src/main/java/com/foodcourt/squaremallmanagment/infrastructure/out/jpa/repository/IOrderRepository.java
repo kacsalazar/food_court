@@ -12,4 +12,9 @@ public interface IOrderRepository extends CrudRepository<OrderEntity, Long> {
     @Query("SELECT * FROM orders o WHERE o.id_client = :idClient AND o.status IN" +
             " ('IN_PROGRESS', 'PENDING', 'ALREADY')")
     List<OrderEntity> findOrdersByIdClient(@Param("idClient") Long idClient);
+
+    @Query("SELECT * FROM orders o WHERE o.id_chef = :idChef AND (:status IS NULL OR status = :status) " +
+            "LIMIT :size OFFSET :page")
+    List<OrderEntity> findOrdersByStatus(@Param("idChef") Long idChef, @Param("status") String status,@Param("size") int size,
+                                         @Param("page") int page);
 }

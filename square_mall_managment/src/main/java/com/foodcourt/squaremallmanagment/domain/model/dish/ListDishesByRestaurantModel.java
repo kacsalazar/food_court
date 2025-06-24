@@ -1,4 +1,4 @@
-package com.foodcourt.squaremallmanagment.domain.model;
+package com.foodcourt.squaremallmanagment.domain.model.dish;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class DishUpdateModel {
-    private Double price;
+public class ListDishesByRestaurantModel {
+
+    private String name;
     private String description;
+    private String imageUrl;
 }
