@@ -1,10 +1,7 @@
 package com.foodcourt.squaremallmanagment.domain.usecase.util;
 
-import com.foodcourt.squaremallmanagment.domain.exception.ConstantException;
-import com.foodcourt.squaremallmanagment.domain.exception.DomainException;
-import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.restaurant.RestaurantModel;
 import lombok.experimental.UtilityClass;
-import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 

@@ -5,8 +5,8 @@ import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpda
 import com.foodcourt.squaremallmanagment.application.dto.response.DishResponse;
 import com.foodcourt.squaremallmanagment.application.mapper.IDishRequestMapper;
 import com.foodcourt.squaremallmanagment.domain.api.IDishServicePort;
-import com.foodcourt.squaremallmanagment.domain.model.DishModel;
-import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishUpdateModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

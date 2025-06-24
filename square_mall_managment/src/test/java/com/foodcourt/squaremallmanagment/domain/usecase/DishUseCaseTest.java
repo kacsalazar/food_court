@@ -1,17 +1,15 @@
 package com.foodcourt.squaremallmanagment.domain.usecase;
 
 import com.foodcourt.squaremallmanagment.CreatorMocks;
-import com.foodcourt.squaremallmanagment.domain.model.DishModel;
-import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.usecase.util.DishValidationUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class DishUseCaseTest {

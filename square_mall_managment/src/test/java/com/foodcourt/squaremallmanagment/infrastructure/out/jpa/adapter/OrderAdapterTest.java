@@ -1,7 +1,7 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 
-import com.foodcourt.squaremallmanagment.domain.model.OrderModel;
-import com.foodcourt.squaremallmanagment.domain.model.OrderModelReturn;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderModelReturn;
 import com.foodcourt.squaremallmanagment.domain.model.UserModel;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.OrderEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.OrderVsDishEntity;

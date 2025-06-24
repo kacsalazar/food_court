@@ -1,8 +1,8 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 
 import com.foodcourt.squaremallmanagment.CreatorMocks;
-import com.foodcourt.squaremallmanagment.domain.model.DishModel;
-import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishUpdateModel;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IDishEntityMapper;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.IDishRepository;

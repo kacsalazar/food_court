@@ -3,8 +3,9 @@ package com.foodcourt.squaremallmanagment.domain.usecase;
 import com.foodcourt.squaremallmanagment.domain.api.IOrderServicePort;
 import com.foodcourt.squaremallmanagment.domain.exception.ConstantException;
 import com.foodcourt.squaremallmanagment.domain.exception.DomainException;
-import com.foodcourt.squaremallmanagment.domain.model.OrderModel;
-import com.foodcourt.squaremallmanagment.domain.model.OrderModelReturn;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderModelReturn;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IOrderPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,23 @@ public class OrderUseCase implements IOrderServicePort {
         orderModel.setUserDni(userDni);
         orderModel.setStatus("PENDING");
         orderPersistencePort.makeOrder(orderModel);
+    }
+
+    @Override
+    public void assignOrderToEmployee(Long orderId, String employeeDni) {
+        OrderUpdateModel orderModel = orderPersistencePort.findOrderById(orderId);
+        if (orderModel == null) {
+            //throw new DomainException(ConstantException.ORDER_NOT_FOUND);
+        }
+        Long employeeId = userClientPort.ownerExists(employeeDni).getId();
+        orderModel.setIdChef(employeeId);
+        orderModel.setStatus("IN_PROGRESS");
+        orderPersistencePort.updateOrder(orderModel);
+    }
+
+    @Override
+    public List<OrderModel> getOrdersByEmployee(String status, Integer page, Integer size, String dniEmployee) {
+        return orderPersistencePort.getOrdersByEmployee(status, page, size, userClientPort.ownerExists(dniEmployee).getId());
     }
 
 }

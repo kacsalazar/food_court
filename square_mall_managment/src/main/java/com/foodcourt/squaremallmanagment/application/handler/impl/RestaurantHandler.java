@@ -6,8 +6,7 @@ import com.foodcourt.squaremallmanagment.application.dto.response.RestaurantResp
 import com.foodcourt.squaremallmanagment.application.handler.IRestaurantHandler;
 import com.foodcourt.squaremallmanagment.application.mapper.IRestaurantRequestMapper;
 import com.foodcourt.squaremallmanagment.domain.api.IRestaurantServicePort;
-import com.foodcourt.squaremallmanagment.domain.api.IUserClientServicePort;
-import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.restaurant.RestaurantModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

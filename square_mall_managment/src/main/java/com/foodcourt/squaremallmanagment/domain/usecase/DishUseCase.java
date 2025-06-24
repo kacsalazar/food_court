@@ -1,9 +1,9 @@
 package com.foodcourt.squaremallmanagment.domain.usecase;
 
 import com.foodcourt.squaremallmanagment.domain.api.IDishServicePort;
-import com.foodcourt.squaremallmanagment.domain.exception.ConstantException;
-import com.foodcourt.squaremallmanagment.domain.exception.DomainException;
-import com.foodcourt.squaremallmanagment.domain.model.*;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishUpdateModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesByRestaurantModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IRestaurantPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;

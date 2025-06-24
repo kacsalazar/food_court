@@ -3,16 +3,13 @@ package com.foodcourt.squaremallmanagment.application.handler.impl;
 import com.foodcourt.squaremallmanagment.application.dto.request.RestaurantRequestDto;
 import com.foodcourt.squaremallmanagment.application.mapper.IRestaurantRequestMapper;
 import com.foodcourt.squaremallmanagment.domain.api.IRestaurantServicePort;
-import com.foodcourt.squaremallmanagment.domain.api.IUserClientServicePort;
-import com.foodcourt.squaremallmanagment.domain.model.RestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.restaurant.RestaurantModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RestaurantHandlerTest {
 

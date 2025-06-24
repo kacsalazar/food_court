@@ -1,8 +1,8 @@
 package com.foodcourt.squaremallmanagment.domain.api;
 
-import com.foodcourt.squaremallmanagment.domain.model.DishModel;
-import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
-import com.foodcourt.squaremallmanagment.domain.model.ListDishesByRestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishUpdateModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesByRestaurantModel;
 
 import java.util.List;
 

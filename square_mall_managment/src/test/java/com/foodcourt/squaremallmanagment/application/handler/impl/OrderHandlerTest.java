@@ -3,7 +3,7 @@ package com.foodcourt.squaremallmanagment.application.handler.impl;
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.mapper.impl.OrderRequestMapper;
 import com.foodcourt.squaremallmanagment.domain.api.IOrderServicePort;
-import com.foodcourt.squaremallmanagment.domain.model.OrderModel;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 

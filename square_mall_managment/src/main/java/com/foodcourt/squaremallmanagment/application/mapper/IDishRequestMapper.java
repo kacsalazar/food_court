@@ -4,9 +4,9 @@ import com.foodcourt.squaremallmanagment.application.dto.request.DishCreateReque
 import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpdateDto;
 import com.foodcourt.squaremallmanagment.application.dto.response.DishResponse;
 import com.foodcourt.squaremallmanagment.application.dto.response.DishRestaurantResponse;
-import com.foodcourt.squaremallmanagment.domain.model.DishModel;
-import com.foodcourt.squaremallmanagment.domain.model.DishUpdateModel;
-import com.foodcourt.squaremallmanagment.domain.model.ListDishesByRestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.DishUpdateModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesByRestaurantModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
