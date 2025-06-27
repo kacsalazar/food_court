@@ -1,6 +1,7 @@
 package com.foodcourt.squaremallmanagment.infrastructure.documentation;
 
 import com.foodcourt.squaremallmanagment.application.dto.request.RestaurantRequestDto;
+import com.foodcourt.squaremallmanagment.application.dto.response.GetRestaurantByOwnerResponse;
 import com.foodcourt.squaremallmanagment.application.dto.response.RestaurantResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,8 +12,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -96,5 +97,41 @@ public interface IRestaurantRestController {
                     schema = @Schema(type = "integer", defaultValue = "10")
             )
             @RequestParam(defaultValue = "10") Integer size
+    );
+
+    @Operation(
+            summary = "Get restaurant by owner ID",
+            description = "Returns the restaurant associated with the provided owner ID.",
+            tags = {"Restaurant Management"}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Restaurant returned successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GetRestaurantByOwnerResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Restaurant not found for the given owner ID",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    ResponseEntity<GetRestaurantByOwnerResponse> getRestaurantByIdOwner(
+            @Parameter(
+                    name = "idOwner",
+                    description = "ID of the restaurant owner",
+                    required = true,
+                    example = "1",
+                    schema = @Schema(type = "integer")
+            )
+            @PathVariable Long idOwner
     );
 }

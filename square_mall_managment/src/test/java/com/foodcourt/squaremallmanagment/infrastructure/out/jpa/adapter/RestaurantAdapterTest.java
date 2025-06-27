@@ -11,6 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
@@ -38,6 +42,7 @@ class RestaurantAdapterTest {
         RestaurantEntity restaurantEntity = CreatorMocks.createRestaurantEntity();
 
         when(restaurantMapper.toRestaurantEntity(restaurantModel)).thenReturn(restaurantEntity);
+        when(restaurantRepository.save(restaurantEntity)).thenReturn(restaurantEntity);
         when(restaurantMapper.toRestaurantModel(restaurantEntity)).thenReturn(restaurantModel);
 
         RestaurantModel result = restaurantAdapter.saveRestaurant(restaurantModel);
@@ -46,6 +51,48 @@ class RestaurantAdapterTest {
         verify(restaurantRepository).save(restaurantEntity);
         verify(restaurantMapper).toRestaurantModel(restaurantEntity);
         assertEquals(restaurantModel, result);
+    }
+
+    @Test
+    void findRestaurantByIdTest() {
+        Long id = 1L;
+        RestaurantEntity entity = CreatorMocks.createRestaurantEntity();
+        RestaurantModel model = CreatorMocks.createRestaurantModel();
+
+        when(restaurantRepository.findById(id)).thenReturn(Optional.of(entity));
+        when(restaurantMapper.toRestaurantModel(entity)).thenReturn(model);
+
+        RestaurantModel result = restaurantAdapter.findRestaurantById(id);
+
+        assertEquals(model, result);
+    }
+
+    @Test
+    void getAllRestaurantsTest() {
+        int page = 0, size = 10;
+        List<RestaurantEntity> entities = Collections.singletonList(CreatorMocks.createRestaurantEntity());
+        List<RestaurantModel> models = Collections.singletonList(CreatorMocks.createRestaurantModel());
+
+        when(restaurantRepository.findAllByOrderByIdAsc(page, size)).thenReturn(entities);
+        when(restaurantMapper.toRestaurantModelList(entities)).thenReturn(models);
+
+        List<RestaurantModel> result = restaurantAdapter.getAllRestaurants(page, size);
+
+        assertEquals(models, result);
+    }
+
+    @Test
+    void findRestaurantByIdOwnerTest() {
+        Long idOwner = 1L;
+        RestaurantEntity entity = CreatorMocks.createRestaurantEntity();
+        RestaurantModel model = CreatorMocks.createRestaurantModel();
+
+        when(restaurantRepository.findRestaurantByIdOwner(idOwner)).thenReturn(entity);
+        when(restaurantMapper.toRestaurantModel(entity)).thenReturn(model);
+
+        RestaurantModel result = restaurantAdapter.findRestaurantByIdOwner(idOwner);
+
+        assertEquals(model, result);
     }
 
 }

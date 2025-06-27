@@ -23,7 +23,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public AuthUseCase authUseCase(IAuthPort iAuthPort){
-        return new AuthUseCase(iAuthPort);
+    public AuthUseCase authUseCase(IAuthPort iAuthPort, IRolPersistencePort iRolPort,
+                                   IUserPersistencePort iUserPersistencePort){
+        return new AuthUseCase(iAuthPort, iRolPort, iUserPersistencePort);
     }
 }

@@ -1,5 +1,7 @@
 package com.foodcourt.squaremallmanagment.infrastructure.input.rest;
 
+import com.foodcourt.squaremallmanagment.application.dto.request.DeliverOrderRequest;
+import com.foodcourt.squaremallmanagment.application.dto.request.NotificationRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.response.OrderResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IOrderHandler;
@@ -40,5 +42,28 @@ public class OrderRestController implements IOrderRestController {
                                                                    @RequestParam(defaultValue = "10") Integer size) {
 
         return ResponseEntity.ok(orderHandler.getOrdersByEmployee(status, page, size));
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PatchMapping("/ready/{orderId}")
+    public ResponseEntity<Void> changeOrderToReady(@PathVariable Long orderId,
+                                                        @RequestBody NotificationRequest notification) {
+        orderHandler.changeOrderToReady(notification, orderId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PatchMapping("/deliver/{orderId}")
+    public ResponseEntity<Void> deliverOrder(@PathVariable Long orderId,
+                                                   @RequestBody DeliverOrderRequest deliverOrder) {
+        orderHandler.deliverOrder(deliverOrder, orderId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @PatchMapping("/cancel/{orderId}")
+    public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId) {
+        orderHandler.cancelOrder(orderId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

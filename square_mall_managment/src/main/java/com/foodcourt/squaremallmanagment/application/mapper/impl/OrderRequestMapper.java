@@ -1,8 +1,12 @@
 package com.foodcourt.squaremallmanagment.application.mapper.impl;
 
+import com.foodcourt.squaremallmanagment.application.dto.request.DeliverOrderRequest;
+import com.foodcourt.squaremallmanagment.application.dto.request.NotificationRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.response.OrderResponse;
 import com.foodcourt.squaremallmanagment.application.handler.util.UtilClass;
+import com.foodcourt.squaremallmanagment.domain.model.order.DeliverOrderModel;
+import com.foodcourt.squaremallmanagment.domain.model.order.NotificationOrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
 import lombok.experimental.UtilityClass;
 
@@ -40,5 +44,18 @@ public class OrderRequestMapper {
                         .orderDate(order.getOrderDate())
                         .build())
                 .toList();
+    }
+
+    public static NotificationOrderModel toNotificationModel(NotificationRequest notificationRequest) {
+        return NotificationOrderModel.builder()
+                .messageBody(notificationRequest.getMessageBody())
+                .build();
+    }
+
+    public static DeliverOrderModel toDeliverOrderModel(DeliverOrderRequest deliverOrderRequest) {
+        return DeliverOrderModel.builder()
+                .securityPin(deliverOrderRequest.getSecurityPin())
+                .build();
+
     }
 }

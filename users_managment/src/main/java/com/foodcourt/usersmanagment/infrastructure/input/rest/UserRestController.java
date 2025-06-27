@@ -24,15 +24,11 @@ public class UserRestController implements IUserRestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
         UserResponseDto userResponseDto = userHandler.getUserById(id);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
-
-
 
     @GetMapping("/verify/{id}/{rol}")
     public ResponseEntity<Boolean> verifyUserRol(@PathVariable String dni, @PathVariable String rol) {
@@ -47,12 +43,12 @@ public class UserRestController implements IUserRestController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+
     @GetMapping("/dni/{dni}")
     public ResponseEntity<UserResponseDto> getUserByDni(@PathVariable String dni) {
         UserResponseDto userResponseDto = userHandler.getUserByDni(dni);
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
-
 
     @PostMapping("/customer/")
     public ResponseEntity<Void> createAccountCustomer(@RequestBody UserRequestDto userRequestDto){

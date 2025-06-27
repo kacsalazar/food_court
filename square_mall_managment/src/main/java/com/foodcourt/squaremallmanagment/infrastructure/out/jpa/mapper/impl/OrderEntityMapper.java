@@ -17,7 +17,6 @@ public class OrderEntityMapper {
 
     public static OrderEntity toOrderEntity(OrderModel orderModel) {
         return OrderEntity.builder()
-                .orderDate(new Date())
                 .status(orderModel.getStatus())
                 .idChef(orderModel.getEmployeeId())
                 .idRestaurant(orderModel.getRestaurantId())
@@ -52,6 +51,7 @@ public class OrderEntityMapper {
                 .idChef(orderEntity.getIdChef())
                 .status(orderEntity.getStatus())
                 .idClient(orderEntity.getIdClient())
+                .securityPin(orderEntity.getSecurityPin())
                 .build();
     }
 
@@ -63,6 +63,7 @@ public class OrderEntityMapper {
                 .status(orderModel.getStatus())
                 .idChef(orderModel.getIdChef())
                 .idRestaurant(orderModel.getIdRestaurant())
+                .securityPin(orderModel.getSecurityPin())
                 .build();
     }
 
@@ -86,6 +87,7 @@ public class OrderEntityMapper {
 
     public static OrderModel toOrderModel(OrderEntity orderEntity, List<OrderVsDishEntity> orderVsDishEntities) {
         return OrderModel.builder()
+                .id(orderEntity.getId())
                 .restaurantId(orderEntity.getIdRestaurant())
                 .employeeId(orderEntity.getIdChef())
                 .status(orderEntity.getStatus())

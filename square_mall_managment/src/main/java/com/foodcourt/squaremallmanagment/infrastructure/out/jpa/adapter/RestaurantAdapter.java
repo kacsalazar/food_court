@@ -40,8 +40,6 @@ public class RestaurantAdapter implements IRestaurantPersistencePort {
 
     @Override
     public RestaurantModel findRestaurantByIdOwner(Long idOwner) {
-        RestaurantModel r = restaurantMapper.toRestaurantModel( restaurantRepository.findRestaurantByIdOwner(idOwner));
-        log.info("Restaurant found by owner id {}: {}"+ r);
-        return r;
+        return restaurantMapper.toRestaurantModel( restaurantRepository.findRestaurantByIdOwner(idOwner));
     }
 }

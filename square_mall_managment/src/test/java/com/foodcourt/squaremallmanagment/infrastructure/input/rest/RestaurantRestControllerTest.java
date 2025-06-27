@@ -1,6 +1,10 @@
 package com.foodcourt.squaremallmanagment.infrastructure.input.rest;
 
 import com.foodcourt.squaremallmanagment.CreatorMocks;
+import com.foodcourt.squaremallmanagment.application.dto.request.RestaurantRequestDto;
+import com.foodcourt.squaremallmanagment.application.dto.response.GetRestaurantByOwnerResponse;
+import com.foodcourt.squaremallmanagment.application.dto.response.RestaurantResponse;
+import com.foodcourt.squaremallmanagment.application.handler.IRestaurantHandler;
 import com.foodcourt.squaremallmanagment.domain.model.restaurant.RestaurantModel;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter.RestaurantAdapter;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.RestaurantEntity;
@@ -11,6 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -20,13 +29,10 @@ class RestaurantRestControllerTest {
 
 
     @Mock
-    IRestaurantRepository restaurantRepository;
-
-    @Mock
-    IRestaurantEntityMapper restaurantMapper;
+    private IRestaurantHandler restaurantHandler;
 
     @InjectMocks
-    RestaurantAdapter restaurantAdapter;
+    private RestaurantRestController restaurantRestController;
 
     @BeforeEach
     void setUp() {
@@ -34,19 +40,39 @@ class RestaurantRestControllerTest {
     }
 
     @Test
-    void saveRestaurantTest() {
-        RestaurantModel restaurantModel = CreatorMocks.createRestaurantModel();
-        RestaurantEntity restaurantEntity = mock(RestaurantEntity.class);
+    void saveRestaurant() {
+        RestaurantRequestDto dto = new RestaurantRequestDto();
 
+        ResponseEntity<Void> response = restaurantRestController.saveRestaurant(dto);
 
-        when(restaurantMapper.toRestaurantEntity(restaurantModel)).thenReturn(restaurantEntity);
-        when(restaurantMapper.toRestaurantModel(restaurantEntity)).thenReturn(restaurantModel);
+        verify(restaurantHandler).saveRestaurant(dto);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNull(response.getBody());
+    }
 
-        RestaurantModel result = restaurantAdapter.saveRestaurant(restaurantModel);
+    @Test
+    void getAllRestaurants() {
+        int page = 0, size = 10;
+        List<RestaurantResponse> list = Collections.singletonList(new RestaurantResponse());
+        when(restaurantHandler.getAllRestaurants(page, size)).thenReturn(list);
 
-        verify(restaurantMapper).toRestaurantEntity(restaurantModel);
-        verify(restaurantRepository).save(restaurantEntity);
-        verify(restaurantMapper).toRestaurantModel(restaurantEntity);
-        assertEquals(restaurantModel, result);
+        ResponseEntity<List<RestaurantResponse>> response = restaurantRestController.getAllRestaurants(page, size);
+
+        verify(restaurantHandler).getAllRestaurants(page, size);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(list, response.getBody());
+    }
+
+    @Test
+    void getRestaurantByIdOwner() {
+        Long idOwner = 1L;
+        GetRestaurantByOwnerResponse ownerResponse = new GetRestaurantByOwnerResponse();
+        when(restaurantHandler.getRestaurantByIdOwner(idOwner)).thenReturn(ownerResponse);
+
+        ResponseEntity<GetRestaurantByOwnerResponse> response = restaurantRestController.getRestaurantByIdOwner(idOwner);
+
+        verify(restaurantHandler).getRestaurantByIdOwner(idOwner);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(ownerResponse, response.getBody());
     }
 }

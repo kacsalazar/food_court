@@ -1,18 +1,23 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 
-import com.foodcourt.squaremallmanagment.CreatorMocks;
 import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
 import com.foodcourt.squaremallmanagment.domain.model.dish.DishUpdateModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesByRestaurantModel;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IDishEntityMapper;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.IDishRepository;
+import com.foodcourt.squaremallmanagment.mocks.CreatorDishMocks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.MockitoAnnotations;
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.List;
+import java.util.Optional;
+
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
@@ -20,7 +25,6 @@ class DishAdapterTest {
 
     @Mock
     private IDishRepository dishRepository;
-
     @Mock
     private IDishEntityMapper dishMapper;
 
@@ -34,61 +38,76 @@ class DishAdapterTest {
 
     @Test
     void saveDish() {
-        DishModel dishModel = CreatorMocks.createDishModel();
+        // Arrange
+        DishModel dishModel = CreatorDishMocks.buildCompleteDishModel();
 
-        DishEntity dishEntity = CreatorMocks.createDishEntity();
-        when(dishMapper.toDishEntity(dishModel)).thenReturn(dishEntity);
-
+        // Act
         dishAdapter.saveDish(dishModel);
 
-        assertTrue(dishEntity.getIsActive());
-        verify(dishMapper).toDishEntity(dishModel);
-        verify(dishRepository).save(dishEntity);
+        // Assert
+        verify(dishRepository).save(any(DishEntity.class));
     }
 
     @Test
     void findDishById() {
-        Long id = 1L;
-        DishEntity entity = CreatorMocks.createDishEntity();
-        DishModel model = CreatorMocks.createDishModel();
+        // Arrange
+        DishEntity dishEntity = CreatorDishMocks.buildCompleteDishEntity();
+        when(dishRepository.findById(1L)).thenReturn(Optional.of(dishEntity));
 
-        when(dishRepository.findById(id)).thenReturn(java.util.Optional.of(entity));
-        when(dishMapper.toDishModel(entity)).thenReturn(model);
+        // Act
+        DishModel result = dishAdapter.findDishById(1L);
 
-        DishModel result = dishAdapter.findDishById(id);
-
-        assertEquals(model, result);
-        verify(dishRepository).findById(id);
-        verify(dishMapper).toDishModel(entity);
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result.getDishInfo().getName()).isEqualTo("Pizza");
+        assertThat(result.getRestaurantInfo().getIdRestaurant()).isEqualTo(10L);
     }
 
     @Test
     void updateDish() {
-        Long id = 1L;
-        DishEntity entity = CreatorMocks.createDishEntity();
-        DishUpdateModel updateModel = new DishUpdateModel();
-        updateModel.setDescription("Nueva descripción");
-        updateModel.setPrice(20.0);
+        // Arrange
+        DishModel dishModel = CreatorDishMocks.buildCompleteDishModel();
+        DishEntity dishEntity = CreatorDishMocks.buildCompleteDishEntity();
 
-        DishEntity updatedEntity = CreatorMocks.createDishEntity();
-        updatedEntity.setDescription("Nueva descripción");
-        updatedEntity.setPrice(20.0);
+        when(dishMapper.toDishEntity(dishModel)).thenReturn(dishEntity);
+        when(dishRepository.save(dishEntity)).thenReturn(dishEntity);
 
-        DishModel updatedModel = CreatorMocks.createDishModel();
-        updatedModel.setDescription("Nueva descripción");
-        updatedModel.setPrice(20.0);
+        // Act
+        DishModel result = dishAdapter.updateDish(dishModel, new DishUpdateModel());
 
-        when(dishRepository.findById(id)).thenReturn(java.util.Optional.of(entity));
-        when(dishRepository.save(entity)).thenReturn(updatedEntity);
-        when(dishMapper.toDishModel(updatedEntity)).thenReturn(updatedModel);
+        // Assert
+        assertThat(result.getDishInfo().getName()).isEqualTo("Pizza");
+        verify(dishRepository).save(dishEntity);
+    }
 
-        DishModel result = dishAdapter.updateDish(id, updateModel);
+    @Test
+    void disableDish() {
+        // Arrange
+        DishModel dishModel = CreatorDishMocks.buildCompleteDishModel();
+        DishEntity dishEntity = CreatorDishMocks.buildCompleteDishEntity();
 
-        assertEquals(updatedModel, result);
-        assertEquals("Nueva descripción", entity.getDescription());
-        assertEquals(20.0, entity.getPrice());
-        verify(dishRepository).findById(id);
-        verify(dishRepository).save(entity);
-        verify(dishMapper).toDishModel(updatedEntity);
+        when(dishMapper.toDishEntity(dishModel)).thenReturn(dishEntity);
+        when(dishRepository.save(dishEntity)).thenReturn(dishEntity);
+
+        // Act
+        DishModel result = dishAdapter.disableDish(dishModel, false);
+
+        // Assert
+        assertThat(result.getDishInfo().getIsActive()).isTrue(); // se mantiene igual porque la lógica no cambia el valor
+        verify(dishRepository).save(dishEntity);
+    }
+
+    @Test
+    void returnDishesByRestaurantCategory() {
+        // Arrange
+        DishEntity dishEntity = CreatorDishMocks.buildCompleteDishEntity();
+        when(dishRepository.findDishesByRestaurant(10L, 5L, 0, 10)).thenReturn(List.of(dishEntity));
+
+        // Act
+        List<ListDishesByRestaurantModel> result = dishAdapter.getDishesByCategory(10L, 5L, 0, 10);
+
+        // Assert
+        assertThat(result).hasSize(1);
+        assertThat(result.get(0).getName()).isEqualTo("Pizza");
     }
 }

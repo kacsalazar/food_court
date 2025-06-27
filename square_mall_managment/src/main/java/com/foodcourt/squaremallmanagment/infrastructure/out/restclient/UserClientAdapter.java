@@ -25,4 +25,9 @@ public class UserClientAdapter implements IUserClientPort {
         log.info("Checking if owner exists with DNI: {}", restTemplate.getForObject(url, UserModel.class));
         return restTemplate.getForObject(url, UserModel.class);
     }
+
+    public UserModel getUserById(Long id) {
+        String url = USER_SERVICE_URL + "id/" + id;
+        return restTemplate.getForObject(url, UserModel.class);
+    }
 }

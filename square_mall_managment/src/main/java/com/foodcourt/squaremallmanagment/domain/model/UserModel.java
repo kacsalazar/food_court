@@ -14,4 +14,6 @@ public class UserModel {
     private String name;
     private String dni;
     private Long id;
+    private String phoneNumber;
+    private String email;
 }

@@ -1,9 +1,11 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 
+import com.foodcourt.squaremallmanagment.domain.model.order.NotificationOrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModelReturn;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IOrderPersistencePort;
+import com.foodcourt.squaremallmanagment.domain.spi.ISendNotificationPort;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.OrderVsDishEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.OrderEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.impl.OrderEntityMapper;
@@ -21,7 +23,6 @@ import java.util.List;
 @Slf4j
 public class OrderAdapter implements IOrderPersistencePort {
 
-    private final UserClientAdapter userClientAdapter;
     private final IOrderRepository orderRepository;
     private final IOrderVsDishRepository orderDishRepository;
 
@@ -34,7 +35,7 @@ public class OrderAdapter implements IOrderPersistencePort {
 
     private Long saveOrder(OrderModel orderModel) {
         OrderEntity order = OrderEntityMapper.toOrderEntity(orderModel);
-        order.setIdClient(userClientAdapter.ownerExists(orderModel.getUserDni()).getId());
+
         return orderRepository.save(order).getId();
     }
 
@@ -59,6 +60,7 @@ public class OrderAdapter implements IOrderPersistencePort {
     public void updateOrder(OrderUpdateModel orderModel) {
         OrderEntity entity = OrderEntityMapper.toOrderEntityUpdate(orderModel);
         orderRepository.save(entity);
+
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.foodcourt.usersmanagment.domain.exception.DomainException;
 import com.foodcourt.usersmanagment.domain.model.AuthModel;
 import com.foodcourt.usersmanagment.domain.model.ClaimUserModel;
 import com.foodcourt.usersmanagment.domain.model.TokenModel;
+import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.domain.spi.IAuthPort;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter.RolAdapter;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
@@ -28,16 +29,7 @@ public class AuthAdapter implements IAuthPort {
     private final RolAdapter rolAdapter;
 
     @Override
-    public TokenModel userLogin(AuthModel authModel) {
-        UserEntity user = findUserByEmail(authModel.getEmail());
-
-        String rolName = rolAdapter.findById(user.getIdRol()).getName();
-        if (rolName == null)
-            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
-
-        boolean validPassword = passwordEncoder.matches(authModel.getPassword(), user.getPassword());
-        if (!validPassword)
-             throw new DomainException(ConstantException.INVALID_PASSWORD);
+    public TokenModel userLogin(AuthModel authModel, UserModel user, String rolName) {
 
         ClaimUserModel claimUserModel = new ClaimUserModel(
                 new ClaimUserModel.Identity(user.getEmail(), user.getName(),user.getDni()),
@@ -50,9 +42,7 @@ public class AuthAdapter implements IAuthPort {
         return TokenModel.builder().token(token).build();
     }
 
-    private UserEntity findUserByEmail(String email) {
-        return Optional.ofNullable(userRepository.findUserByEmail(email))
-                .orElseThrow(() -> new DomainException(ConstantException.USER_NOT_FOUND));
+    public Boolean verifyPassword(String password, String encodedPassword) {
+        return passwordEncoder.matches(password, encodedPassword);
     }
-
 }

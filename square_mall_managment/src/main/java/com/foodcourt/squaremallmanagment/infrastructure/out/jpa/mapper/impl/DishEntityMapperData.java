@@ -37,8 +37,6 @@ public class DishEntityMapperData {
                 .restaurantInfo(DishModel.RestaurantInfo.builder()
                         .idRestaurant(dishEntity.getIdRestaurant())
                         .build())
-                .ownerInfo(DishModel.OwnerInfo.builder()
-                        .build())
                 .build();
     }
 

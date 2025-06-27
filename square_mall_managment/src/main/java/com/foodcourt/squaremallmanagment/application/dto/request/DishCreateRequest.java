@@ -16,5 +16,5 @@ public class DishCreateRequest {
     private Double price;
     private String imageUrl;
     private Long idCategory;
-    private Long idRestaurant; // Changed from nitRestaurant to idRestaurant for consistency
+    private Long idRestaurant;
 }

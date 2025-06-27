@@ -1,4 +1,4 @@
-package com.foodcourt.squaremallmanagment.infrastructure.exception;
+package com.foodcourt.squaremallmanagment.domain.exception;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException() {

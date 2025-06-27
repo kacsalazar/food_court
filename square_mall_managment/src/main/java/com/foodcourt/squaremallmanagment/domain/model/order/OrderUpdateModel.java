@@ -20,4 +20,5 @@ public class OrderUpdateModel {
     private String status;
     private Long idChef;
     private Long idRestaurant;
+    private String securityPin;
 }
