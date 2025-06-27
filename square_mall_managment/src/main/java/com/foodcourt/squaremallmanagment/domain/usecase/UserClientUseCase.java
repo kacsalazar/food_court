@@ -1,10 +1,8 @@
 package com.foodcourt.squaremallmanagment.domain.usecase;
 
 import com.foodcourt.squaremallmanagment.domain.api.IUserClientServicePort;
-import com.foodcourt.squaremallmanagment.domain.exception.ConstantException;
-import com.foodcourt.squaremallmanagment.domain.exception.DomainException;
 import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
-import com.foodcourt.squaremallmanagment.infrastructure.exception.InvalidUserException;
+import com.foodcourt.squaremallmanagment.domain.exception.InvalidUserException;
 import lombok.AllArgsConstructor;
 
 import java.util.Optional;
@@ -18,6 +16,6 @@ public class UserClientUseCase implements IUserClientServicePort {
     public Boolean isValidUser(String dni, String rol) {
 
         return Optional.ofNullable(userClientPort.isValidUser(dni, rol))
-                .orElseThrow(() -> new InvalidUserException());
+                .orElseThrow(InvalidUserException::new);
     }
 }

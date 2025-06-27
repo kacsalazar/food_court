@@ -48,6 +48,4 @@ public class DishRestController implements IDishRestController {
                                                                             @RequestParam(defaultValue = "10") Integer size) {
         return ResponseEntity.ok(dishHandler.getDishesByCategory(idRestaurant, idCategory, page, size));
     }
-
-
 }

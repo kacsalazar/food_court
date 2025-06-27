@@ -1,5 +1,6 @@
 package com.foodcourt.squaremallmanagment.infrastructure.exceptionhandler;
 
+import com.foodcourt.squaremallmanagment.domain.exception.*;
 import com.foodcourt.squaremallmanagment.infrastructure.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,29 +25,57 @@ public class ControllerAdvisor {
     @ExceptionHandler(DishNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleDishNotFoundException(
             NoDataFoundException ignoredNoDataFoundException) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.DISH_NOT_FOUND.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.DISH_NOT_FOUND.getMessage()));
     }
 
     @ExceptionHandler(RestaurantNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleRestaurantNotFoundException(
             NoDataFoundException ignoredNoDataFoundException) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.RESTAURANT_NOT_FOUND.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.RESTAURANT_NOT_FOUND.getMessage()));
     }
 
     @ExceptionHandler(InvalidUserException.class)
     public ResponseEntity<Map<String, String>> handleInvalidUserException(
-            NoDataFoundException ignoredNoDataFoundException) {
+            InvalidUserException ignoredNoDataFoundException) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.INVALID_USER.getMessage()));
+                .body(Collections.singletonMap(MESSAGE, ConstantException.INVALID_USER.getMessage()));
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleUserNotFoundException(
-            NoDataFoundException ignoredNoDataFoundException) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.USER_NOT_FOUND.getMessage()));
+            UserNotFoundException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.USER_NOT_FOUND.getMessage()));
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleOrderNotFoundException(
+            OrderNotFoundException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.ORDER_NOT_FOUND.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidOrderException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidOrderException(
+            InvalidOrderException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.INVALID_ORDER.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidStateTransitionException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidStateTransactionException(
+            InvalidStateTransitionException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.INVALID_STATE_TRANSITION.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidPinSecurityException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidStateTransactionException(
+            InvalidPinSecurityException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.INVALID_PIN_SECURITY.getMessage()));
     }
     
 }

@@ -14,6 +14,7 @@ import java.util.List;
 @Builder
 public class OrderModel {
 
+    private Long id;
     private Long restaurantId;
     private Long employeeId;
     private List<Dish> dishes;

@@ -1,26 +1,24 @@
 package com.foodcourt.squaremallmanagment.domain.exception;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-@Getter
 public enum ConstantException {
 
-    USER_NOT_ALLOWED("The user is not allowed", "404-04"),
-    USER_NOT_AUTHORIZED("The user is not authorized", "404-05"),
-    DISH_NOT_FOUND("Dish not found", "404-06"),
-    USER_NOT_FOUND("User not found", "404-07"),
-    RESTAURANT_NOT_FOUND("Restaurant not found", "404-08"),
-    INVALID_ORDER("You already have an order in this restaurant", "404-09"),
-    INVALID_USER("The user is not valid", "404-10"),
-    INVALID_NAME("The name of the restaurant cannot be empty.", "404-11"),
-    INVALID_PRICE_DISH("The price of the dish must be an integer greater than 0.", "404-12"),
-    INVALID_NIT_RESTAURANT("The NIT must contain only numbers.", "404-13"),
-    INVALID_PHONE_NUMBER("The phone number must have a maximum of 13 characters and can start with +", "404-14"),
-    INVALID_RESTAURANT_NAME("The name of the restaurant cannot contain only numbers.", "404-15");
+    INVALID_USER("Invalid user credentials provided"),
+    DISH_NOT_FOUND("Dish not found"),
+    RESTAURANT_NOT_FOUND("Restaurant not found"),
+    USER_NOT_FOUND("User not found"),
+    ORDER_NOT_FOUND("Order not found"),
+    INVALID_ORDER("You have a order in progress, please finish it before creating a new one"),
+    INVALID_STATE_TRANSITION("Invalid state transition for the order"),
+    INVALID_PIN_SECURITY("Invalid security pin provided"),;
 
-    private final String error_message;
-    private final String code_error;
+    private final String message;
+
+    ConstantException(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return this.message;
+    }
 
 }

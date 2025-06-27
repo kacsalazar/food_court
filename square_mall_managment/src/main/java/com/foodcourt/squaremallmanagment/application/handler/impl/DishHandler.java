@@ -30,13 +30,13 @@ public class DishHandler implements IDishHandler {
     @Override
     public void saveDish(DishCreateRequest dishCreateRequest) {
         DishModel dishModel = DishRequestMapperModel.toDishModel(dishCreateRequest);
-        dishServicePort.saveDish(dishModel);
+        dishServicePort.saveDish(dishModel, UtilClass.getUserDni());
     }
 
     @Override
     public DishResponse updateDish(Long id, DishRequestUpdateDto dishRequestUpdateDto) {
         DishUpdateModel dishUpdateModel = dishMapper.toDishUpdateModel(dishRequestUpdateDto);
-        return DishRequestMapperModel.toDishResponseDto(dishServicePort.updateDish(id, dishUpdateModel));
+        return DishRequestMapperModel.toDishResponseDto(dishServicePort.updateDish(id, dishUpdateModel, UtilClass.getUserDni()));
     }
 
     @Override

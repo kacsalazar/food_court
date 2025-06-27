@@ -34,15 +34,17 @@ class DishHandlerTest {
 
     @Test
     void saveDish() {
-        DishCreateRequest dto = mock(DishCreateRequest.class);
-        DishModel model = mock(DishModel.class);
+        // Arrange
+        DishCreateRequest request = new DishCreateRequest(); // Llénalo si es necesario
+        DishModel model = DishModel.builder().build();
 
-        when(dishMapper.toDishModel(dto)).thenReturn(model);
+        //when(DishRequestMapperModel.toDishModel(request)).thenReturn(model);
 
-        dishHandler.saveDish(dto);
+        // Act
+        dishHandler.saveDish(request);
 
-        verify(dishMapper).toDishModel(dto);
-        verify(dishServicePort).saveDish(model);
+        // Assert
+        verify(dishServicePort).saveDish(model, "123"); // Asumiendo que "123" es el DNI del usuario
     }
 
     @Test
@@ -54,13 +56,13 @@ class DishHandlerTest {
         DishResponse responseDto = mock(DishResponse.class);
 
         when(dishMapper.toDishUpdateModel(updateDto)).thenReturn(updateModel);
-        when(dishServicePort.updateDish(id, updateModel)).thenReturn(dishModel);
+        when(dishServicePort.updateDish(id, updateModel, "123")).thenReturn(dishModel);
         when(dishMapper.toDishResponseDto(dishModel)).thenReturn(responseDto);
 
         DishResponse result = dishHandler.updateDish(id, updateDto);
 
         verify(dishMapper).toDishUpdateModel(updateDto);
-        verify(dishServicePort).updateDish(id, updateModel);
+        verify(dishServicePort).updateDish(id, updateModel, "123");
         verify(dishMapper).toDishResponseDto(dishModel);
         assertEquals(responseDto, result);
     }}

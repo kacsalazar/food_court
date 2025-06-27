@@ -53,8 +53,7 @@ public class UserUseCase implements IUserServicePort {
 
     @Override
     public void createAccountEmployee(CreateUserModel createUserModel, String ownerDni) {
-        log.info("Creating account for employee with owner DNI: {}" + ownerDni);
-        log.info("Creating account for employee with owner DNI: {}" + createUserModel);
+
         UseValidationUtil.isValidUser(createUserModel);
         Long idRol = rolPersistencePort.findByName("ROLE_EMPLOYEE").getId();
         if(idRol == null)
@@ -62,7 +61,7 @@ public class UserUseCase implements IUserServicePort {
 
         Long idRestaurant = restaurantClientPort.getRestaurantIdByOwner(
                 userPersistencePort.findUserByDni(ownerDni).getId()).getId();
-        log.info("Creating account for employee with owner DNI: {}" + idRestaurant);
+
         createUserModel.setIdRol(idRol);
         createUserModel.setIdRestaurant(idRestaurant);
         userPersistencePort.saveUser(createUserModel);

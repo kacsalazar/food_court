@@ -36,6 +36,7 @@ public class RestaurantRestController implements IRestaurantRestController {
         return ResponseEntity.ok( restaurantHandler.getAllRestaurants(page, size));
     }
 
+    @PreAuthorize("hasAnyRole('EMPLOYEE', 'OWNER')")
     @GetMapping("/ownerId/{idOwner}")
     public ResponseEntity<GetRestaurantByOwnerResponse> getRestaurantByIdOwner(@PathVariable Long idOwner) {
         return ResponseEntity.ok( restaurantHandler.getRestaurantByIdOwner(idOwner));

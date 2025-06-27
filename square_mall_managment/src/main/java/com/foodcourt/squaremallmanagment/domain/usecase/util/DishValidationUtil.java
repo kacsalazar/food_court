@@ -1,18 +1,17 @@
 package com.foodcourt.squaremallmanagment.domain.usecase.util;
 
-import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class DishValidationUtil {
 
-    public static void isValidDish(DishModel dishModel) {
+    public static void isValidDish(String name ,  Double price) {
 
-        if (dishModel.getDishInfo().getName() == null ||dishModel.getDishInfo().getName().isBlank()) {
+        if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("The name of the dish cannot be empty");
         }
 
-        if (dishModel.getDishInfo().getPrice() == null || dishModel.getDishInfo().getPrice() <= 0) {
+        if (price == null || price <= 0) {
             throw new IllegalArgumentException("The price of the dish must be an integer greater than 0.");
         }
     }

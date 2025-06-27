@@ -11,17 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DishModel {
 
-    private OwnerInfo ownerInfo;
     private DishInfo dishInfo;
     private RestaurantInfo restaurantInfo;
-
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Data
-    @Builder
-    public static class OwnerInfo{
-        private String dniOwner;
-    }
 
     @NoArgsConstructor
     @AllArgsConstructor

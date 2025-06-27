@@ -1,0 +1,27 @@
+package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
+
+import com.foodcourt.squaremallmanagment.domain.model.TraceabilityModel;
+import com.foodcourt.squaremallmanagment.domain.spi.ITraceabilityPersistencePort;
+import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.TraceabilityEntity;
+import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.impl.TraceabilityEntityMapper;
+import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.ITraceabilityRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class TraceabilityAdapter implements ITraceabilityPersistencePort {
+
+    private final ITraceabilityRepository traceabilityRepository;
+
+    public void saveTraceability(TraceabilityModel traceabilityModel) {
+        TraceabilityEntity traceabilityEntity = TraceabilityEntityMapper.toTraceabilityEntity(traceabilityModel);
+        traceabilityRepository.save(traceabilityEntity);
+    }
+
+
+}

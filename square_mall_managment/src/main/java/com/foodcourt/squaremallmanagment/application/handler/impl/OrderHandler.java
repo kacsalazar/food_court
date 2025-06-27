@@ -1,5 +1,7 @@
 package com.foodcourt.squaremallmanagment.application.handler.impl;
 
+import com.foodcourt.squaremallmanagment.application.dto.request.DeliverOrderRequest;
+import com.foodcourt.squaremallmanagment.application.dto.request.NotificationRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.response.OrderResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IOrderHandler;
@@ -34,6 +36,21 @@ public class OrderHandler implements IOrderHandler {
     @Override
     public List<OrderResponse> getOrdersByEmployee(String status, Integer page, Integer size) {
         return OrderRequestMapper.toOrderResponse(orderServicePort.getOrdersByEmployee( status, page, size, UtilClass.getUserDni()));
+    }
+
+    @Override
+    public void changeOrderToReady(NotificationRequest notification, Long orderId) {
+        orderServicePort.changeOrderToReady(OrderRequestMapper.toNotificationModel(notification), orderId);
+    }
+
+    @Override
+    public void deliverOrder(DeliverOrderRequest deliverOrder, Long orderId) {
+        orderServicePort.deliverOrder(OrderRequestMapper.toDeliverOrderModel(deliverOrder), orderId);
+    }
+
+    @Override
+    public void cancelOrder(Long orderId) {
+        orderServicePort.cancelOrder(orderId);
     }
 
 
