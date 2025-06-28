@@ -32,8 +32,9 @@ public class BeanConfiguration {
     @Bean
     public OrderUseCase orderUseCase(IOrderPersistencePort iOrderPersistencePort, IUserClientPort userClientPort,
                                    ISendNotificationPort iSendNotificationPort,
-                                     ITraceabilityPersistencePort iTraceabilityPersistencePort) {
+                                     ITraceabilityPersistencePort iTraceabilityPersistencePort,
+                                     IDishPersistencePort iDishPersistencePort) {
         return new OrderUseCase(iOrderPersistencePort, userClientPort, iSendNotificationPort,
-                                iTraceabilityPersistencePort);
+                                iTraceabilityPersistencePort, iDishPersistencePort);
     }
 }

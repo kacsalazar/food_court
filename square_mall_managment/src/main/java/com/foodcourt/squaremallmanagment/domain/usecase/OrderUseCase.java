@@ -5,7 +5,6 @@ import com.foodcourt.squaremallmanagment.domain.exception.*;
 import com.foodcourt.squaremallmanagment.domain.model.TraceabilityModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.*;
 import com.foodcourt.squaremallmanagment.domain.spi.*;
-import jakarta.persistence.criteria.Order;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
