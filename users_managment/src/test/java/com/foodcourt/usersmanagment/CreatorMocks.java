@@ -1,5 +1,6 @@
 package com.foodcourt.usersmanagment;
 
+import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
 import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
@@ -42,8 +43,8 @@ public class CreatorMocks {
                 .birthdayDate(new Date()).build();
     }
 
-    public static UserRequestDto createEmployeeRequestDto() {
-        return UserRequestDto.builder()
+    public static OwnerRequestDto createEmployeeRequestDto() {
+        return OwnerRequestDto.builder()
                 .name("John Doe")
                 .lastName("Martinez")
                 .dni("123")

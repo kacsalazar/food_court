@@ -1,5 +1,6 @@
 package com.foodcourt.usersmanagment.infrastructure.documentation;
 
+import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
 import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -122,7 +123,7 @@ public interface IUserRestController {
                             examples = @ExampleObject(
                                     name = "Employee request dto example",
                                     value = SAVE_USER_EXAMPLE)
-                    )) UserRequestDto requestDto
+                    )) OwnerRequestDto requestDto
     );
 
     @Operation(

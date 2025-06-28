@@ -1,5 +1,6 @@
 package com.foodcourt.usersmanagment.application.mapper;
 
+import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
 import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
@@ -14,4 +15,5 @@ public interface IUserRequestMapper {
 
     CreateUserModel toUserToSave(UserRequestDto userRequestDto);
     UserResponseDto toUserResponseDto(UserModel userModel);
+    CreateUserModel toOwnerModel(OwnerRequestDto userRequestDto);
 }
