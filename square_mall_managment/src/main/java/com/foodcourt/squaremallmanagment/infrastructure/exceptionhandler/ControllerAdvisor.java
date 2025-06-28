@@ -77,5 +77,12 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(MESSAGE, ConstantException.INVALID_PIN_SECURITY.getMessage()));
     }
+
+    @ExceptionHandler(DishesNotFromSameRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handleDishesNotFromSameRestaurantException(
+            DishesNotFromSameRestaurantException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.DISHES_NOT_FROM_SAME_RESTAURANT.getMessage()));
+    }
     
 }

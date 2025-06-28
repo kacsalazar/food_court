@@ -4,10 +4,8 @@ import com.foodcourt.squaremallmanagment.domain.api.IOrderServicePort;
 import com.foodcourt.squaremallmanagment.domain.exception.*;
 import com.foodcourt.squaremallmanagment.domain.model.TraceabilityModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.*;
-import com.foodcourt.squaremallmanagment.domain.spi.IOrderPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.spi.ISendNotificationPort;
-import com.foodcourt.squaremallmanagment.domain.spi.ITraceabilityPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
+import com.foodcourt.squaremallmanagment.domain.spi.*;
+import jakarta.persistence.criteria.Order;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -20,11 +18,14 @@ public class OrderUseCase implements IOrderServicePort {
     private final IUserClientPort userClientPort;
     private final ISendNotificationPort sendNotificationPort;
     private final ITraceabilityPersistencePort traceabilityPersistencePort;
+    private final IDishPersistencePort dishPersistencePort;
 
     @Override
     public void makeOrder(OrderModel orderModel, String userDni) {
 
         Long ownerId = getValidatedUserId(userDni);
+
+        validateDishOwnerRestaurant(orderModel);
 
         List<OrderModelReturn> orders = orderPersistencePort
                 .findOrdersByIdUser(ownerId);
@@ -148,4 +149,16 @@ public class OrderUseCase implements IOrderServicePort {
                 .orElseThrow(UserNotFoundException::new)
                 .getId();
     }
+
+    private void validateDishOwnerRestaurant(OrderModel orderModel) {
+        for (OrderModel.Dish dish : orderModel.getDishes()) {
+            Long dishRestaurantId = dishPersistencePort.findDishById(dish.getDishId())
+                    .getRestaurantInfo()
+                    .getIdRestaurant();
+            if (!dishRestaurantId.equals(orderModel.getRestaurantId())) {
+                throw new DishesNotFromSameRestaurantException();
+            }
+        }
+    }
+
 }

@@ -1,17 +1,14 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 
-import com.foodcourt.squaremallmanagment.domain.model.order.NotificationOrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModelReturn;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IOrderPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.spi.ISendNotificationPort;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.OrderVsDishEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.OrderEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.impl.OrderEntityMapper;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.IOrderVsDishRepository;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.IOrderRepository;
-import com.foodcourt.squaremallmanagment.infrastructure.out.restclient.UserClientAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
