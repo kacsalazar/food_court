@@ -158,7 +158,7 @@ class OrderUseCaseTest {
         when(userClientPort.getUserById(2L)).thenReturn(CreatorMocksUser.buildEmployeeModel());
 
         // Act
-        orderUseCase.changeOrderToReady(notification, 1L);
+        orderUseCase.changeOrderToReady(notification, 1L, "2");
 
         // Assert
         assertThat(order.getStatus()).isEqualTo("COMPLETED");
@@ -176,6 +176,6 @@ class OrderUseCaseTest {
     void changeOrderToReady_orderNotFound_throwsException() {
         when(orderPersistencePort.findOrderById(anyLong())).thenReturn(null);
 
-        assertThrows(OrderNotFoundException.class, () -> orderUseCase.changeOrderToReady(new NotificationOrderModel(), 1L));
+        assertThrows(OrderNotFoundException.class, () -> orderUseCase.changeOrderToReady(new NotificationOrderModel(), 1L, "2"));
     }
 }

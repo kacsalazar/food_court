@@ -84,5 +84,12 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Collections.singletonMap(MESSAGE, ConstantException.DISHES_NOT_FROM_SAME_RESTAURANT.getMessage()));
     }
+
+    @ExceptionHandler(InvalidEmployeeException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidEmployeeExceptionException(
+            InvalidEmployeeException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.UNAUTHORIZED_ORDER_ACCESS_EXCEPTION.getMessage()));
+    }
     
 }

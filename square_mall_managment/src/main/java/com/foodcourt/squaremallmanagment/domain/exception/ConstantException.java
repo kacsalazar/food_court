@@ -10,7 +10,8 @@ public enum ConstantException {
     INVALID_ORDER("You have a order in progress, please finish it before creating a new one"),
     INVALID_STATE_TRANSITION("Invalid state transition for the order"),
     INVALID_PIN_SECURITY("Invalid security pin provided"),
-    DISHES_NOT_FROM_SAME_RESTAURANT("All dishes in the order must belong to the same restaurant"),;
+    DISHES_NOT_FROM_SAME_RESTAURANT("All dishes in the order must belong to the same restaurant"),
+    UNAUTHORIZED_ORDER_ACCESS_EXCEPTION("You are not authorized to access or modify this order");
 
     private final String message;
 
