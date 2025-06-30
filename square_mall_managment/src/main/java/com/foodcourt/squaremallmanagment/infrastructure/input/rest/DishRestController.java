@@ -7,6 +7,7 @@ import com.foodcourt.squaremallmanagment.application.dto.response.DishResponse;
 import com.foodcourt.squaremallmanagment.application.dto.response.DishRestaurantResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IDishHandler;
 import com.foodcourt.squaremallmanagment.infrastructure.documentation.IDishRestController;
+import com.foodcourt.squaremallmanagment.infrastructure.input.rest.util.SecurityExpressions;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,26 +23,26 @@ public class DishRestController implements IDishRestController {
 
     private final IDishHandler dishHandler;
 
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize(SecurityExpressions.OWNER)
     @PostMapping("/")
     public ResponseEntity<Void> saveDish(@RequestBody DishCreateRequest dishCreateRequest) {
         dishHandler.saveDish(dishCreateRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize(SecurityExpressions.OWNER)
     @PatchMapping("/{id}")
     public ResponseEntity<DishResponse> updateDish(@PathVariable Long id, @RequestBody DishRequestUpdateDto dishRequestUpdateDto) {
         return ResponseEntity.ok(dishHandler.updateDish(id, dishRequestUpdateDto));
     }
 
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize(SecurityExpressions.OWNER)
     @PatchMapping("/{id}/status")
     public ResponseEntity<DishResponse> disableDish(@PathVariable Long id, @RequestBody DishStatusRequest status) {
         return ResponseEntity.ok(dishHandler.disableDish(id, status.getStatus()));
     }
 
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize(SecurityExpressions.CUSTOMER)
     @GetMapping("/{idRestaurant}/dishes")
     public ResponseEntity<List<DishRestaurantResponse>> getDishesByCategory(@RequestParam (required = false) Long idCategory, @PathVariable Long idRestaurant,
                                                                             @RequestParam(defaultValue = "0") Integer page,

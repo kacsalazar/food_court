@@ -1,6 +1,6 @@
 package com.foodcourt.squaremallmanagment.domain.usecase;
 
-import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
+import com.foodcourt.squaremallmanagment.domain.spi.IUserRestPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.when;
 public class UserClientUseCaseTest {
 
     @Mock
-    private IUserClientPort userClientPort;
+    private IUserRestPort userClientPort;
 
     @InjectMocks
     private UserClientUseCase userClientUseCase;

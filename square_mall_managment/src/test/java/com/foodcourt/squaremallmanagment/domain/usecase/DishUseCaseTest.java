@@ -7,7 +7,7 @@ import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesByRestauran
 import com.foodcourt.squaremallmanagment.domain.model.restaurant.RestaurantModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IRestaurantPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
+import com.foodcourt.squaremallmanagment.domain.spi.IUserRestPort;
 import com.foodcourt.squaremallmanagment.domain.exception.DishNotFoundException;
 import com.foodcourt.squaremallmanagment.domain.exception.InvalidUserException;
 import com.foodcourt.squaremallmanagment.domain.exception.RestaurantNotFoundException;
@@ -28,7 +28,7 @@ class DishUseCaseTest {
     //@Mock
     private IDishPersistencePort dishPersistencePort;
     //@Mock
-    private IUserClientPort userClientPort;
+    private IUserRestPort userClientPort;
     //@Mock
     private IRestaurantPersistencePort restaurantPersistencePort;
 
@@ -38,7 +38,7 @@ class DishUseCaseTest {
     @BeforeEach
     void setUp() {
         dishPersistencePort = mock(IDishPersistencePort.class);
-        userClientPort = mock(IUserClientPort.class);
+        userClientPort = mock(IUserRestPort.class);
         restaurantPersistencePort = mock(IRestaurantPersistencePort.class);
         dishUseCase = new DishUseCase(dishPersistencePort, userClientPort, restaurantPersistencePort);
 

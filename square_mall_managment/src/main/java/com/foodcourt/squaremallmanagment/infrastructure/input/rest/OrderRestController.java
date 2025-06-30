@@ -6,6 +6,7 @@ import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequ
 import com.foodcourt.squaremallmanagment.application.dto.response.OrderResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IOrderHandler;
 import com.foodcourt.squaremallmanagment.infrastructure.documentation.IOrderRestController;
+import com.foodcourt.squaremallmanagment.infrastructure.input.rest.util.SecurityExpressions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +22,21 @@ public class OrderRestController implements IOrderRestController {
 
     private final IOrderHandler orderHandler;
 
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize(SecurityExpressions.CUSTOMER)
     @PostMapping("/")
     public ResponseEntity<Void> makeOrder(@RequestBody OrderCreateRequest orderCreateRequest) {
         orderHandler.makeOrder(orderCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize(SecurityExpressions.EMPLOYEE)
     @PatchMapping("/assign/{orderId}")
     public ResponseEntity<Void> assignOrderToEmployee(@PathVariable Long orderId){
         orderHandler.assignOrderToEmployee(orderId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize(SecurityExpressions.EMPLOYEE)
     @GetMapping("/orders")
     public ResponseEntity<List<OrderResponse>> getOrdersByEmployee(@RequestParam String status,
                                                                    @RequestParam(defaultValue = "0") Integer page,
@@ -44,7 +45,7 @@ public class OrderRestController implements IOrderRestController {
         return ResponseEntity.ok(orderHandler.getOrdersByEmployee(status, page, size));
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize(SecurityExpressions.EMPLOYEE)
     @PatchMapping("/ready/{orderId}")
     public ResponseEntity<Void> changeOrderToReady(@PathVariable Long orderId,
                                                         @RequestBody NotificationRequest notification) {
@@ -52,7 +53,7 @@ public class OrderRestController implements IOrderRestController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PreAuthorize("hasRole('EMPLOYEE')")
+    @PreAuthorize(SecurityExpressions.EMPLOYEE)
     @PatchMapping("/deliver/{orderId}")
     public ResponseEntity<Void> deliverOrder(@PathVariable Long orderId,
                                                    @RequestBody DeliverOrderRequest deliverOrder) {
@@ -60,7 +61,7 @@ public class OrderRestController implements IOrderRestController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize(SecurityExpressions.CUSTOMER)
     @PatchMapping("/cancel/{orderId}")
     public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId) {
         orderHandler.cancelOrder(orderId);

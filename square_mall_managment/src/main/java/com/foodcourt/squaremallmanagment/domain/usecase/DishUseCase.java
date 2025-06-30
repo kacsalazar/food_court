@@ -9,7 +9,7 @@ import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesByRestauran
 import com.foodcourt.squaremallmanagment.domain.model.restaurant.RestaurantModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IRestaurantPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
+import com.foodcourt.squaremallmanagment.domain.spi.IUserRestPort;
 import com.foodcourt.squaremallmanagment.domain.usecase.util.DishValidationUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import java.util.Optional;
 public class DishUseCase implements IDishServicePort {
 
     private final IDishPersistencePort dishPersistencePort;
-    private final IUserClientPort userClientPort;
+    private final IUserRestPort userClientPort;
     private final IRestaurantPersistencePort restaurantPersistencePort;
 
 
@@ -101,11 +101,12 @@ public class DishUseCase implements IDishServicePort {
         return dishPersistencePort.getDishesByCategory(idRestaurant, idCategory, page, size);
     }
 
-    private void validateOwner(String dniOwner) {
+    /*private void validateOwner(String dniOwner) {
         Optional.ofNullable(userClientPort.ownerExists(dniOwner))
                 .orElseThrow(InvalidUserException::new);
-    }
+    }*/
 
+    //validar que el owner del restaurante sea el mismo que el que hace la peticion de crear y modificar platos
     private void validateOwnerRestaurant(Long idRestaurant, String dniOwner) {
         Long idOwner = restaurantPersistencePort.findRestaurantById(idRestaurant).getIdOwner();
         if (idOwner == null || !userClientPort.getUserById(idOwner).getDni().equals(dniOwner)) {

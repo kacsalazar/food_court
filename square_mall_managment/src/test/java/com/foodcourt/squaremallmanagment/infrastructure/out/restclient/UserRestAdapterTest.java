@@ -10,13 +10,13 @@ import org.springframework.web.client.RestTemplate;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class UserClientAdapterTest {
+public class UserRestAdapterTest {
 
     @Mock
     private RestTemplate restTemplate;
 
     @InjectMocks
-    private UserClientAdapter userClientAdapter;
+    private UserRestAdapter userRestAdapter;
 
     @BeforeEach
     void setUp() {
@@ -31,7 +31,7 @@ public class UserClientAdapterTest {
 
         when(restTemplate.getForObject(expectedUrl, Boolean.class)).thenReturn(true);
 
-        Boolean result = userClientAdapter.isValidUser(dni, role);
+        Boolean result = userRestAdapter.isValidUser(dni, role);
 
         verify(restTemplate).getForObject(expectedUrl, Boolean.class);
         assertTrue(result);

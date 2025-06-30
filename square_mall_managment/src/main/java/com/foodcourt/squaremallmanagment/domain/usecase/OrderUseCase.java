@@ -5,7 +5,7 @@ import com.foodcourt.squaremallmanagment.domain.exception.*;
 import com.foodcourt.squaremallmanagment.domain.model.TraceabilityModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.*;
 import com.foodcourt.squaremallmanagment.domain.spi.*;
-import jakarta.persistence.criteria.Order;
+import com.foodcourt.squaremallmanagment.domain.usecase.util.StateEnum;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -15,18 +15,17 @@ import java.util.Optional;
 public class OrderUseCase implements IOrderServicePort {
 
     private final IOrderPersistencePort orderPersistencePort;
-    private final IUserClientPort userClientPort;
+    private final IUserRestPort userClientPort;
     private final ISendNotificationPort sendNotificationPort;
     private final ITraceabilityPersistencePort traceabilityPersistencePort;
     private final IDishPersistencePort dishPersistencePort;
+    private final IEmployeeRestPort employeeRestPort;
 
     @Override
     public void makeOrder(OrderModel orderModel, String userDni) {
 
         Long userId = getValidatedUserId(userDni);
         validateDishOwnerRestaurant(orderModel);
-
-        getValidatedUserId(userDni);
 
         List<OrderModelReturn> orders = orderPersistencePort
                 .findOrdersByIdUser(userId);
@@ -36,7 +35,7 @@ public class OrderUseCase implements IOrderServicePort {
         }
 
         orderModel.setUserDni(userDni);
-        orderModel.setStatus("PENDING");
+        orderModel.setStatus(StateEnum.PENDING.name());
         orderPersistencePort.makeOrder(orderModel);
     }
 
@@ -47,14 +46,14 @@ public class OrderUseCase implements IOrderServicePort {
         Optional.ofNullable(orderModel)
                 .orElseThrow(OrderNotFoundException::new);
 
-        if (!orderModel.getStatus().equals("PENDING")) {
+        if (!orderModel.getStatus().equals(StateEnum.PENDING.name())) {
             throw new InvalidStateTransitionException();
         }
 
-        Long employeeId = userClientPort.ownerExists(employeeDni).getId();
+        Long employeeId = validateEmployeeRestaurant(employeeDni, orderModel.getIdRestaurant());
         orderModel.setIdChef(employeeId);
-        orderModel.setStatus("IN_PROGRESS");
-        saveTraceability(orderModel, "PENDING", "IN_PROGRESS", orderId);
+        orderModel.setStatus(StateEnum.IN_PROGRESS.name());
+        saveTraceability(orderModel, StateEnum.PENDING.name(), StateEnum.IN_PROGRESS.name(), orderId);
         orderPersistencePort.updateOrder(orderModel);
     }
 
@@ -71,7 +70,7 @@ public class OrderUseCase implements IOrderServicePort {
         Optional.ofNullable(orderModel)
                 .orElseThrow(OrderNotFoundException::new);
 
-        if (!orderModel.getStatus().equals("IN_PROGRESS")) {
+        if (!orderModel.getStatus().equals(StateEnum.IN_PROGRESS.name())) {
             throw new InvalidStateTransitionException();
         }
 
@@ -80,8 +79,8 @@ public class OrderUseCase implements IOrderServicePort {
         notificationOrderModel.setPhoneNumber(userClientPort.getUserById(orderModel.getIdClient()).getPhoneNumber());
         notificationOrderModel.setMessageBody(notificationOrderModel.getMessageBody().concat("Pin: ").concat(randomPin));
 
-        orderModel.setStatus("COMPLETED");
-        saveTraceability(orderModel, "IN_PROGRESS", "COMPLETED", orderId);
+        orderModel.setStatus(StateEnum.COMPLETED.name());
+        saveTraceability(orderModel, StateEnum.IN_PROGRESS.name(), StateEnum.COMPLETED.name(), orderId);
         orderModel.setSecurityPin(randomPin);
 
         orderPersistencePort.updateOrder(orderModel);
@@ -100,12 +99,12 @@ public class OrderUseCase implements IOrderServicePort {
             throw new InvalidPinSecurityException();
         }
 
-        if (!orderModel.getStatus().equals("COMPLETED")) {
+        if (!orderModel.getStatus().equals(StateEnum.COMPLETED.name())) {
             throw new InvalidStateTransitionException();
         }
 
-        orderModel.setStatus("DELIVERED");
-        saveTraceability(orderModel, "COMPLETED", "DELIVERED", orderId);
+        orderModel.setStatus(StateEnum.DELIVERED.name());
+        saveTraceability(orderModel, StateEnum.COMPLETED.name(), StateEnum.DELIVERED.name(), orderId);
         orderPersistencePort.updateOrder(orderModel);
     }
 
@@ -117,12 +116,12 @@ public class OrderUseCase implements IOrderServicePort {
         Optional.ofNullable(orderModel)
                 .orElseThrow(OrderNotFoundException::new);
 
-        if (!orderModel.getStatus().equals("PENDING") ) {
+        if (!orderModel.getStatus().equals(StateEnum.PENDING.name()) ) {
             throw new InvalidStateTransitionException();
         }
 
-        orderModel.setStatus("CANCELED");
-        saveTraceability(orderModel, "PENDING", "CANCELED", orderId);
+        orderModel.setStatus(StateEnum.CANCELLED.name());
+        saveTraceability(orderModel, StateEnum.PENDING.name(), StateEnum.CANCELLED.name(), orderId);
         orderPersistencePort.updateOrder(orderModel);
     }
 
@@ -176,7 +175,17 @@ public class OrderUseCase implements IOrderServicePort {
     private void validateOrderCustomer (OrderUpdateModel order, String dni){
         Long customerId = userClientPort.ownerExists(dni).getId();
         if (!order.getIdClient().equals(customerId)) {
+            //cambiar empleado a cliente
             throw new InvalidEmployeeException();
         }
+    }
+
+    //validar que el empleado que se va a asignar a la orden sea un empleado del restaurante
+    private Long validateEmployeeRestaurant(String employeeDni, Long restaurantIdBelongingOrder) {
+        Long employeeRestaurantId = employeeRestPort.getEmployeeByDni(employeeDni).getEmployeeRestaurantId();
+        if (!employeeRestaurantId.equals(restaurantIdBelongingOrder)) {
+            throw new InvalidEmployeeException();
+        }
+        return employeeRestPort.getEmployeeByDni(employeeDni).getId();
     }
 }

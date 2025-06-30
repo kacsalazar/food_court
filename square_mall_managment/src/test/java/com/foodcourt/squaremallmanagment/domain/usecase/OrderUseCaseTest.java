@@ -9,7 +9,7 @@ import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IOrderPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.ISendNotificationPort;
 import com.foodcourt.squaremallmanagment.domain.spi.ITraceabilityPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
+import com.foodcourt.squaremallmanagment.domain.spi.IUserRestPort;
 import com.foodcourt.squaremallmanagment.domain.exception.InvalidOrderException;
 import com.foodcourt.squaremallmanagment.domain.exception.OrderNotFoundException;
 import com.foodcourt.squaremallmanagment.mocks.CreatorMocksUser;
@@ -35,7 +35,7 @@ class OrderUseCaseTest {
     private IOrderPersistencePort orderPersistencePort;
 
     @Mock
-    private IUserClientPort userClientPort;
+    private IUserRestPort userClientPort;
 
     @Mock
     private ISendNotificationPort sendNotificationPort;

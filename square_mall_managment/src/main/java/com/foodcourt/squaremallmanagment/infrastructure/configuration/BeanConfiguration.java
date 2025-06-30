@@ -19,22 +19,24 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public UserClientUseCase userClientUseCase(IUserClientPort iuserClientPort) {
-        return new UserClientUseCase(iuserClientPort);
+    public UserClientUseCase userClientUseCase(IUserRestPort iuserRestPort) {
+        return new UserClientUseCase(iuserRestPort);
     }
 
     @Bean
-    public DishUseCase dishUseCase(IDishPersistencePort iDishPersistencePort, IUserClientPort iUserClientPort,
+    public DishUseCase dishUseCase(IDishPersistencePort iDishPersistencePort, IUserRestPort iUserRestPort,
                                    IRestaurantPersistencePort restaurantPersistencePort) {
-        return new DishUseCase(iDishPersistencePort, iUserClientPort, restaurantPersistencePort);
+        return new DishUseCase(iDishPersistencePort, iUserRestPort, restaurantPersistencePort);
     }
 
     @Bean
-    public OrderUseCase orderUseCase(IOrderPersistencePort iOrderPersistencePort, IUserClientPort userClientPort,
+    public OrderUseCase orderUseCase(IOrderPersistencePort iOrderPersistencePort, IUserRestPort userClientPort,
                                    ISendNotificationPort iSendNotificationPort,
                                      ITraceabilityPersistencePort iTraceabilityPersistencePort,
-                                     IDishPersistencePort iDishPersistencePort) {
+                                     IDishPersistencePort iDishPersistencePort,
+                                     IEmployeeRestPort iEmployeeRestPort) {
         return new OrderUseCase(iOrderPersistencePort, userClientPort, iSendNotificationPort,
-                                iTraceabilityPersistencePort, iDishPersistencePort);
+                                iTraceabilityPersistencePort, iDishPersistencePort,
+                iEmployeeRestPort);
     }
 }

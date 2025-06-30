@@ -6,6 +6,7 @@ import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
 import com.foodcourt.usersmanagment.application.handler.util.UtilClass;
 import com.foodcourt.usersmanagment.application.mapper.IUserRequestMapper;
+import com.foodcourt.usersmanagment.application.mapper.impl.UserRequestMapper;
 import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
 import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
@@ -49,7 +50,7 @@ public class UserHandler implements IUserHandler {
     @Override
     public UserResponseDto getUserByDni(String dni) {
         UserModel userModel = userServicePort.getUserByDni(dni);
-        return userRequestMapper.toUserResponseDto(userModel);
+        return UserRequestMapper.toUserResponseDto(userModel);
     }
 
     @Override

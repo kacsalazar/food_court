@@ -1,41 +1,34 @@
 package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 
-import com.foodcourt.squaremallmanagment.CreatorMocks;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModelReturn;
-import com.foodcourt.squaremallmanagment.domain.model.UserModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.OrderEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.OrderVsDishEntity;
-import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.impl.OrderEntityMapper;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.IOrderRepository;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.IOrderVsDishRepository;
-import com.foodcourt.squaremallmanagment.infrastructure.out.restclient.UserClientAdapter;
+import com.foodcourt.squaremallmanagment.infrastructure.out.restclient.UserRestAdapter;
 import com.foodcourt.squaremallmanagment.mocks.CreatorAdapterMocks;
-import com.foodcourt.squaremallmanagment.mocks.CreatorMocksUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 
 import java.time.Instant;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class OrderAdapterTest {
 
     @Mock
-    private UserClientAdapter userClientAdapter;
+    private UserRestAdapter userRestAdapter;
     @Mock
     private IOrderRepository orderRepository;
     @Mock

@@ -5,6 +5,7 @@ import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
 import com.foodcourt.usersmanagment.infrastructure.documentation.IUserRestController;
+import com.foodcourt.usersmanagment.infrastructure.input.rest.util.SecurityExpressions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class UserRestController implements IUserRestController {
 
     private final IUserHandler userHandler;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(SecurityExpressions.ADMIN)
     @PostMapping("/owner/")
     public ResponseEntity<Void> saveUser(@RequestBody UserRequestDto userRequestDto) {
         userHandler.saveUser(userRequestDto);
@@ -31,13 +32,13 @@ public class UserRestController implements IUserRestController {
         return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/verify/{id}/{rol}")
+    @GetMapping("/verify/{dni}/{rol}")
     public ResponseEntity<Boolean> verifyUserRol(@PathVariable String dni, @PathVariable String rol) {
         boolean isVerified = userHandler.verifyUserRol(dni, rol);
         return new ResponseEntity<>(isVerified, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize(SecurityExpressions.OWNER)
     @PostMapping("/employee/")
     public ResponseEntity<Void> createAccountEmployee(@RequestBody OwnerRequestDto userRequestDto){
         userHandler.createAccountEmployee(userRequestDto);

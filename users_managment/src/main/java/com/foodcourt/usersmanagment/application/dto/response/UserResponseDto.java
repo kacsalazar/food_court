@@ -1,5 +1,6 @@
 package com.foodcourt.usersmanagment.application.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponseDto {
 
     private String name;
@@ -18,6 +20,7 @@ public class UserResponseDto {
     private String dni;
     private String phoneNumber;
     private Date birthdayDate;
-    private String idRol;
+    private Long idRol;
     private Long id;
+    private Long employeeRestaurantId;
 }
