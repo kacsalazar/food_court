@@ -13,5 +13,5 @@ public interface IOrderServicePort {
     List<OrderModel> getOrdersByEmployee(String status, Integer page, Integer size, String dniEmployee);
     void changeOrderToReady(NotificationOrderModel notificationOrderModel, Long orderId ,String employeeDni);
     void deliverOrder(DeliverOrderModel deliverOrderModel, Long orderId, String employeeDni);
-    void cancelOrder(Long orderId);
+    void cancelOrder(Long orderId, String customerDni);
 }

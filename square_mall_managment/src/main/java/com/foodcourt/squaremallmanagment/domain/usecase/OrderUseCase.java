@@ -110,9 +110,10 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
-    public void cancelOrder(Long orderId) {
+    public void cancelOrder(Long orderId, String customerDni) {
         OrderUpdateModel orderModel = orderPersistencePort.findOrderById(orderId);
 
+        validateOrderCustomer(orderModel, customerDni);
         Optional.ofNullable(orderModel)
                 .orElseThrow(OrderNotFoundException::new);
 
@@ -169,7 +170,13 @@ public class OrderUseCase implements IOrderServicePort {
         if (!order.getIdChef().equals(employeeId)) {
             throw new InvalidEmployeeException();
         }
-
     }
 
+    //validar que la orden que quiere cancelar el usuario sea de su propiedad
+    private void validateOrderCustomer (OrderUpdateModel order, String dni){
+        Long customerId = userClientPort.ownerExists(dni).getId();
+        if (!order.getIdClient().equals(customerId)) {
+            throw new InvalidEmployeeException();
+        }
+    }
 }
