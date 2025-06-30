@@ -5,7 +5,6 @@ import com.foodcourt.squaremallmanagment.domain.exception.*;
 import com.foodcourt.squaremallmanagment.domain.model.TraceabilityModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.*;
 import com.foodcourt.squaremallmanagment.domain.spi.*;
-import jakarta.persistence.criteria.Order;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -15,18 +14,17 @@ import java.util.Optional;
 public class OrderUseCase implements IOrderServicePort {
 
     private final IOrderPersistencePort orderPersistencePort;
-    private final IUserClientPort userClientPort;
+    private final IUserRestPort userClientPort;
     private final ISendNotificationPort sendNotificationPort;
     private final ITraceabilityPersistencePort traceabilityPersistencePort;
     private final IDishPersistencePort dishPersistencePort;
+    private final IEmployeeRestPort employeeRestPort;
 
     @Override
     public void makeOrder(OrderModel orderModel, String userDni) {
 
         Long userId = getValidatedUserId(userDni);
         validateDishOwnerRestaurant(orderModel);
-
-        getValidatedUserId(userDni);
 
         List<OrderModelReturn> orders = orderPersistencePort
                 .findOrdersByIdUser(userId);
@@ -51,7 +49,7 @@ public class OrderUseCase implements IOrderServicePort {
             throw new InvalidStateTransitionException();
         }
 
-        Long employeeId = userClientPort.ownerExists(employeeDni).getId();
+        Long employeeId = validateEmployeeRestaurant(employeeDni, orderModel.getIdRestaurant());
         orderModel.setIdChef(employeeId);
         orderModel.setStatus("IN_PROGRESS");
         saveTraceability(orderModel, "PENDING", "IN_PROGRESS", orderId);
@@ -176,7 +174,17 @@ public class OrderUseCase implements IOrderServicePort {
     private void validateOrderCustomer (OrderUpdateModel order, String dni){
         Long customerId = userClientPort.ownerExists(dni).getId();
         if (!order.getIdClient().equals(customerId)) {
+            //cambiar empleado a cliente
             throw new InvalidEmployeeException();
         }
+    }
+
+    //validar que el empleado que se va a asignar a la orden sea un empleado del restaurante
+    private Long validateEmployeeRestaurant(String employeeDni, Long restaurantIdBelongingOrder) {
+        Long employeeRestaurantId = employeeRestPort.getEmployeeByDni(employeeDni).getEmployeeRestaurantId();
+        if (!employeeRestaurantId.equals(restaurantIdBelongingOrder)) {
+            throw new InvalidEmployeeException();
+        }
+        return employeeRestPort.getEmployeeByDni(employeeDni).getId();
     }
 }
