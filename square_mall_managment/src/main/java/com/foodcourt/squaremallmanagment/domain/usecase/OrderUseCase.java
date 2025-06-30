@@ -4,10 +4,8 @@ import com.foodcourt.squaremallmanagment.domain.api.IOrderServicePort;
 import com.foodcourt.squaremallmanagment.domain.exception.*;
 import com.foodcourt.squaremallmanagment.domain.model.TraceabilityModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.*;
-import com.foodcourt.squaremallmanagment.domain.spi.IOrderPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.spi.ISendNotificationPort;
-import com.foodcourt.squaremallmanagment.domain.spi.ITraceabilityPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.spi.IUserClientPort;
+import com.foodcourt.squaremallmanagment.domain.spi.*;
+import jakarta.persistence.criteria.Order;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -20,14 +18,18 @@ public class OrderUseCase implements IOrderServicePort {
     private final IUserClientPort userClientPort;
     private final ISendNotificationPort sendNotificationPort;
     private final ITraceabilityPersistencePort traceabilityPersistencePort;
+    private final IDishPersistencePort dishPersistencePort;
 
     @Override
     public void makeOrder(OrderModel orderModel, String userDni) {
 
-        Long ownerId = getValidatedUserId(userDni);
+        Long userId = getValidatedUserId(userDni);
+        validateDishOwnerRestaurant(orderModel);
+
+        getValidatedUserId(userDni);
 
         List<OrderModelReturn> orders = orderPersistencePort
-                .findOrdersByIdUser(ownerId);
+                .findOrdersByIdUser(userId);
 
         if (!orders.isEmpty()) {
             throw new InvalidOrderException();
@@ -35,7 +37,6 @@ public class OrderUseCase implements IOrderServicePort {
 
         orderModel.setUserDni(userDni);
         orderModel.setStatus("PENDING");
-        orderModel.setId(ownerId);
         orderPersistencePort.makeOrder(orderModel);
     }
 
@@ -63,9 +64,10 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
-    public void changeOrderToReady(NotificationOrderModel notificationOrderModel, Long orderId) {
+    public void changeOrderToReady(NotificationOrderModel notificationOrderModel, Long orderId, String employeeDni) {
         OrderUpdateModel orderModel = orderPersistencePort.findOrderById(orderId);
 
+        validateOrderEmployee(orderModel, employeeDni);
         Optional.ofNullable(orderModel)
                 .orElseThrow(OrderNotFoundException::new);
 
@@ -88,9 +90,9 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
-    public void deliverOrder(DeliverOrderModel deliverOrderModel, Long orderId) {
+    public void deliverOrder(DeliverOrderModel deliverOrderModel, Long orderId, String employeeDni) {
         OrderUpdateModel orderModel = orderPersistencePort.findOrderById(orderId);
-
+        validateOrderEmployee(orderModel, employeeDni);
         Optional.ofNullable(orderModel)
                 .orElseThrow(OrderNotFoundException::new);
 
@@ -108,9 +110,10 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
-    public void cancelOrder(Long orderId) {
+    public void cancelOrder(Long orderId, String customerDni) {
         OrderUpdateModel orderModel = orderPersistencePort.findOrderById(orderId);
 
+        validateOrderCustomer(orderModel, customerDni);
         Optional.ofNullable(orderModel)
                 .orElseThrow(OrderNotFoundException::new);
 
@@ -147,5 +150,33 @@ public class OrderUseCase implements IOrderServicePort {
         return Optional.ofNullable(userClientPort.ownerExists(dni))
                 .orElseThrow(UserNotFoundException::new)
                 .getId();
+    }
+
+    //validar que todos los platos pertenezcan al mismo restaurante
+    private void validateDishOwnerRestaurant(OrderModel orderModel) {
+        for (OrderModel.Dish dish : orderModel.getDishes()) {
+            Long dishRestaurantId = dishPersistencePort.findDishById(dish.getDishId())
+                    .getRestaurantInfo()
+                    .getIdRestaurant();
+            if (!dishRestaurantId.equals(orderModel.getRestaurantId())) {
+                throw new DishesNotFromSameRestaurantException();
+            }
+        }
+    }
+
+    //validar que el empleado que va a entragar la orden sea el empleado asignado a la orden
+    private void validateOrderEmployee (OrderUpdateModel order, String dni){
+        Long employeeId = userClientPort.ownerExists(dni).getId();
+        if (!order.getIdChef().equals(employeeId)) {
+            throw new InvalidEmployeeException();
+        }
+    }
+
+    //validar que la orden que quiere cancelar el usuario sea de su propiedad
+    private void validateOrderCustomer (OrderUpdateModel order, String dni){
+        Long customerId = userClientPort.ownerExists(dni).getId();
+        if (!order.getIdClient().equals(customerId)) {
+            throw new InvalidEmployeeException();
+        }
     }
 }

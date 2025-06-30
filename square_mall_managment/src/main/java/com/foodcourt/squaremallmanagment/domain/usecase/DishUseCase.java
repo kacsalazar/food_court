@@ -78,6 +78,8 @@ public class DishUseCase implements IDishServicePort {
         DishModel dishToChange = Optional.ofNullable(dishPersistencePort.findDishById(id))
                 .orElseThrow(DishNotFoundException::new);
 
+        validateOwnerRestaurant(dishToChange.getRestaurantInfo().getIdRestaurant(), dniOwner);
+
         Long idDishRestaurantReturned = dishToChange.getRestaurantInfo().getIdRestaurant();
 
         UserModel user = Optional.ofNullable(userClientPort.ownerExists(dniOwner))

@@ -4,7 +4,8 @@ public enum ExceptionResponse {
     NO_DATA_FOUND("No data found for the requested petition"),
     USER_NOT_FOUND("User not found"),
     ROL_NOT_FOUND("Rol not found"),
-    INVALID_PASSWORD("Invalid password"),;
+    INVALID_PASSWORD("Invalid password"),
+    USER_NOT_AUTHORIZED("User not authorized"),;
 
     private final String message;
 

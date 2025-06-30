@@ -1,5 +1,6 @@
 package com.foodcourt.usersmanagment.infrastructure.input.rest;
 
+import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
 import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
@@ -79,7 +80,7 @@ class UserControllerTest {
 
     @Test
     void testCreateAccountEmployee() {
-        UserRequestDto userRequestDto = CreatorMocks.createEmployeeRequestDto();
+        OwnerRequestDto userRequestDto = CreatorMocks.createEmployeeRequestDto();
 
         ResponseEntity<Void> response = userRestController.createAccountEmployee(userRequestDto);
 

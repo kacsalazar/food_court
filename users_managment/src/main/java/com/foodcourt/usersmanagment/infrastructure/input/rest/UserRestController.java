@@ -1,5 +1,6 @@
 package com.foodcourt.usersmanagment.infrastructure.input.rest;
 
+import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
 import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
@@ -38,7 +39,7 @@ public class UserRestController implements IUserRestController {
 
     @PreAuthorize("hasRole('OWNER')")
     @PostMapping("/employee/")
-    public ResponseEntity<Void> createAccountEmployee(@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<Void> createAccountEmployee(@RequestBody OwnerRequestDto userRequestDto){
         userHandler.createAccountEmployee(userRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

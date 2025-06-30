@@ -1,5 +1,6 @@
 package com.foodcourt.usersmanagment.application.handler.impl;
 
+import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
 import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.handler.IUserHandler;
@@ -40,8 +41,8 @@ public class UserHandler implements IUserHandler {
     }
 
     @Override
-    public void createAccountEmployee(UserRequestDto userRequestDto) {
-        CreateUserModel createUserModel = userRequestMapper.toUserToSave(userRequestDto);
+    public void createAccountEmployee(OwnerRequestDto userRequestDto) {
+        CreateUserModel createUserModel = userRequestMapper.toOwnerModel(userRequestDto);
         userServicePort.createAccountEmployee(createUserModel, UtilClass.getUserDni());
     }
 

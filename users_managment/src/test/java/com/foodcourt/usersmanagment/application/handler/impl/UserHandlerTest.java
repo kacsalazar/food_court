@@ -1,5 +1,6 @@
 package com.foodcourt.usersmanagment.application.handler.impl;
 
+import com.foodcourt.usersmanagment.application.dto.request.OwnerRequestDto;
 import com.foodcourt.usersmanagment.application.dto.request.UserRequestDto;
 import com.foodcourt.usersmanagment.application.dto.response.UserResponseDto;
 import com.foodcourt.usersmanagment.application.mapper.IUserRequestMapper;
@@ -92,7 +93,7 @@ public class UserHandlerTest {
     @Test
     void createAccountEmployeeTest() {
         // Given
-        UserRequestDto userRequestDto = CreatorMocks.createEmployeeRequestDto();
+        OwnerRequestDto userRequestDto = CreatorMocks.createEmployeeRequestDto();
         CreateUserModel createUserModel = CreatorMocks.createOwnerModel();
 
         when(userRequestMapper.toUserToSave(userRequestDto)).thenReturn(createUserModel);

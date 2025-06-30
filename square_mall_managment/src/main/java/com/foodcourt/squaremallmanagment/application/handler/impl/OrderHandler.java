@@ -40,17 +40,18 @@ public class OrderHandler implements IOrderHandler {
 
     @Override
     public void changeOrderToReady(NotificationRequest notification, Long orderId) {
-        orderServicePort.changeOrderToReady(OrderRequestMapper.toNotificationModel(notification), orderId);
+        orderServicePort.changeOrderToReady(OrderRequestMapper.toNotificationModel(notification), orderId, UtilClass.getUserDni()) ;
     }
 
     @Override
     public void deliverOrder(DeliverOrderRequest deliverOrder, Long orderId) {
-        orderServicePort.deliverOrder(OrderRequestMapper.toDeliverOrderModel(deliverOrder), orderId);
+        orderServicePort.deliverOrder(OrderRequestMapper.toDeliverOrderModel(deliverOrder),
+                orderId, UtilClass.getUserDni());
     }
 
     @Override
     public void cancelOrder(Long orderId) {
-        orderServicePort.cancelOrder(orderId);
+        orderServicePort.cancelOrder(orderId, UtilClass.getUserDni());
     }
 
 
