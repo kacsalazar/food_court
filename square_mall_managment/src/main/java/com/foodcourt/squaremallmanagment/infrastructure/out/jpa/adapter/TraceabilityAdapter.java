@@ -23,5 +23,12 @@ public class TraceabilityAdapter implements ITraceabilityPersistencePort {
         traceabilityRepository.save(traceabilityEntity);
     }
 
+    public List<TraceabilityModel> findAllTracesByOrderId(Long orderId) {
+        List<TraceabilityEntity> traceabilityEntities = traceabilityRepository.findAllByOrderId(orderId);
+        return traceabilityEntities.stream()
+                .map(TraceabilityEntityMapper::toTraceabilityModel)
+                .toList();
+    }
+
 
 }

@@ -91,5 +91,13 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(Collections.singletonMap(MESSAGE, ConstantException.UNAUTHORIZED_ORDER_ACCESS_EXCEPTION.getMessage()));
     }
+
+
+    @ExceptionHandler(NotPermissionException.class)
+    public ResponseEntity<Map<String, String>> handleNotPermissionException(
+            NotPermissionException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.NOT_PERMISSION.getMessage()));
+    }
     
 }
