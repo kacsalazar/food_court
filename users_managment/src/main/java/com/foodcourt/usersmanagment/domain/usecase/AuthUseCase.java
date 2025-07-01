@@ -1,18 +1,14 @@
 package com.foodcourt.usersmanagment.domain.usecase;
 
 import com.foodcourt.usersmanagment.domain.api.IAuthServicePort;
-import com.foodcourt.usersmanagment.domain.exception.ConstantException;
-import com.foodcourt.usersmanagment.domain.exception.DomainException;
 import com.foodcourt.usersmanagment.domain.model.AuthModel;
-import com.foodcourt.usersmanagment.domain.model.ClaimUserModel;
 import com.foodcourt.usersmanagment.domain.model.TokenModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.domain.spi.IAuthPort;
 import com.foodcourt.usersmanagment.domain.spi.IRolPersistencePort;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
-import com.foodcourt.usersmanagment.infrastructure.exception.InvalidPasswordException;
-import com.foodcourt.usersmanagment.infrastructure.exception.RolNotFoundException;
-import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
+import com.foodcourt.usersmanagment.domain.exception.InvalidPasswordException;
+import com.foodcourt.usersmanagment.domain.exception.RolNotFoundException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

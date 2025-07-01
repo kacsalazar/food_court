@@ -1,4 +1,4 @@
-package com.foodcourt.usersmanagment.infrastructure.exception;
+package com.foodcourt.usersmanagment.domain.exception;
 
 public class InvalidPasswordException extends RuntimeException {
     public InvalidPasswordException( ) {

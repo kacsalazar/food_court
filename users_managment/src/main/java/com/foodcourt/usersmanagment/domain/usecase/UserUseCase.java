@@ -10,7 +10,7 @@ import com.foodcourt.usersmanagment.domain.spi.IRestaurantClientPort;
 import com.foodcourt.usersmanagment.domain.spi.IRolPersistencePort;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import com.foodcourt.usersmanagment.domain.usecase.util.UseValidationUtil;
-import com.foodcourt.usersmanagment.infrastructure.exception.UserNotAuthorizedException;
+import com.foodcourt.usersmanagment.domain.exception.UserNotAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
