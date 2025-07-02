@@ -29,4 +29,8 @@ public class TraceabilityHandler implements ITraceabilityHandler {
                 .map(TraceabilityRequestMapper::toTraceabilityResponse)
                 .toList();
     }
+
+    public String getOrderProcessingTime(Long orderId) {
+        return traceabilityServicePort.getOrderProcessingTime(orderId, UtilClass.getUserDni());
+    }
 }

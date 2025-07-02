@@ -7,4 +7,5 @@ import java.util.List;
 public interface ITraceabilityServicePort {
 
     List<TraceabilityModel> findAllTracesByOrderId(Long orderId, String userDni);
+    String getOrderProcessingTime(Long orderId, String userDni);
 }
