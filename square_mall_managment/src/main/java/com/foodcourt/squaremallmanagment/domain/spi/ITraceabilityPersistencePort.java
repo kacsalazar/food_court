@@ -8,4 +8,5 @@ public interface ITraceabilityPersistencePort {
 
     void saveTraceability(TraceabilityModel traceabilityModel);
     List<TraceabilityModel> findAllTracesByOrderId(Long orderId);
+    List<TraceabilityModel> findAllByOrderIdAndStatus(Long OrderId);
 }

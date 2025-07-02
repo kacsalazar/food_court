@@ -68,4 +68,10 @@ public class OrderAdapter implements IOrderPersistencePort {
                 .toList();
     }
 
+    public List<OrderModel> findAllOrdersByEmployeeId(Long employeeId) {
+        List<OrderEntity> orders = orderRepository.findAllOrdersByEmployeeId(employeeId);
+        return orders.stream()
+                .map(order -> OrderEntityMapper.toOrderModel(order, orderDishRepository.findByOrderId(order.getId())))
+                .toList();
+    }
 }

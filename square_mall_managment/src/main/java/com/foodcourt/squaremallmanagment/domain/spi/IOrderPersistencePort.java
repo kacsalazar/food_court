@@ -12,5 +12,6 @@ public interface IOrderPersistencePort {
     OrderUpdateModel findOrderById(Long orderId);
     void updateOrder(OrderUpdateModel orderModel);
     List<OrderModel> getOrdersByEmployee(String status, Integer page, Integer size, Long idEmployee);
+    List<OrderModel> findAllOrdersByEmployeeId(Long employeeId);
 
 }

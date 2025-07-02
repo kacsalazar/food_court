@@ -14,12 +14,12 @@ public class TraceabilityEntity {
 
     @Id
     private String id;
-    private String orderId;
-    private String customerId;
+    private Long orderId;
+    private Long customerId;
     private String emailCustomer;
     private LocalDateTime date;
     private String beforeState;
     private String newState;
-    private String employeeId;
+    private Long employeeId;
     private String employeeEmail;
 }

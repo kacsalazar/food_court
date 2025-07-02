@@ -1,7 +1,9 @@
 package com.foodcourt.squaremallmanagment.infrastructure.input.rest;
 
+import com.foodcourt.squaremallmanagment.application.dto.response.EmployeeRankingResponse;
 import com.foodcourt.squaremallmanagment.application.dto.response.TraceabilityResponse;
 import com.foodcourt.squaremallmanagment.application.handler.ITraceabilityHandler;
+import com.foodcourt.squaremallmanagment.domain.model.EmployeeRankingModel;
 import com.foodcourt.squaremallmanagment.infrastructure.documentation.ITraceabilityRestController;
 import com.foodcourt.squaremallmanagment.infrastructure.input.rest.util.RolesEnum;
 import com.foodcourt.squaremallmanagment.infrastructure.input.rest.util.SecurityExpressions;
@@ -34,6 +36,13 @@ public class TraceabilityRestController implements ITraceabilityRestController {
     public ResponseEntity<String> getOrderProcessingTime(@PathVariable Long orderId) {
         String processingTime = traceabilityHandler.getOrderProcessingTime(orderId);
         return ResponseEntity.ok(processingTime);
+    }
+
+    @PreAuthorize(SecurityExpressions.OWNER)
+    @GetMapping("/ranking/{orderId}")
+    public ResponseEntity<List<EmployeeRankingResponse>> getRankingForOrderByEmployeeId(@PathVariable Long orderId) {
+        List<EmployeeRankingResponse> employeeRankingResponses = traceabilityHandler.getRankingForOrderByEmployeeId(orderId);
+        return ResponseEntity.ok(employeeRankingResponses);
     }
 
 }

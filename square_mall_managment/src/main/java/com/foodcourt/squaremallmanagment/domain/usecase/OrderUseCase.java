@@ -132,13 +132,13 @@ public class OrderUseCase implements IOrderServicePort {
     private void saveTraceability(OrderUpdateModel orderModel, String beforeState, String newState,
                                   Long orderId) {
         TraceabilityModel traceabilityModel = TraceabilityModel.builder()
-                .orderId(orderId.toString())
-                .customerId(orderModel.getIdClient().toString())
+                .orderId(orderId)
+                .customerId(orderModel.getIdClient())
                 .emailCustomer(userClientPort.getUserById(orderModel.getIdClient()).getEmail())
                 .date(java.time.LocalDateTime.now())
                 .beforeState(beforeState)
                 .newState(newState)
-                .employeeId(orderModel.getIdChef().toString())
+                .employeeId(orderModel.getIdChef())
                 .employeeEmail(userClientPort.getUserById(orderModel.getIdChef()).getEmail())
                 .build();
 

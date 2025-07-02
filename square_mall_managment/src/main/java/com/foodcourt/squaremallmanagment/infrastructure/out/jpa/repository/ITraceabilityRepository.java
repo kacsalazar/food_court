@@ -14,4 +14,7 @@ public interface ITraceabilityRepository extends MongoRepository<TraceabilityEnt
     @Query("{ 'orderId' : ?0 }")
     List<TraceabilityEntity> findAllByOrderId(Long orderId);
 
+    @Query("{ 'orderId': ?0, 'newState': { $in: ?1 } }")
+    List<TraceabilityEntity> findByOrderIdAndStates(Long orderId, List<String> states);
+
 }

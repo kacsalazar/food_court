@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -57,6 +59,13 @@ public class UserHandler implements IUserHandler {
     public void createAccountCustomer(UserRequestDto userRequestDto) {
         CreateUserModel createUserModel = userRequestMapper.toUserToSave(userRequestDto);
         userServicePort.createAccountCustomer(createUserModel);
+    }
+
+    public List<UserResponseDto> findEmployeeByRestaurantId(Long restaurantId) {
+        List<UserModel> userModels = userServicePort.findEmployeeByRestaurantId(restaurantId);
+        return userModels.stream()
+                .map(UserRequestMapper::toUserResponseDto)
+                .toList();
     }
 
 }

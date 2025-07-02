@@ -14,6 +14,7 @@ import com.foodcourt.usersmanagment.domain.exception.UserNotAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -83,6 +84,15 @@ public class UserUseCase implements IUserServicePort {
             throw new DomainException(ConstantException.ROLE_NOT_FOUND);
         createUserModel.setIdRol(idRol);
         userPersistencePort.saveUser(createUserModel);
+    }
+
+    public List<UserModel> findEmployeeByRestaurantId(Long restaurantId) {
+        List<UserModel> employees = userPersistencePort.findEmployeeByRestaurantId(restaurantId);
+        if (employees.isEmpty()) {
+            //crear una excepcion personalizada
+            throw new DomainException(ConstantException.USER_NOT_FOUND);
+        }
+        return employees;
     }
 
     private Boolean verifyUserRol(UserModel user, String role) {
