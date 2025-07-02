@@ -3,6 +3,7 @@ package com.foodcourt.squaremallmanagment.application.handler.impl;
 import com.foodcourt.squaremallmanagment.application.dto.request.DishCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpdateDto;
 import com.foodcourt.squaremallmanagment.application.dto.response.DishResponse;
+import com.foodcourt.squaremallmanagment.application.handler.helper.HelperClass;
 import com.foodcourt.squaremallmanagment.application.mapper.IDishRequestMapper;
 import com.foodcourt.squaremallmanagment.domain.api.IDishServicePort;
 import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
@@ -35,11 +36,30 @@ class DishHandlerTest {
     @Test
     void saveDish() {
         // Arrange
-        DishCreateRequest request = new DishCreateRequest(); // Llénalo si es necesario
-        DishModel model = DishModel.builder().build();
+        DishCreateRequest request = new DishCreateRequest();
+        request.setName("Pizza Margarita");
+        request.setDescription("Pizza clásica con tomate y albahaca");
+        request.setPrice(12.5);
+        request.setImageUrl("https://dummyimage.com/pizza-margarita.jpg");
+        request.setIdCategory(2L);
+        request.setIdRestaurant(5L);
+        // Llénalo si es necesario
+        DishModel model = DishModel.builder()
+            .dishInfo(DishModel.DishInfo.builder()
+                .name("Pizza Margarita")
+                .description("Pizza clásica con tomate y albahaca")
+                .price(12.5)
+                .imageUrl("https://dummyimage.com/pizza-margarita.jpg")
+                .idCategory(2L)
+                .isActive(true)
+                .build())
+            .restaurantInfo(DishModel.RestaurantInfo.builder()
+                .idRestaurant(5L)
+                .build())
+            .build();
 
-        //when(DishRequestMapperModel.toDishModel(request)).thenReturn(model);
-
+        mockStatic(HelperClass.class);
+        when(HelperClass.getUserDni()).thenReturn("123");
         // Act
         dishHandler.saveDish(request);
 
@@ -65,4 +85,5 @@ class DishHandlerTest {
         verify(dishServicePort).updateDish(id, updateModel, "123");
         verify(dishMapper).toDishResponseDto(dishModel);
         assertEquals(responseDto, result);
-    }}
+    }
+}

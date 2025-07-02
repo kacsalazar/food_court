@@ -13,9 +13,12 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class UserControllerTest {
 
@@ -111,4 +114,29 @@ class UserControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
+    @Test
+    void employeesByRestaurantIdSuccessfully() {
+        // Arrange
+        Long restaurantId = 1L;
+        UserResponseDto userResponse = UserResponseDto.builder()
+                .id(1L)
+                .dni("123")
+                .name("Jane Doe")
+                .phoneNumber("123456789")
+                .build();
+
+        List<UserResponseDto> mockUsers = List.of(userResponse);
+        when(userHandler.findEmployeeByRestaurantId(restaurantId)).thenReturn(mockUsers);
+
+        // Act
+        ResponseEntity<List<UserResponseDto>> response = userRestController.findEmployeeByRestaurantId(restaurantId);
+
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody()).hasSize(1);
+        assertThat(response.getBody().get(0)).isEqualTo(userResponse);
+
+        verify(userHandler).findEmployeeByRestaurantId(restaurantId);
+    }
 }

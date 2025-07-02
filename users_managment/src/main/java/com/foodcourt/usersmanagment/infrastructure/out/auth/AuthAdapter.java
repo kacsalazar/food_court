@@ -24,9 +24,7 @@ import java.util.Optional;
 public class AuthAdapter implements IAuthPort {
 
     private final PasswordEncoder passwordEncoder;
-    private final IUserRepository userRepository;
     private final ITokenValidator iTokenValidator;
-    private final RolAdapter rolAdapter;
 
     @Override
     public TokenModel userLogin(AuthModel authModel, UserModel user, String rolName) {

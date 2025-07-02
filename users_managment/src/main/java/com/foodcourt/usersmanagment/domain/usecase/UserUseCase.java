@@ -3,6 +3,7 @@ package com.foodcourt.usersmanagment.domain.usecase;
 import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
 import com.foodcourt.usersmanagment.domain.exception.ConstantException;
 import com.foodcourt.usersmanagment.domain.exception.DomainException;
+import com.foodcourt.usersmanagment.domain.exception.RolNotFoundException;
 import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
 import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
@@ -31,7 +32,7 @@ public class UserUseCase implements IUserServicePort {
         UseValidationUtil.isValidUser(createUserModel);
         Long idRol = rolPersistencePort.findByName("ROLE_OWNER").getId();
         if(idRol == null)
-            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
+            throw new RolNotFoundException();
 
         createUserModel.setIdRol(idRol);
         userPersistencePort.saveUser(createUserModel);
@@ -81,7 +82,7 @@ public class UserUseCase implements IUserServicePort {
         UseValidationUtil.isValidUser(createUserModel);
         Long idRol = rolPersistencePort.findByName("ROLE_CUSTOMER").getId();
         if(idRol == null)
-            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
+            throw new RolNotFoundException();
         createUserModel.setIdRol(idRol);
         userPersistencePort.saveUser(createUserModel);
     }

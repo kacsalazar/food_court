@@ -8,12 +8,13 @@ public class CreatorDishMocks {
     public static DishModel buildCompleteDishModel() {
         return DishModel.builder()
                 .dishInfo(DishModel.DishInfo.builder()
+
                         .name("Pizza")
                         .description("Delicious cheese pizza")
                         .price(15.99)
                         .imageUrl("https://example.com/pizza.jpg")
                         .idCategory(5L)
-                        .isActive(true)
+                        .isActive(false)
                         .build())
                 .restaurantInfo(DishModel.RestaurantInfo.builder()
                         .idRestaurant(1L)

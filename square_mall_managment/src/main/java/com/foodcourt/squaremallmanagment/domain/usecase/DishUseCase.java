@@ -29,7 +29,7 @@ public class DishUseCase implements IDishServicePort {
     @Override
     public void saveDish(DishModel dishModel, String dniOwner) {
         DishValidationUtil.isValidDish(dishModel.getDishInfo().getName(), dishModel.getDishInfo().getPrice());
-        validateOwnerRestaurant(dishModel.getRestaurantInfo().getIdRestaurant(), dniOwner);
+        validateDishRestaurantVsOwnerRestaurant(dishModel.getRestaurantInfo().getIdRestaurant(), dniOwner);
         dishModel.getDishInfo().setIsActive(Boolean.TRUE);
         dishPersistencePort.saveDish(dishModel);
     }
@@ -43,74 +43,43 @@ public class DishUseCase implements IDishServicePort {
 
         DishValidationUtil.isValidDish(dishUpdateModel.getDescription(), dishUpdateModel.getPrice());
 
-        validateOwnerRestaurant(dish.getRestaurantInfo().getIdRestaurant(), dniOwner);
+        validateDishRestaurantVsOwnerRestaurant(dish.getRestaurantInfo().getIdRestaurant(), dniOwner);
         dish.getDishInfo().setDescription(dishUpdateModel.getDescription());
         dish.getDishInfo().setPrice(dishUpdateModel.getPrice());
         return dishPersistencePort.updateDish(dish,dishUpdateModel);
     }
 
     @Override
-    public DishModel disableDish(Long id, Boolean status, String dniOwner) {
-    /*
-        //DishModel dishToChange = dishPersistencePort.findDishById(id);
+    public DishModel disableDish(Long dishId, Boolean newDishStatus, String dniOwner) {
 
-        DishModel dishToChange =Optional.ofNullable(dishPersistencePort.findDishById(id))
+        // Obtener el plato a modificar
+        DishModel dishToChange = Optional.ofNullable(dishPersistencePort.findDishById(dishId))
                 .orElseThrow(DishNotFoundException::new);
 
-        Long idDishRestaurantReturned = dishToChange.getRestaurantInfo().getIdRestaurant();
+        // Validar que el owner sea el propietario del restaurante del plato.
+        validateDishRestaurantVsOwnerRestaurant(dishToChange.getRestaurantInfo().getIdRestaurant(), dniOwner);
 
-        //Long idUser = userClientPort.ownerExists(dniOwner).getId();
+        dishToChange.getDishInfo().setIsActive(newDishStatus);
+        return dishPersistencePort.disableDish(dishToChange, newDishStatus);
+    }
 
-        Long idUser = Optional.ofNullable(userClientPort.ownerExists(dniOwner).getId())
-                .orElseThrow(UserNotFoundException::new);
+    //validar que el owner del restaurante sea el mismo que el que hace la peticion de crear y modificar platos
+    private void validateDishRestaurantVsOwnerRestaurant(Long idRestaurant, String dniOwnerRequester) {
+        RestaurantModel restaurantOfDish = restaurantPersistencePort.findRestaurantById(idRestaurant);
+        if (restaurantOfDish == null) throw new RestaurantNotFoundException();
+        UserModel dishRestaurantOwner = userClientPort.getUserById(restaurantOfDish.getIdOwner());
 
-        //Long idOwnerRestaurantReturned = restaurantPersistencePort.findRestaurantById(idDishRestaurantReturned).getIdOwner();
+        if ((dishRestaurantOwner != null)){
+            if (!dishRestaurantOwner.getDni().equals(dniOwnerRequester))throw new InvalidUserException();
+        }else{
+            throw new UserNotFoundException();
+        }
 
-        Long idOwnerRestaurantReturned = Optional.ofNullable(restaurantPersistencePort.findRestaurantById(idDishRestaurantReturned).getIdOwner())
-                .orElseThrow(RestaurantNotFoundException::new);
-
-        if (!idOwnerRestaurantReturned.equals(idUser))
-            throw new InvalidUserException();
-
-        dishToChange.getDishInfo().setIsActive(status);
-        return dishPersistencePort.disableDish(dishToChange, status);*/
-
-        DishModel dishToChange = Optional.ofNullable(dishPersistencePort.findDishById(id))
-                .orElseThrow(DishNotFoundException::new);
-
-        validateOwnerRestaurant(dishToChange.getRestaurantInfo().getIdRestaurant(), dniOwner);
-
-        Long idDishRestaurantReturned = dishToChange.getRestaurantInfo().getIdRestaurant();
-
-        UserModel user = Optional.ofNullable(userClientPort.ownerExists(dniOwner))
-                .orElseThrow(UserNotFoundException::new);
-
-        RestaurantModel restaurant = Optional.ofNullable(restaurantPersistencePort.findRestaurantById(idDishRestaurantReturned))
-                .orElseThrow(RestaurantNotFoundException::new);
-
-        if (!user.getId().equals(restaurant.getIdOwner()))
-            throw new InvalidUserException();
-
-        dishToChange.getDishInfo().setIsActive(status);
-        return dishPersistencePort.disableDish(dishToChange, status);
     }
 
     @Override
     public List<ListDishesByRestaurantModel>
     getDishesByCategory(Long idRestaurant, Long idCategory, Integer page, Integer size) {
         return dishPersistencePort.getDishesByCategory(idRestaurant, idCategory, page, size);
-    }
-
-    /*private void validateOwner(String dniOwner) {
-        Optional.ofNullable(userClientPort.ownerExists(dniOwner))
-                .orElseThrow(InvalidUserException::new);
-    }*/
-
-    //validar que el owner del restaurante sea el mismo que el que hace la peticion de crear y modificar platos
-    private void validateOwnerRestaurant(Long idRestaurant, String dniOwner) {
-        Long idOwner = restaurantPersistencePort.findRestaurantById(idRestaurant).getIdOwner();
-        if (idOwner == null || !userClientPort.getUserById(idOwner).getDni().equals(dniOwner)) {
-            throw new InvalidUserException();
-        }
     }
 }

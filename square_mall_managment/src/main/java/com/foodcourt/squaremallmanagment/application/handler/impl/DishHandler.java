@@ -5,7 +5,7 @@ import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpda
 import com.foodcourt.squaremallmanagment.application.dto.response.DishResponse;
 import com.foodcourt.squaremallmanagment.application.dto.response.DishRestaurantResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IDishHandler;
-import com.foodcourt.squaremallmanagment.application.handler.util.UtilClass;
+import com.foodcourt.squaremallmanagment.application.handler.helper.HelperClass;
 import com.foodcourt.squaremallmanagment.application.mapper.IDishRequestMapper;
 import com.foodcourt.squaremallmanagment.application.mapper.impl.DishRequestMapperModel;
 import com.foodcourt.squaremallmanagment.domain.api.IDishServicePort;
@@ -26,22 +26,23 @@ public class DishHandler implements IDishHandler {
 
     private final IDishRequestMapper dishMapper;
     private final IDishServicePort dishServicePort;
+    private final HelperClass helperClass;
 
     @Override
     public void saveDish(DishCreateRequest dishCreateRequest) {
         DishModel dishModel = DishRequestMapperModel.toDishModel(dishCreateRequest);
-        dishServicePort.saveDish(dishModel, UtilClass.getUserDni());
+        dishServicePort.saveDish(dishModel, helperClass.getUserDni());
     }
 
     @Override
     public DishResponse updateDish(Long id, DishRequestUpdateDto dishRequestUpdateDto) {
         DishUpdateModel dishUpdateModel = dishMapper.toDishUpdateModel(dishRequestUpdateDto);
-        return DishRequestMapperModel.toDishResponseDto(dishServicePort.updateDish(id, dishUpdateModel, UtilClass.getUserDni()));
+        return DishRequestMapperModel.toDishResponseDto(dishServicePort.updateDish(id, dishUpdateModel, HelperClass.getUserDni()));
     }
 
     @Override
     public DishResponse disableDish(Long id, Boolean status) {
-        String dniOwner = UtilClass.getUserDni();
+        String dniOwner = HelperClass.getUserDni();
         return DishRequestMapperModel.toDishResponseDto(dishServicePort.disableDish(id, status, dniOwner));
     }
 
