@@ -22,9 +22,9 @@ public class OrderUseCase implements IOrderServicePort {
     private final IEmployeeRestPort employeeRestPort;
 
     @Override
-    public void makeOrder(OrderModel orderModel, String userDni) {
+    public void makeOrder(OrderModel orderModel) {
 
-        Long userId = getValidatedUserId(userDni);
+        Long userId = getValidatedUserId(orderModel.getUserDni());
         validateDishOwnerRestaurant(orderModel);
 
         List<OrderModelReturn> orders = orderPersistencePort
@@ -34,7 +34,6 @@ public class OrderUseCase implements IOrderServicePort {
             throw new InvalidOrderException();
         }
 
-        orderModel.setUserDni(userDni);
         orderModel.setStatus(StateEnum.PENDING.name());
         orderPersistencePort.makeOrder(orderModel);
     }

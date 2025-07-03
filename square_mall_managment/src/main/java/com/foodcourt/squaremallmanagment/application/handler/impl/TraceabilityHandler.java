@@ -22,22 +22,23 @@ import java.util.List;
 public class TraceabilityHandler implements ITraceabilityHandler {
 
     private final ITraceabilityServicePort traceabilityServicePort;
+    private final HelperClass helperClass;
 
     @Override
     public List<TraceabilityResponse> findAllTracesByOrderId(Long orderId) {
-        List<TraceabilityModel> traceabilityModels = traceabilityServicePort.findAllTracesByOrderId(orderId, HelperClass.getUserDni());
+        List<TraceabilityModel> traceabilityModels = traceabilityServicePort.findAllTracesByOrderId(orderId,  helperClass.getUserDni());
         return traceabilityModels.stream()
                 .map(TraceabilityRequestMapper::toTraceabilityResponse)
                 .toList();
     }
 
     public String getOrderProcessingTime(Long orderId) {
-        return traceabilityServicePort.getOrderProcessingTime(orderId, HelperClass.getUserDni());
+        return traceabilityServicePort.getOrderProcessingTime(orderId,  helperClass.getUserDni());
     }
 
     public List<EmployeeRankingResponse> getRankingForOrderByEmployeeId(Long orderId) {
         List<EmployeeRankingModel> employeesRankingModel = traceabilityServicePort.getRankingForOrderByEmployeeId(orderId,
-                HelperClass.getUserDni());
+                helperClass.getUserDni());
         return employeesRankingModel.stream()
                 .map(TraceabilityRequestMapper::toEmployeeRankingResponse)
                 .toList();

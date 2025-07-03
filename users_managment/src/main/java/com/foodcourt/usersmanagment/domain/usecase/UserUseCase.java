@@ -62,9 +62,9 @@ public class UserUseCase implements IUserServicePort {
         if(idRol == null)
             throw new DomainException(ConstantException.ROLE_NOT_FOUND);
 
-        validateUserRestaurant(createUserModel.getIdRestaurant(),
+        /*validateUserRestaurant(createUserModel.getIdRestaurant(),
                 restaurantClientPort.getRestaurantIdByOwner(
-                        userPersistencePort.findUserByDni(ownerDni).getId()).getId());
+                        userPersistencePort.findUserByDni(ownerDni).getId()).getId());*/
 
         createUserModel.setIdRol(idRol);
         createUserModel.setIdRestaurant(createUserModel.getIdRestaurant());

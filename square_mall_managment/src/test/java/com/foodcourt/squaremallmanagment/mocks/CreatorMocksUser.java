@@ -1,11 +1,21 @@
 package com.foodcourt.squaremallmanagment.mocks;
 
+import com.foodcourt.squaremallmanagment.domain.model.EmployeeModel;
 import com.foodcourt.squaremallmanagment.domain.model.UserModel;
 
 public class CreatorMocksUser {
 
     public static UserModel createUserModel() {
         return UserModel.builder()
+                .id(1L)
+                .dni("123")
+                .name("John Doe")
+                .email("jdoe@mail.com")
+                .phoneNumber("3136").build();
+    }
+
+    public static EmployeeModel createEmployeeModel() {
+        return EmployeeModel.builder()
                 .id(1L)
                 .dni("123")
                 .name("John Doe")

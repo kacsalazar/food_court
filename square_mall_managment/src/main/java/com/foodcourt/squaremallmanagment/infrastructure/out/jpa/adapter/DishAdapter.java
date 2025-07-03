@@ -42,8 +42,8 @@ public class DishAdapter implements IDishPersistencePort {
     }
 
     @Override
-    public DishModel disableDish(DishModel dish, Boolean status) {
-        DishEntity dishEntity = dishMapper.toDishEntity(dish);
+    public DishModel disableDish(DishModel dish) {
+        DishEntity dishEntity = DishEntityMapperData.toDishEntity(dish);
         return DishEntityMapperData.toDishModel(dishRepository.save(dishEntity));
     }
 

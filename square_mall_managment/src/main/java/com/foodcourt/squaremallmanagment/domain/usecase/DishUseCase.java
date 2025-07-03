@@ -60,7 +60,7 @@ public class DishUseCase implements IDishServicePort {
         validateDishRestaurantVsOwnerRestaurant(dishToChange.getRestaurantInfo().getIdRestaurant(), dniOwner);
 
         dishToChange.getDishInfo().setIsActive(newDishStatus);
-        return dishPersistencePort.disableDish(dishToChange, newDishStatus);
+        return dishPersistencePort.disableDish(dishToChange);
     }
 
     //validar que el owner del restaurante sea el mismo que el que hace la peticion de crear y modificar platos

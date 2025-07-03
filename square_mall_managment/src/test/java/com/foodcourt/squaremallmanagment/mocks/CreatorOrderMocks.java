@@ -1,5 +1,6 @@
 package com.foodcourt.squaremallmanagment.mocks;
 
+import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 
@@ -38,4 +39,20 @@ public class CreatorOrderMocks {
                 .idChef(2L)
                 .build();
     }
+
+    public static OrderCreateRequest createOrderCreateRequestMock() {
+            return OrderCreateRequest.builder()
+                    .restaurantId(1L)
+                    .dishes(List.of(
+                            OrderCreateRequest.DishRequest.builder()
+                                    .dishId(100L)
+                                    .quantity(2)
+                                    .build(),
+                            OrderCreateRequest.DishRequest.builder()
+                                    .dishId(101L)
+                                    .quantity(1)
+                                    .build()
+                    ))
+                    .build();
+        }
 }

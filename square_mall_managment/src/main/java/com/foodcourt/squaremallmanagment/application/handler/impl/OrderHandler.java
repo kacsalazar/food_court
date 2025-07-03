@@ -8,6 +8,7 @@ import com.foodcourt.squaremallmanagment.application.handler.IOrderHandler;
 import com.foodcourt.squaremallmanagment.application.handler.helper.HelperClass;
 import com.foodcourt.squaremallmanagment.application.mapper.impl.OrderRequestMapper;
 import com.foodcourt.squaremallmanagment.domain.api.IOrderServicePort;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,36 +23,39 @@ import java.util.List;
 public class OrderHandler implements IOrderHandler {
 
     private final IOrderServicePort orderServicePort;
+    private final HelperClass helperClass;
 
     @Override
     public void makeOrder(OrderCreateRequest orderCreateRequest) {
-        orderServicePort.makeOrder(OrderRequestMapper.toOrderModel(orderCreateRequest), HelperClass.getUserDni());
+        OrderModel orderToMake = OrderRequestMapper.toOrderModel(orderCreateRequest);
+        orderToMake.setUserDni(helperClass.getUserDni());
+        orderServicePort.makeOrder(orderToMake);
     }
 
     @Override
     public void assignOrderToEmployee(Long orderId) {
-        orderServicePort.assignOrderToEmployee(orderId, HelperClass.getUserDni());
+        orderServicePort.assignOrderToEmployee(orderId,  helperClass.getUserDni());
     }
 
     @Override
     public List<OrderResponse> getOrdersByEmployee(String status, Integer page, Integer size) {
-        return OrderRequestMapper.toOrderResponse(orderServicePort.getOrdersByEmployee( status, page, size, HelperClass.getUserDni()));
+        return OrderRequestMapper.toOrderResponse(orderServicePort.getOrdersByEmployee( status, page, size,  helperClass.getUserDni()));
     }
 
     @Override
     public void changeOrderToReady(NotificationRequest notification, Long orderId) {
-        orderServicePort.changeOrderToReady(OrderRequestMapper.toNotificationModel(notification), orderId, HelperClass.getUserDni()) ;
+        orderServicePort.changeOrderToReady(OrderRequestMapper.toNotificationModel(notification), orderId,  helperClass.getUserDni()) ;
     }
 
     @Override
     public void deliverOrder(DeliverOrderRequest deliverOrder, Long orderId) {
         orderServicePort.deliverOrder(OrderRequestMapper.toDeliverOrderModel(deliverOrder),
-                orderId, HelperClass.getUserDni());
+                orderId,  helperClass.getUserDni());
     }
 
     @Override
     public void cancelOrder(Long orderId) {
-        orderServicePort.cancelOrder(orderId, HelperClass.getUserDni());
+        orderServicePort.cancelOrder(orderId,  helperClass.getUserDni());
     }
 
 

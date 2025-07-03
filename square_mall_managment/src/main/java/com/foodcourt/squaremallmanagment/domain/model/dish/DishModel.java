@@ -19,6 +19,8 @@ public class DishModel {
     @Data
     @Builder
     public static class DishInfo {
+
+        private Long id;
         private String name;
         private Long idCategory;
         private String description;

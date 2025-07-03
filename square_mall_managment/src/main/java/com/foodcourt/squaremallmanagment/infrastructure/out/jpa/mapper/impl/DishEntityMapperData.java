@@ -13,6 +13,7 @@ public class DishEntityMapperData {
     public static DishEntity toDishEntity(DishModel dishModel){
 
         return DishEntity.builder()
+                .id(dishModel.getDishInfo().getId())
                 .name(dishModel.getDishInfo().getName())
                 .idCategory(dishModel.getDishInfo().getIdCategory())
                 .description(dishModel.getDishInfo().getDescription())
@@ -27,6 +28,7 @@ public class DishEntityMapperData {
 
         return DishModel.builder()
                 .dishInfo(DishModel.DishInfo.builder()
+                        .id(dishEntity.getId())
                         .name(dishEntity.getName())
                         .idCategory(dishEntity.getIdCategory())
                         .description(dishEntity.getDescription())
