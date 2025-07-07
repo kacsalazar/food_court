@@ -18,6 +18,6 @@ public interface IOrderRepository extends CrudRepository<OrderEntity, Long> {
     List<OrderEntity> findOrdersByStatus(@Param("idChef") Long idChef, @Param("status") String status,@Param("size") int size,
                                          @Param("page") int page);
 
-    @Query("SELECT * FROM orders o WHERE o.idChef = :employeeId")
+    @Query("SELECT * FROM orders o WHERE o.id_chef = :employeeId")
     List<OrderEntity> findAllOrdersByEmployeeId(@Param("employeeId") Long employeeId);
 }

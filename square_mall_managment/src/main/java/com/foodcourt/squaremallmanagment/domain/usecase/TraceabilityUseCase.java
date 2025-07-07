@@ -13,9 +13,7 @@ import com.foodcourt.squaremallmanagment.domain.usecase.util.StateEnum;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,7 +37,7 @@ public class TraceabilityUseCase implements ITraceabilityServicePort {
 
         List<TraceabilityModel> traceabilityModels = traceabilityPersistencePort.findAllTracesByOrderId(OrderId);
         TraceabilityModel firstTrace = traceabilityModels.stream()
-                .filter(trace -> trace.getNewState().equals(StateEnum.PENDING.name()) )
+                .filter(trace -> trace.getNewState().equals(StateEnum.IN_PROGRESS.name()) )
                 .findFirst()
                 .orElseThrow(NotPermissionException::new);
 
@@ -70,11 +68,11 @@ public class TraceabilityUseCase implements ITraceabilityServicePort {
 
                     List<Duration> durations = ordersByEmployee.stream()
                             .map(order -> {
-                                List<TraceabilityModel> traceList = traceabilityPersistencePort.findAllByOrderIdAndStatus(1L);
+                                List<TraceabilityModel> traceList = traceabilityPersistencePort.findAllByOrderIdAndStatus(order.getId());
                                 if (traceList == null) return null;
 
                                 LocalDateTime start = traceList.stream()
-                                        .filter(t -> StateEnum.PENDING.name().equals(t.getNewState()))
+                                        .filter(t -> StateEnum.IN_PROGRESS.name().equals(t.getNewState()))
                                         .map(TraceabilityModel::getDate)
                                         .findFirst()
                                         .orElse(null);

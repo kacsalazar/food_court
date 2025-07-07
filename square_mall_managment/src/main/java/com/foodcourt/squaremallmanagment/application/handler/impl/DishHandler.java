@@ -35,14 +35,14 @@ public class DishHandler implements IDishHandler {
     }
 
     @Override
-    public DishResponse updateDish(Long id, DishRequestUpdateDto dishRequestUpdateDto) {
+    public DishResponse updateDish(Long dishId, DishRequestUpdateDto dishRequestUpdateDto) {
         DishUpdateModel dishUpdateModel = dishMapper.toDishUpdateModel(dishRequestUpdateDto);
-        return DishRequestMapperModel.toDishResponseDto(dishServicePort.updateDish(id, dishUpdateModel,helperClass.getUserDni()));
+        return DishRequestMapperModel.toDishResponseDto(dishServicePort.updateDish(dishId, dishUpdateModel,helperClass.getUserDni()));
     }
 
     @Override
-    public DishResponse disableDish(Long id, Boolean status) {
-        return DishRequestMapperModel.toDishResponseDto(dishServicePort.disableDish(id, status, helperClass.getUserDni()));
+    public DishResponse disableDish(Long dishId, Boolean status) {
+        return DishRequestMapperModel.toDishResponseDto(dishServicePort.disableDish(dishId, status, helperClass.getUserDni()));
     }
 
     @Override

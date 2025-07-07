@@ -36,8 +36,8 @@ public class TraceabilityHandler implements ITraceabilityHandler {
         return traceabilityServicePort.getOrderProcessingTime(orderId,  helperClass.getUserDni());
     }
 
-    public List<EmployeeRankingResponse> getRankingForOrderByEmployeeId(Long orderId) {
-        List<EmployeeRankingModel> employeesRankingModel = traceabilityServicePort.getRankingForOrderByEmployeeId(orderId,
+    public List<EmployeeRankingResponse> getRankingForOrderByEmployeeId(Long restaurantId) {
+        List<EmployeeRankingModel> employeesRankingModel = traceabilityServicePort.getRankingForOrderByEmployeeId(restaurantId,
                 helperClass.getUserDni());
         return employeesRankingModel.stream()
                 .map(TraceabilityRequestMapper::toEmployeeRankingResponse)

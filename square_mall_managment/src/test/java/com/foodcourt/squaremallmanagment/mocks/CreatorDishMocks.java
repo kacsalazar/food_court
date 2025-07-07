@@ -11,7 +11,7 @@ public class CreatorDishMocks {
     public static DishModel buildCompleteDishModel() {
         return DishModel.builder()
                 .dishInfo(DishModel.DishInfo.builder()
-
+                        .id(1L)
                         .name("Pizza")
                         .description("Delicious cheese pizza")
                         .price(15.99)

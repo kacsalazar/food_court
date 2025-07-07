@@ -8,6 +8,7 @@ import com.foodcourt.squaremallmanagment.domain.spi.*;
 import com.foodcourt.squaremallmanagment.domain.usecase.util.StateEnum;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,8 +35,10 @@ public class OrderUseCase implements IOrderServicePort {
             throw new InvalidOrderException();
         }
 
+        orderModel.setOrderDate(new Date());
         orderModel.setStatus(StateEnum.PENDING.name());
-        orderPersistencePort.makeOrder(orderModel);
+
+        orderPersistencePort.makeOrder(orderModel, userId);
     }
 
     @Override

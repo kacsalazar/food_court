@@ -154,7 +154,7 @@ class DishUseCaseTest {
         when(dishPersistencePort.findDishById(1L)).thenReturn(dish);
         when(restaurantPersistencePort.findRestaurantById(1L)).thenReturn(restaurant);
         when(userClientPort.getUserById(restaurant.getIdOwner())).thenReturn(dishRestaurantOwnerMock);
-        when(dishPersistencePort.disableDish(any(DishModel.class), eq(false))).thenReturn(CreatorDishMocks.buildCompleteDishModel());
+        when(dishPersistencePort.disableDish(any(DishModel.class))).thenReturn(CreatorDishMocks.buildCompleteDishModel());
 
         DishModel result = dishUseCase.disableDish(1L, false, dniRequesterOwner);
 

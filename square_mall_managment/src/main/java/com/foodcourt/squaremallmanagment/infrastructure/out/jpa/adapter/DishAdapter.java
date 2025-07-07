@@ -48,9 +48,9 @@ public class DishAdapter implements IDishPersistencePort {
     }
 
     @Override
-    public List<ListDishesByRestaurantModel> getDishesByCategory(Long idRestaurant, Long idCategory, Integer page, Integer size) {
+    public List<ListDishesByRestaurantModel> getDishesByCategory(Long idRestaurant, Long idCategory, Integer offset, Integer size) {
 
         return DishEntityMapperData.toDishesByRestaurantModelList(dishRepository
-                .findDishesByRestaurant(idRestaurant, idCategory, page, size));
+                .findDishesByRestaurant(idRestaurant, idCategory, offset, size));
     }
 }

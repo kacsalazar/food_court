@@ -35,8 +35,8 @@ public class DishUseCase implements IDishServicePort {
     }
 
     @Override
-    public DishModel updateDish(Long id, DishUpdateModel dishUpdateModel, String dniOwner) {
-        DishModel dish = dishPersistencePort.findDishById(id);
+    public DishModel updateDish(Long dishId, DishUpdateModel dishUpdateModel, String dniOwner) {
+        DishModel dish = dishPersistencePort.findDishById(dishId);
 
         Optional.ofNullable(dish)
                 .orElseThrow(DishNotFoundException::new);
@@ -80,6 +80,7 @@ public class DishUseCase implements IDishServicePort {
     @Override
     public List<ListDishesByRestaurantModel>
     getDishesByCategory(Long idRestaurant, Long idCategory, Integer page, Integer size) {
-        return dishPersistencePort.getDishesByCategory(idRestaurant, idCategory, page, size);
+        Integer offset = (page - 1) * size;
+        return dishPersistencePort.getDishesByCategory(idRestaurant, idCategory, offset, size);
     }
 }

@@ -39,9 +39,9 @@ public class TraceabilityRestController implements ITraceabilityRestController {
     }
 
     @PreAuthorize(SecurityExpressions.OWNER)
-    @GetMapping("/ranking/{orderId}")
-    public ResponseEntity<List<EmployeeRankingResponse>> getRankingForOrderByEmployeeId(@PathVariable Long orderId) {
-        List<EmployeeRankingResponse> employeeRankingResponses = traceabilityHandler.getRankingForOrderByEmployeeId(orderId);
+    @GetMapping("/ranking/{restaurantId}")
+    public ResponseEntity<List<EmployeeRankingResponse>> getRankingForOrderByEmployeeId(@PathVariable Long restaurantId) {
+        List<EmployeeRankingResponse> employeeRankingResponses = traceabilityHandler.getRankingForOrderByEmployeeId(restaurantId);
         return ResponseEntity.ok(employeeRankingResponses);
     }
 

@@ -13,6 +13,6 @@ public interface IDishPersistencePort {
     DishModel updateDish(DishModel dish, DishUpdateModel dishUpdateModel);
     DishModel disableDish(DishModel dish);
     List<ListDishesByRestaurantModel> getDishesByCategory
-            (Long idRestaurant, Long idCategory, Integer page, Integer size);
+            (Long idRestaurant, Long idCategory, Integer offset, Integer size);
 
 }

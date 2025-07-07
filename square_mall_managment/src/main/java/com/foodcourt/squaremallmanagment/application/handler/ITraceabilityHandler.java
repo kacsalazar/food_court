@@ -10,5 +10,5 @@ public interface ITraceabilityHandler {
 
     List<TraceabilityResponse> findAllTracesByOrderId(Long orderId);
     String getOrderProcessingTime(Long orderId);
-    List<EmployeeRankingResponse> getRankingForOrderByEmployeeId(Long orderId);
+    List<EmployeeRankingResponse> getRankingForOrderByEmployeeId(Long restaurantId);
 }

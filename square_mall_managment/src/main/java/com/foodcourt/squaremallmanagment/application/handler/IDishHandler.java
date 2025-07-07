@@ -10,7 +10,7 @@ import java.util.List;
 public interface IDishHandler {
 
     void saveDish(DishCreateRequest dishCreateRequest);
-    DishResponse updateDish(Long id, DishRequestUpdateDto dishRequestUpdateDto);
-    DishResponse disableDish(Long id, Boolean status);
+    DishResponse updateDish(Long dishId, DishRequestUpdateDto dishRequestUpdateDto);
+    DishResponse disableDish(Long dishId, Boolean status);
     List<DishRestaurantResponse> getDishesByCategory(Long idRestaurant, Long idCategory, Integer page, Integer size);
 }

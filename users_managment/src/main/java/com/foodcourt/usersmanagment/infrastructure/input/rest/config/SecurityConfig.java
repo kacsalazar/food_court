@@ -1,7 +1,6 @@
 package com.foodcourt.usersmanagment.infrastructure.input.rest.config;
 
 import com.foodcourt.usersmanagment.infrastructure.input.rest.filter.JwtAuthenticationFilter;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +30,8 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/v1/user/verify/**"),
                                 new AntPathRequestMatcher("/api/v1/user/dni/**"),
                                 new AntPathRequestMatcher("/api/v1/user/id/**"),
-                                new AntPathRequestMatcher("/api/v1/user/customer/**")).permitAll()
+                                new AntPathRequestMatcher("/api/v1/user/customer/**"),
+                                new AntPathRequestMatcher("/api/v1/user/employees/**")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

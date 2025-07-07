@@ -7,7 +7,7 @@ import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 import java.util.List;
 
 public interface IOrderPersistencePort {
-    void makeOrder(OrderModel orderModel);
+    void makeOrder(OrderModel orderModel, Long userId);
     List<OrderModelReturn> findOrdersByIdUser(Long id);
     OrderUpdateModel findOrderById(Long orderId);
     void updateOrder(OrderUpdateModel orderModel);

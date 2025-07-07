@@ -35,7 +35,7 @@ public class TraceabilityAdapter implements ITraceabilityPersistencePort {
 
         List<TraceabilityEntity> traceabilityEntities =
                 traceabilityRepository.findByOrderIdAndStates(OrderId,
-                        List.of(StateEnum.PENDING.name(), StateEnum.DELIVERED.name()));
+                        List.of(StateEnum.IN_PROGRESS.name(), StateEnum.DELIVERED.name()));
         return traceabilityEntities.stream()
                 .map(TraceabilityEntityMapper::toTraceabilityModel)
                 .toList();

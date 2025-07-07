@@ -86,11 +86,11 @@ class DishAdapterTest {
         DishModel dishModel = CreatorDishMocks.buildCompleteDishModel();
         DishEntity dishEntity = CreatorDishMocks.buildCompleteDishEntity();
 
-        when(dishMapper.toDishEntity(dishModel)).thenReturn(dishEntity);
+        //when(dishMapper.toDishEntity(dishModel)).thenReturn(dishEntity);
         when(dishRepository.save(dishEntity)).thenReturn(dishEntity);
 
         // Act
-        DishModel result = dishAdapter.disableDish(dishModel, false);
+        DishModel result = dishAdapter.disableDish(dishModel);
 
         // Assert
         assertThat(result.getDishInfo().getIsActive()).isTrue(); // se mantiene igual porque la lógica no cambia el valor
