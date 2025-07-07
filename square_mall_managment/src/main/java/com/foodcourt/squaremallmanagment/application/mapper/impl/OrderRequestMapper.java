@@ -4,7 +4,7 @@ import com.foodcourt.squaremallmanagment.application.dto.request.DeliverOrderReq
 import com.foodcourt.squaremallmanagment.application.dto.request.NotificationRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.response.OrderResponse;
-import com.foodcourt.squaremallmanagment.application.handler.util.UtilClass;
+import com.foodcourt.squaremallmanagment.application.handler.helper.HelperClass;
 import com.foodcourt.squaremallmanagment.domain.model.order.DeliverOrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.NotificationOrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
@@ -18,7 +18,6 @@ public class OrderRequestMapper {
     public static OrderModel toOrderModel(OrderCreateRequest orderCreateRequest) {
         return OrderModel.builder()
                 .restaurantId(orderCreateRequest.getRestaurantId())
-                .userDni(UtilClass.getUserDni())
                 .dishes(orderCreateRequest.getDishes().stream()
                         .map(dish -> OrderModel.Dish.builder()
                                 .dishId(dish.getDishId())

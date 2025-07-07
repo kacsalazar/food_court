@@ -8,6 +8,7 @@ import com.foodcourt.squaremallmanagment.domain.spi.*;
 import com.foodcourt.squaremallmanagment.domain.usecase.util.StateEnum;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,9 +23,9 @@ public class OrderUseCase implements IOrderServicePort {
     private final IEmployeeRestPort employeeRestPort;
 
     @Override
-    public void makeOrder(OrderModel orderModel, String userDni) {
+    public void makeOrder(OrderModel orderModel) {
 
-        Long userId = getValidatedUserId(userDni);
+        Long userId = getValidatedUserId(orderModel.getUserDni());
         validateDishOwnerRestaurant(orderModel);
 
         List<OrderModelReturn> orders = orderPersistencePort
@@ -34,9 +35,10 @@ public class OrderUseCase implements IOrderServicePort {
             throw new InvalidOrderException();
         }
 
-        orderModel.setUserDni(userDni);
+        orderModel.setOrderDate(new Date());
         orderModel.setStatus(StateEnum.PENDING.name());
-        orderPersistencePort.makeOrder(orderModel);
+
+        orderPersistencePort.makeOrder(orderModel, userId);
     }
 
     @Override
@@ -132,13 +134,13 @@ public class OrderUseCase implements IOrderServicePort {
     private void saveTraceability(OrderUpdateModel orderModel, String beforeState, String newState,
                                   Long orderId) {
         TraceabilityModel traceabilityModel = TraceabilityModel.builder()
-                .orderId(orderId.toString())
-                .customerId(orderModel.getIdClient().toString())
+                .orderId(orderId)
+                .customerId(orderModel.getIdClient())
                 .emailCustomer(userClientPort.getUserById(orderModel.getIdClient()).getEmail())
                 .date(java.time.LocalDateTime.now())
                 .beforeState(beforeState)
                 .newState(newState)
-                .employeeId(orderModel.getIdChef().toString())
+                .employeeId(orderModel.getIdChef())
                 .employeeEmail(userClientPort.getUserById(orderModel.getIdChef()).getEmail())
                 .build();
 

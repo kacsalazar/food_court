@@ -20,6 +20,7 @@ public class OrderEntityMapper {
                 .status(orderModel.getStatus())
                 .idChef(orderModel.getEmployeeId())
                 .idRestaurant(orderModel.getRestaurantId())
+                .orderDate(orderModel.getOrderDate())
                 .build();
     }
 
@@ -66,24 +67,6 @@ public class OrderEntityMapper {
                 .securityPin(orderModel.getSecurityPin())
                 .build();
     }
-
-    /*public static List<OrderModel> toOrderModel(List<OrderEntity> orderEntities, List<OrderVsDishEntity> orderVsDishEntities) {
-        return orderEntities.stream()
-                .map(order -> OrderModel.builder()
-                        .restaurantId(order.getIdRestaurant())
-                        .employeeId(order.getIdChef())
-                        .status(order.getStatus())
-                        .orderDate(order.getOrderDate())
-                        .dishes(orderVsDishEntities.stream()
-                                .filter(dish -> dish.getIdOrder().equals(order.getId()))
-                                .map(dish -> OrderModel.Dish.builder()
-                                        .dishId(dish.getIdDish())
-                                        .quantity(dish.getQuantity())
-                                        .build())
-                                .toList())
-                        .build())
-                .toList();
-    }*/
 
     public static OrderModel toOrderModel(OrderEntity orderEntity, List<OrderVsDishEntity> orderVsDishEntities) {
         return OrderModel.builder()

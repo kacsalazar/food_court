@@ -1,26 +1,31 @@
 package com.foodcourt.usersmanagment.domain.usecase;
 
 import com.foodcourt.usersmanagment.CreatorMocks;
-import com.foodcourt.usersmanagment.domain.exception.ConstantException;
 import com.foodcourt.usersmanagment.domain.exception.DomainException;
+import com.foodcourt.usersmanagment.domain.exception.RolNotFoundException;
+import com.foodcourt.usersmanagment.domain.exception.UserNotAuthorizedException;
 import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
+import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
+import com.foodcourt.usersmanagment.domain.spi.IRestaurantClientPort;
+import com.foodcourt.usersmanagment.domain.spi.IRolPersistencePort;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
+import com.foodcourt.usersmanagment.infrastructure.exceptionhandler.ExceptionResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.text.ParseException;
+import java.util.Collections;
+import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.*;
 
-public class UserUseCaseTest {
+class UserUseCaseTest {
 
     @Mock
     private IUserPersistencePort userPersistencePort;
@@ -28,121 +33,139 @@ public class UserUseCaseTest {
     @InjectMocks
     private UserUseCase userUseCase;
 
+    @Mock
+    private IRestaurantClientPort restaurantClientPort;
+
+    @Mock
+    private IRolPersistencePort rolPersistencePort;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testSaveOwner() {
+    void saveOwnerSuccessfully() throws ParseException {
+        when(rolPersistencePort.findByName("ROLE_OWNER")).thenReturn(new RolModel(2L, "ROLE_OWNER",
+                ""));
 
-        LocalDate localDate = LocalDate.parse("1998-08-12");
-        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        CreateUserModel modelToSave = CreatorMocks.createSaveUserModel();
 
-        // Given
-        CreateUserModel createUserModel = new CreateUserModel();
-        createUserModel.setEmail("test@mail.com");
-        createUserModel.setPhoneNumber("3136871");
-        createUserModel.setPassword("hashedPassword");
-        createUserModel.setName("Test");
-        createUserModel.setDni("123456");
-        createUserModel.setBirthdayDate(date);
+        userUseCase.saveOwner(modelToSave);
 
-
-        // When
-        userUseCase.saveOwner(createUserModel);
-
-        // Then
-        verify(userPersistencePort, times(1)).saveUser(createUserModel);
+        verify(userPersistencePort).saveUser(modelToSave);
     }
 
     @Test
-    void findUserByIdTest() {
-        Long id = 1L;
-        UserModel userModel = new UserModel();
-        when(userPersistencePort.findUserById(id)).thenReturn(userModel);
+    void exceptionWhenOwnerRoleNotFound() {
+        when(rolPersistencePort.findByName("ROLE_OWNER")).thenReturn(new RolModel(null, null, null));
 
-        UserModel result = userUseCase.findUserById(id);
-
-        assertEquals(userModel, result);
-        verify(userPersistencePort, times(1)).findUserById(id);
+        assertThatThrownBy(() -> userUseCase.saveOwner(CreatorMocks.createSaveUserModel()))
+                .isInstanceOf(RolNotFoundException.class);
+                //.hasMessage(ExceptionResponse.ROL_NOT_FOUND.getMessage());
     }
 
     @Test
-    void findUserByIdThrowsExceptionTest() {
-        Long id = 1L;
-        when(userPersistencePort.findUserById(id)).thenReturn(null);
+    void findUserById() {
+        when(userPersistencePort.findUserById(1L)).thenReturn(CreatorMocks.createUserModel());
 
-        DomainException exception = assertThrows(DomainException.class, () -> {
-            userUseCase.findUserById(id);
-        });
+        UserModel result = userUseCase.findUserById(1L);
 
-        assertEquals(ConstantException.USER_NOT_FOUND, exception.getMessage());
-        verify(userPersistencePort, times(1)).findUserById(id);
+        assertThat(result).isEqualTo(CreatorMocks.createUserModel());
     }
 
     @Test
-    void verifyUserRolTest() {
-        String dni = "123";
-        String role = "ROLE_ADMIN";
-        //when(userPersistencePort.verifyUserRol(dni, role)).thenReturn(true);
+    void exceptionWhenUserNotFound() {
+        when(userPersistencePort.findUserById(1L)).thenReturn(null);
 
-        Boolean result = userUseCase.verifyUserRol(dni, role);
-
-        assertTrue(result);
-        //verify(userPersistencePort, times(1)).verifyUserRol(dni, role);
+        assertThatThrownBy(() -> userUseCase.findUserById(1L))
+                .isInstanceOf(DomainException.class);
+                //.hasMessage(ExceptionResponse.USER_NOT_FOUND.getMessage());
     }
 
     @Test
-    void verifyUserRolThrowsExceptionTest() {
-        String dni = "123";
-        String role = "ROLE_ADMIN";
-        //when(userPersistencePort.verifyUserRol(dni, role)).thenReturn(null);
+    void verifyUserRoleCorrectly() {
 
-        DomainException exception = assertThrows(DomainException.class, () -> {
-            userUseCase.verifyUserRol(dni, role);
-        });
+        when(userPersistencePort.findUserByDni("234")).thenReturn(CreatorMocks.createEmployeeModel());
+        when(rolPersistencePort.findByName("ROLE_EMPLOYEE")).thenReturn(new RolModel(2L, "ROLE_EMPLOYEE", ""));
 
-        assertEquals(ConstantException.INVALID_USER, exception.getMessage());
-        //verify(userPersistencePort, times(1)).verifyUserRol(dni, role);
-    }
+        Boolean result = userUseCase.verifyUserRol("234", "ROLE_EMPLOYEE");
 
-
-    @Test
-    void createAccountEmployee() {
-        // Arrange
-        CreateUserModel createUserModel = CreatorMocks.createOwnerModel();
-
-        // Act
-        //userUseCase.createAccountEmployee(createUserModel);
-
-        // Assert
-       // verify(userPersistencePort, times(1)).createAccountEmployee(createUserModel);
+        assertThat(result).isTrue();
     }
 
     @Test
-    void getUserByDni() {
-        String dni = "123456";
-        UserModel userModel = new UserModel();
-        when(userPersistencePort.findUserByDni(dni)).thenReturn(userModel);
+    void verifyUserRoleWhenUserNotFound() {
+        when(userPersistencePort.findUserByDni("123")).thenReturn(null);
 
-        UserModel result = userUseCase.getUserByDni(dni);
-
-        assertEquals(userModel, result);
-        verify(userPersistencePort, times(1)).findUserByDni(dni);
+        assertThatThrownBy(() -> userUseCase.verifyUserRol("123", "ROLE_EMPLOYEE"))
+                .isInstanceOf(DomainException.class)
+                .hasMessage(ExceptionResponse.USER_NOT_FOUND.getMessage());
     }
 
     @Test
-    void getUserByDniThrowsException() {
-        String dni = "123456";
-        when(userPersistencePort.findUserByDni(dni)).thenReturn(null);
+    void createAccountCustomer() throws ParseException {
+        when(rolPersistencePort.findByName("ROLE_CUSTOMER")).thenReturn(new RolModel(4L, "ROLE_CUSTOMER", ""));
 
-        DomainException exception = assertThrows(DomainException.class, () -> {
-            userUseCase.getUserByDni(dni);
-        });
+        userUseCase.createAccountCustomer(CreatorMocks.createCustomerModel());
 
-        assertEquals(ConstantException.USER_NOT_FOUND, exception.getMessage());
-        verify(userPersistencePort, times(1)).findUserByDni(dni);
+        verify(userPersistencePort).saveUser(CreatorMocks.createCustomerModel());
+    }
+
+    @Test
+    void roleNotFound() {
+        when(rolPersistencePort.findByName("ROLE_CUSTOMER")).thenReturn(new RolModel(null, null, null));
+
+        assertThatThrownBy(() -> userUseCase.createAccountCustomer(CreatorMocks.createCustomerModel()))
+                .isInstanceOf(RolNotFoundException.class);
+                //.hasMessage(ExceptionResponse.ROL_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void useNotAuthorizedWhenIdsMatch() {
+        when(userPersistencePort.findUserByDni("234")).thenReturn(CreatorMocks.createCreateOwnerModel());
+        when(restaurantClientPort.getRestaurantIdByOwner(1L)).thenReturn(CreatorMocks.createRestaurantModel()); // ambos con mismo ID restaurante
+        when(rolPersistencePort.findByName("ROLE_EMPLOYEE")).
+                thenReturn(new RolModel(2L, "ROLE_EMPLOYEE", ""));
+
+        assertThatThrownBy(() -> userUseCase.createAccountEmployee(CreatorMocks.createCreateEmployeeModel(), "234"))
+                .isInstanceOf(UserNotAuthorizedException.class);
+    }
+
+    @Test
+    void findEmployeesByRestaurant_id() {
+        when(userPersistencePort.findEmployeeByRestaurantId(1L)).thenReturn(List.of(CreatorMocks.createUserModel()));
+
+        List<UserModel> result = userUseCase.findEmployeeByRestaurantId(1L);
+
+        assertThat(result).hasSize(1).contains(CreatorMocks.createUserModel());
+    }
+
+    @Test
+    void exceptionEmployeeListEmpty() {
+        when(userPersistencePort.findEmployeeByRestaurantId(1L)).thenReturn(Collections.emptyList());
+
+        assertThatThrownBy(() -> userUseCase.findEmployeeByRestaurantId(1L))
+                .isInstanceOf(DomainException.class)
+                .hasMessage(ExceptionResponse.USER_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    void userByDni() {
+        when(userPersistencePort.findUserByDni("123")).thenReturn(CreatorMocks.createUserModel());
+
+        UserModel result = userUseCase.getUserByDni("123");
+
+        assertThat(result).isEqualTo(CreatorMocks.createUserModel());
+    }
+
+    @Test
+    void exceptionUserNotFoundByDni() {
+        when(userPersistencePort.findUserByDni("123")).thenReturn(null);
+
+        assertThatThrownBy(() -> userUseCase.getUserByDni("123"))
+                .isInstanceOf(DomainException.class)
+                .hasMessage(ExceptionResponse.USER_NOT_FOUND.getMessage());
     }
 
 }

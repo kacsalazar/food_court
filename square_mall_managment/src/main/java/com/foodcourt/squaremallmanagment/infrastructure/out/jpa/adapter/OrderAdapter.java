@@ -24,15 +24,15 @@ public class OrderAdapter implements IOrderPersistencePort {
     private final IOrderVsDishRepository orderDishRepository;
 
     @Override
-    public void makeOrder(OrderModel orderModel) {
+    public void makeOrder(OrderModel orderModel, Long userId) {
 
-        Long persistedOrderId = saveOrder(orderModel);
+        Long persistedOrderId = saveOrder(orderModel, userId);
         relateDishToOrder(orderModel, persistedOrderId);
     }
 
-    private Long saveOrder(OrderModel orderModel) {
+    private Long saveOrder(OrderModel orderModel, Long userId) {
         OrderEntity order = OrderEntityMapper.toOrderEntity(orderModel);
-
+        order.setIdClient(userId);
         return orderRepository.save(order).getId();
     }
 
@@ -68,4 +68,10 @@ public class OrderAdapter implements IOrderPersistencePort {
                 .toList();
     }
 
+    public List<OrderModel> findAllOrdersByEmployeeId(Long employeeId) {
+        List<OrderEntity> orders = orderRepository.findAllOrdersByEmployeeId(employeeId);
+        return orders.stream()
+                .map(order -> OrderEntityMapper.toOrderModel(order, orderDishRepository.findByOrderId(order.getId())))
+                .toList();
+    }
 }

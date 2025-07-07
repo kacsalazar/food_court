@@ -1,14 +1,10 @@
 package com.foodcourt.usersmanagment.infrastructure.out.jpa;
 
+import com.foodcourt.usersmanagment.CreatorMocks;
 import com.foodcourt.usersmanagment.application.handler.ITokenValidator;
-import com.foodcourt.usersmanagment.domain.model.AuthModel;
 import com.foodcourt.usersmanagment.domain.model.ClaimUserModel;
-import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.TokenModel;
 import com.foodcourt.usersmanagment.infrastructure.out.auth.AuthAdapter;
-import com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter.RolAdapter;
-import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
-import com.foodcourt.usersmanagment.infrastructure.out.jpa.repository.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -26,11 +22,7 @@ class AuthAdapterTest {
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
-    private IUserRepository userRepository;
-    @Mock
     private ITokenValidator iTokenValidator;
-    @Mock
-    private RolAdapter rolAdapter;
 
     @InjectMocks
     private AuthAdapter authAdapter;
@@ -41,70 +33,51 @@ class AuthAdapterTest {
     }
 
     @Test
-    void userLogin_Success() {
+    void loginSuccessful() {
         // Arrange
-        AuthModel authModel = new AuthModel("plainPassword", "test@mail.com");
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmail("test@mail.com");
-        userEntity.setPassword("hashedPassword");
-        userEntity.setName("Test");
-        userEntity.setId(1L);
-        userEntity.setDni("123456");
-        userEntity.setIdRol(2L);
+        String rolName = "OWNER";
+        String expectedToken = "mocked-jwt-token";
 
-        when(userRepository.findUserByEmail("test@mail.com")).thenReturn(userEntity);
-        when(passwordEncoder.matches("plainPassword", "hashedPassword")).thenReturn(true);
-
-        RolModel rolModel = new RolModel();
-        rolModel.setName("ROLE_USER");
-        when(rolAdapter.findById(2L)).thenReturn(rolModel);
-
-        when(iTokenValidator.generateToken(any(ClaimUserModel.class))).thenReturn("jwt-token");
+        when(iTokenValidator.generateToken(any(ClaimUserModel.class))).thenReturn(expectedToken);
 
         // Act
-        TokenModel result = authAdapter.userLogin(authModel);
+        TokenModel result = authAdapter.userLogin(CreatorMocks.createAuthModel(), CreatorMocks.createUserModel(), rolName);
 
         // Assert
-        assertNotNull(result);
-        assertEquals("jwt-token", result.getToken());
-        verify(userRepository).findUserByEmail("test@mail.com");
-        verify(passwordEncoder).matches("plainPassword", "hashedPassword");
-        verify(rolAdapter).findById(2L);
+        assertThat(result).isNotNull();
+        assertThat(result.getToken()).isEqualTo(expectedToken);
         verify(iTokenValidator).generateToken(any(ClaimUserModel.class));
     }
 
     @Test
-    void userLogin() {
+    void verifyPasswordSuccessfully() {
         // Arrange
-        AuthModel authModel = new AuthModel("wrongPassword", "test@mail.com");
-        UserEntity userEntity = new UserEntity();
-        userEntity.setEmail("test@mail.com");
-        userEntity.setPassword("hashedPassword");
+        String rawPassword = "plaintextpassword";
+        String encodedPassword = "$2a$10$encodedValue";
 
-        when(userRepository.findUserByEmail("test@mail.com")).thenReturn(userEntity);
-        when(passwordEncoder.matches("wrongPassword", "hashedPassword")).thenReturn(false);
-
-        // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            authAdapter.userLogin(authModel);
-        });
-        assertEquals("Invalid password", exception.getMessage());
-        verify(userRepository).findUserByEmail("test@mail.com");
-        verify(passwordEncoder).matches("wrongPassword", "hashedPassword");
-        verifyNoMoreInteractions(rolAdapter, iTokenValidator);
-    }
-
-    /*@Test
-    void findUserByEmail() {
-        // Arrange
-        UserEntity userEntity = new UserEntity();
-        when(userRepository.findUserByEmail("mail@mail.com")).thenReturn(userEntity);
+        when(passwordEncoder.matches(rawPassword, encodedPassword)).thenReturn(true);
 
         // Act
-        UserEntity result = authAdapter.findUserByEmail("mail@mail.com");
+        boolean result = authAdapter.verifyPassword(rawPassword, encodedPassword);
 
         // Assert
-        assertEquals(userEntity, result);
-        verify(userRepository).findUserByEmail("mail@mail.com");
-    }*/
+        assertThat(result).isTrue();
+        verify(passwordEncoder).matches(rawPassword, encodedPassword);
+    }
+
+    @Test
+    void passwordsDoNotMatch() {
+        // Arrange
+        String rawPassword = "wrongpassword";
+        String encodedPassword = "$2a$10$encodedValue";
+
+        when(passwordEncoder.matches(rawPassword, encodedPassword)).thenReturn(false);
+
+        // Act
+        boolean result = authAdapter.verifyPassword(rawPassword, encodedPassword);
+
+        // Assert
+        assertThat(result).isFalse();
+        verify(passwordEncoder).matches(rawPassword, encodedPassword);
+    }
 }

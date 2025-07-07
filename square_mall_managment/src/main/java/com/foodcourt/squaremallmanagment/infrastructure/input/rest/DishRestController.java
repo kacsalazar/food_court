@@ -31,15 +31,15 @@ public class DishRestController implements IDishRestController {
     }
 
     @PreAuthorize(SecurityExpressions.OWNER)
-    @PatchMapping("/{id}")
-    public ResponseEntity<DishResponse> updateDish(@PathVariable Long id, @RequestBody DishRequestUpdateDto dishRequestUpdateDto) {
-        return ResponseEntity.ok(dishHandler.updateDish(id, dishRequestUpdateDto));
+    @PatchMapping("/{dishId}")
+    public ResponseEntity<DishResponse> updateDish(@PathVariable Long dishId, @RequestBody DishRequestUpdateDto dishRequestUpdateDto) {
+        return ResponseEntity.ok(dishHandler.updateDish(dishId, dishRequestUpdateDto));
     }
 
     @PreAuthorize(SecurityExpressions.OWNER)
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<DishResponse> disableDish(@PathVariable Long id, @RequestBody DishStatusRequest status) {
-        return ResponseEntity.ok(dishHandler.disableDish(id, status.getStatus()));
+    @PatchMapping("/{dishId}/status")
+    public ResponseEntity<DishResponse> disableDish(@PathVariable Long dishId, @RequestBody DishStatusRequest status) {
+        return ResponseEntity.ok(dishHandler.disableDish(dishId, status.getStatus()));
     }
 
     @PreAuthorize(SecurityExpressions.CUSTOMER)

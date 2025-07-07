@@ -1,15 +1,9 @@
 package com.foodcourt.squaremallmanagment.infrastructure.input.rest;
 
-import com.foodcourt.squaremallmanagment.CreatorMocks;
 import com.foodcourt.squaremallmanagment.application.dto.request.RestaurantRequestDto;
 import com.foodcourt.squaremallmanagment.application.dto.response.GetRestaurantByOwnerResponse;
 import com.foodcourt.squaremallmanagment.application.dto.response.RestaurantResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IRestaurantHandler;
-import com.foodcourt.squaremallmanagment.domain.model.restaurant.RestaurantModel;
-import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter.RestaurantAdapter;
-import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.RestaurantEntity;
-import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IRestaurantEntityMapper;
-import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.IRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

@@ -1,4 +1,5 @@
 package com.foodcourt.squaremallmanagment.infrastructure.documentation;
+import com.foodcourt.squaremallmanagment.application.dto.request.DeliverOrderRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.NotificationRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.response.OrderResponse;
@@ -198,5 +199,89 @@ public interface IOrderRestController {
             )
             NotificationRequest notification
     );
+    @Operation(
+            summary = "Mark order as DELIVERED",
+            description = "Changes the status of an order to DELIVERED using the provided delivery details. Only accessible to users with role EMPLOYEE.",
+            tags = {"Order Management"}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Order marked as DELIVERED successfully",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Order not found",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden - User does not have EMPLOYEE role",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    ResponseEntity<Void> deliverOrder(
+            @Parameter(
+                    name = "orderId",
+                    description = "ID of the order to deliver",
+                    required = true,
+                    example = "1234",
+                    schema = @Schema(type = "integer")
+            )
+            @PathVariable Long orderId,
 
+            @RequestBody(
+                    description = "Delivery details for completing the order",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = DeliverOrderRequest.class)
+                    )
+            )
+            DeliverOrderRequest deliverOrder
+    );
+
+    @Operation(
+            summary = "Cancel an order",
+            description = "Cancels the specified order. Only accessible to users with the CUSTOMER role.",
+            tags = {"Order Management"}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Order cancelled successfully",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Order not found",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden - User does not have CUSTOMER role or is not authorized to cancel this order",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    ResponseEntity<Void> cancelOrder(
+            @Parameter(
+                    name = "orderId",
+                    description = "ID of the order to cancel",
+                    required = true,
+                    example = "1234",
+                    schema = @Schema(type = "integer")
+            )
+            @PathVariable Long orderId
+    );
 }

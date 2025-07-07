@@ -1,5 +1,6 @@
 package com.foodcourt.squaremallmanagment.infrastructure.input.rest;
 
+import com.foodcourt.squaremallmanagment.application.dto.request.DeliverOrderRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.NotificationRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.response.OrderResponse;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class OrderRestControllerTest {
 
@@ -78,5 +80,26 @@ class OrderRestControllerTest {
         verify(orderHandler, times(1)).changeOrderToReady(notification, orderId);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNull(response.getBody());
+    }
+
+    @Test
+    void deliverOrderSuccessfully() {
+        Long orderId = 1L;
+        DeliverOrderRequest deliverRequest = DeliverOrderRequest.builder().securityPin("1234").build();
+
+        ResponseEntity<Void> response = orderRestController.deliverOrder(orderId, deliverRequest);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        verify(orderHandler).deliverOrder(deliverRequest, orderId);
+    }
+
+    @Test
+    void cancelOrderSuccessfully() {
+        Long orderId = 1L;
+
+        ResponseEntity<Void> response = orderRestController.cancelOrder(orderId);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        verify(orderHandler).cancelOrder(orderId);
     }
 }

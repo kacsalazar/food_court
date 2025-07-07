@@ -38,10 +38,4 @@ public class TraceabilityEntityMapper {
                 .build();
     }
 
-    public static List<TraceabilityModel> toTraceabilityModelList(List<TraceabilityEntity> traceabilityEntities) {
-        return traceabilityEntities.stream()
-                .map(TraceabilityEntityMapper::toTraceabilityModel)
-                .toList();
-    }
-
 }

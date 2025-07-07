@@ -3,6 +3,7 @@ package com.foodcourt.usersmanagment.domain.usecase;
 import com.foodcourt.usersmanagment.domain.api.IUserServicePort;
 import com.foodcourt.usersmanagment.domain.exception.ConstantException;
 import com.foodcourt.usersmanagment.domain.exception.DomainException;
+import com.foodcourt.usersmanagment.domain.exception.RolNotFoundException;
 import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
 import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
@@ -10,10 +11,11 @@ import com.foodcourt.usersmanagment.domain.spi.IRestaurantClientPort;
 import com.foodcourt.usersmanagment.domain.spi.IRolPersistencePort;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import com.foodcourt.usersmanagment.domain.usecase.util.UseValidationUtil;
-import com.foodcourt.usersmanagment.infrastructure.exception.UserNotAuthorizedException;
+import com.foodcourt.usersmanagment.domain.exception.UserNotAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -30,7 +32,7 @@ public class UserUseCase implements IUserServicePort {
         UseValidationUtil.isValidUser(createUserModel);
         Long idRol = rolPersistencePort.findByName("ROLE_OWNER").getId();
         if(idRol == null)
-            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
+            throw new RolNotFoundException();
 
         createUserModel.setIdRol(idRol);
         userPersistencePort.saveUser(createUserModel);
@@ -60,10 +62,6 @@ public class UserUseCase implements IUserServicePort {
         if(idRol == null)
             throw new DomainException(ConstantException.ROLE_NOT_FOUND);
 
-        validateUserRestaurant(createUserModel.getIdRestaurant(),
-                restaurantClientPort.getRestaurantIdByOwner(
-                        userPersistencePort.findUserByDni(ownerDni).getId()).getId());
-
         createUserModel.setIdRol(idRol);
         createUserModel.setIdRestaurant(createUserModel.getIdRestaurant());
         userPersistencePort.saveUser(createUserModel);
@@ -78,11 +76,20 @@ public class UserUseCase implements IUserServicePort {
     @Override
     public void createAccountCustomer(CreateUserModel createUserModel) {
         UseValidationUtil.isValidUser(createUserModel);
-        Long idRol = rolPersistencePort.findByName("ROLE_CUSTOMER").getId();
-        if(idRol == null)
-            throw new DomainException(ConstantException.ROLE_NOT_FOUND);
-        createUserModel.setIdRol(idRol);
+        Long roleId = rolPersistencePort.findByName("ROLE_CUSTOMER").getId();
+        if(roleId == null)
+            throw new RolNotFoundException();
+        createUserModel.setIdRol(roleId);
         userPersistencePort.saveUser(createUserModel);
+    }
+
+    public List<UserModel> findEmployeeByRestaurantId(Long restaurantId) {
+        List<UserModel> employees = userPersistencePort.findEmployeeByRestaurantId(restaurantId);
+        if (employees.isEmpty()) {
+            //crear una excepcion personalizada
+            throw new DomainException(ConstantException.USER_NOT_FOUND);
+        }
+        return employees;
     }
 
     private Boolean verifyUserRol(UserModel user, String role) {

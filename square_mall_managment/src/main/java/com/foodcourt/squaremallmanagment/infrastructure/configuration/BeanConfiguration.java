@@ -1,10 +1,7 @@
 package com.foodcourt.squaremallmanagment.infrastructure.configuration;
 
 import com.foodcourt.squaremallmanagment.domain.spi.*;
-import com.foodcourt.squaremallmanagment.domain.usecase.DishUseCase;
-import com.foodcourt.squaremallmanagment.domain.usecase.OrderUseCase;
-import com.foodcourt.squaremallmanagment.domain.usecase.RestaurantUseCase;
-import com.foodcourt.squaremallmanagment.domain.usecase.UserClientUseCase;
+import com.foodcourt.squaremallmanagment.domain.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,5 +35,15 @@ public class BeanConfiguration {
         return new OrderUseCase(iOrderPersistencePort, userClientPort, iSendNotificationPort,
                                 iTraceabilityPersistencePort, iDishPersistencePort,
                 iEmployeeRestPort);
+    }
+
+    @Bean
+    public TraceabilityUseCase traceabilityUseCase(ITraceabilityPersistencePort iTraceabilityPersistencePort,
+                                                               IOrderPersistencePort iOrderPersistencePort,
+                                                               IUserRestPort iUserRestPort,
+                                                               IRestaurantPersistencePort iRestaurantPersistencePort,
+                                                               IEmployeeRestPort iEmployeeRestPort) {
+        return new TraceabilityUseCase(iTraceabilityPersistencePort, iOrderPersistencePort, iUserRestPort,
+                                       iRestaurantPersistencePort, iEmployeeRestPort);
     }
 }

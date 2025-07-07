@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class UserClientUseCaseTest {
+class UserClientUseCaseTest {
 
     @Mock
     private IUserRestPort userClientPort;

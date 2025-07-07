@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 @Slf4j
@@ -46,6 +48,11 @@ public class UserAdapter implements IUserPersistencePort {
     @Override
     public UserModel findUserByDni(String dni) {
         return userEntityMapper.toUserModel(userRepository.findUserByDni(dni));
+    }
+
+    public List<UserModel> findEmployeeByRestaurantId(Long restaurantId) {
+        List<UserEntity> userEntities = userRepository.findEmployeeByRestaurantId(restaurantId);
+        return userEntities.stream().map(userEntityMapper::toUserModel).toList();
     }
 
 }

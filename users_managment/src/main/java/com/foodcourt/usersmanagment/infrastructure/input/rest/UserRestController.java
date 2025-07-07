@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/user")
@@ -56,6 +58,12 @@ public class UserRestController implements IUserRestController {
     public ResponseEntity<Void> createAccountCustomer(@RequestBody UserRequestDto userRequestDto){
         userHandler.createAccountCustomer(userRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/employees/{restaurantId}")
+    public ResponseEntity<List<UserResponseDto>> findEmployeeByRestaurantId(@PathVariable Long restaurantId) {
+        List<UserResponseDto> employees = userHandler.findEmployeeByRestaurantId(restaurantId);
+        return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.foodcourt.usersmanagment.infrastructure.exceptionhandler;
 
-import com.foodcourt.usersmanagment.infrastructure.exception.*;
+import com.foodcourt.usersmanagment.domain.exception.*;
+import com.foodcourt.usersmanagment.infrastructure.exception.NoDataFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -47,6 +48,34 @@ public class ControllerAdvisor {
             UserNotAuthorizedException ignoredNoDataFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(MESSAGE, ExceptionResponse.USER_NOT_AUTHORIZED.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidBirthDayDateException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidBirthDayDateException(
+            InvalidBirthDayDateException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.INVALID_BIRTHDAY_DATE.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidDniException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidDniException(
+            InvalidDniException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.INVALID_DNI.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidEmailException(
+            InvalidEmailException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.INVALID_EMAIL.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidPhoneNumberException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidPhoneNumberException(
+            InvalidPhoneNumberException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE, ExceptionResponse.INVALID_PHONE_NUMBER.getMessage()));
     }
     
 }

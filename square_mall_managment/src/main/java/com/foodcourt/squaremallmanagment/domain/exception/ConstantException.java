@@ -11,7 +11,8 @@ public enum ConstantException {
     INVALID_STATE_TRANSITION("Invalid state transition for the order"),
     INVALID_PIN_SECURITY("Invalid security pin provided"),
     DISHES_NOT_FROM_SAME_RESTAURANT("All dishes in the order must belong to the same restaurant"),
-    UNAUTHORIZED_ORDER_ACCESS_EXCEPTION("You are not authorized to access or modify this order");
+    UNAUTHORIZED_ORDER_ACCESS_EXCEPTION("You are not authorized to access or modify this order"),
+    NOT_PERMISSION("You do not have permission to perform this action"),;
 
     private final String message;
 

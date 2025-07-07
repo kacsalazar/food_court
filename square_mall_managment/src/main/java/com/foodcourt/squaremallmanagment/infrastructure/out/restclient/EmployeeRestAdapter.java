@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @Component
 @AllArgsConstructor
 @Slf4j
@@ -20,6 +22,13 @@ public class EmployeeRestAdapter implements IEmployeeRestPort {
         String url = USER_SERVICE_URL + "dni/" + dni;
         log.info("Checking if owner exists with DNI: {}", restTemplate.getForObject(url, EmployeeModel.class));
         return restTemplate.getForObject(url, EmployeeModel.class);
+    }
+
+    public List<EmployeeModel> getEmployeesByRestaurantId(Long restaurantId) {
+        String url = USER_SERVICE_URL + "employees/" + restaurantId;
+        log.info("Fetching employees for restaurant ID: {}", restaurantId);
+        EmployeeModel[] employees = restTemplate.getForObject(url, EmployeeModel[].class);
+        return List.of(employees);
     }
 
 }

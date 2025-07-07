@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
 
 class DishUseCaseTest {
@@ -137,26 +138,27 @@ class DishUseCaseTest {
     }
 
     @Test
-    void disableDish() {
-        // Arrange
-        DishModel dish = CreatorDishMocks.buildCompleteDishModel(); // idRestaurant = 1L
-        dish.getDishInfo().setIsActive(true);
-        String dniOwner = "123";
+    void should_disable_dish_successfully() {
+        DishModel dish = CreatorDishMocks.buildCompleteDishModel();
 
-        UserModel user = CreatorMocksUser.createUserModel(); // id = 1L, dni = "123"
-        RestaurantModel restaurant = CreatorMocksRestaurant.createRestaurantModel(); // idOwner = 1L
+        UserModel dishRestaurantOwnerMock = UserModel.builder()
+                .id(1L) // ID incorrecto
+                .dni("123")
+                .build();
 
+        RestaurantModel restaurant = RestaurantModel.builder()
+                .id(1L)
+                .idOwner(1L) // Dueño real
+                .build();
+        String dniRequesterOwner = "123";
         when(dishPersistencePort.findDishById(1L)).thenReturn(dish);
-        when(userClientPort.ownerExists(dniOwner)).thenReturn(user);
         when(restaurantPersistencePort.findRestaurantById(1L)).thenReturn(restaurant);
-        when(dishPersistencePort.disableDish(dish, false)).thenReturn(dish);
+        when(userClientPort.getUserById(restaurant.getIdOwner())).thenReturn(dishRestaurantOwnerMock);
+        when(dishPersistencePort.disableDish(any(DishModel.class))).thenReturn(CreatorDishMocks.buildCompleteDishModel());
 
-        // Act
-        DishModel result = dishUseCase.disableDish(1L, false, dniOwner);
+        DishModel result = dishUseCase.disableDish(1L, false, dniRequesterOwner);
 
-        // Assert
-        assertThat(result.getDishInfo().getIsActive()).isFalse();
-        verify(dishPersistencePort).disableDish(dish, false);
+        assertFalse(result.getDishInfo().getIsActive());
     }
 
     @Test
@@ -172,6 +174,7 @@ class DishUseCaseTest {
         DishModel dish = CreatorDishMocks.buildCompleteDishModel();
         when(dishPersistencePort.findDishById(1L)).thenReturn(dish);
         when(userClientPort.ownerExists("123")).thenReturn(null);
+        when(restaurantPersistencePort.findRestaurantById(1L)).thenReturn(CreatorMocksRestaurant.createRestaurantModel());
 
         assertThatThrownBy(() -> dishUseCase.disableDish(1L, false, "123"))
                 .isInstanceOf(UserNotFoundException.class);
@@ -194,8 +197,8 @@ class DishUseCaseTest {
     void invalidUserExceptionDoesNotOwnRestaurant() {
         DishModel dish = CreatorDishMocks.buildCompleteDishModel();
 
-        UserModel user = UserModel.builder()
-                .id(99L) // ID incorrecto
+        UserModel dishRestaurantOwnerMock = UserModel.builder()
+                .id(1L) // ID incorrecto
                 .dni("123")
                 .build();
 
@@ -203,12 +206,13 @@ class DishUseCaseTest {
                 .id(1L)
                 .idOwner(1L) // Dueño real
                 .build();
+        String wrongDniRequesterOwner = "1234";
 
         when(dishPersistencePort.findDishById(1L)).thenReturn(dish);
-        when(userClientPort.ownerExists("123")).thenReturn(user);
+        when(userClientPort.getUserById(restaurant.getIdOwner())).thenReturn(dishRestaurantOwnerMock);
         when(restaurantPersistencePort.findRestaurantById(1L)).thenReturn(restaurant);
 
-        assertThatThrownBy(() -> dishUseCase.disableDish(1L, false, "123"))
+        assertThatThrownBy(() -> dishUseCase.disableDish(1L, false, wrongDniRequesterOwner))
                 .isInstanceOf(InvalidUserException.class);
     }
 
