@@ -99,5 +99,40 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Collections.singletonMap(MESSAGE, ConstantException.NOT_PERMISSION.getMessage()));
     }
+
+    @ExceptionHandler(InvalidNameException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidNameException(
+            InvalidNameException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.INVALID_NAME.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidNameRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidNameRestaurantException(
+            InvalidNameRestaurantException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.INVALID_NAME_RESTAURANT.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidNitRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidNitRestaurantException(
+            InvalidNitRestaurantException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.INVALID_NIT_RESTAURANT.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidPhoneNumberRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidPhoneNumberRestaurantException(
+            InvalidPhoneNumberRestaurantException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.INVALID_PHONE_NUMBER_RESTAURANT.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidPriceDishException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidPriceDishException(
+            InvalidPriceDishException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.INVALID_PRICE_DISH.getMessage()));
+    }
     
 }

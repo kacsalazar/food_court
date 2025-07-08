@@ -5,6 +5,7 @@ import com.foodcourt.squaremallmanagment.application.dto.response.GetRestaurantB
 import com.foodcourt.squaremallmanagment.application.dto.response.RestaurantResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IRestaurantHandler;
 
+import com.foodcourt.squaremallmanagment.infrastructure.input.rest.util.SecurityExpressions;
 import lombok.RequiredArgsConstructor;
 import com.foodcourt.squaremallmanagment.infrastructure.documentation.IRestaurantRestController;
 
@@ -22,14 +23,14 @@ public class RestaurantRestController implements IRestaurantRestController {
 
     private final IRestaurantHandler restaurantHandler;
 
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize(SecurityExpressions.OWNER)
     @PostMapping("/")
     public ResponseEntity<Void> saveRestaurant(@RequestBody RestaurantRequestDto restaurantRequestDto) {
         restaurantHandler.saveRestaurant(restaurantRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize(SecurityExpressions.CUSTOMER)
     @GetMapping("/restaurants")
     public ResponseEntity<List<RestaurantResponse>> getAllRestaurants( @RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
         return ResponseEntity.ok( restaurantHandler.getAllRestaurants(page, size));

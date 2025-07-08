@@ -2,6 +2,7 @@ package com.foodcourt.squaremallmanagment.domain.usecase;
 
 import com.foodcourt.squaremallmanagment.domain.api.ITraceabilityServicePort;
 import com.foodcourt.squaremallmanagment.domain.exception.NotPermissionException;
+import com.foodcourt.squaremallmanagment.domain.exception.RestaurantNotFoundException;
 import com.foodcourt.squaremallmanagment.domain.model.EmployeeModel;
 import com.foodcourt.squaremallmanagment.domain.model.EmployeeRankingModel;
 import com.foodcourt.squaremallmanagment.domain.model.TraceabilityModel;
@@ -9,7 +10,7 @@ import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.model.restaurant.RestaurantModel;
 import com.foodcourt.squaremallmanagment.domain.spi.*;
-import com.foodcourt.squaremallmanagment.domain.usecase.util.StateEnum;
+import com.foodcourt.squaremallmanagment.domain.usecase.util.StatusEnum;
 import lombok.RequiredArgsConstructor;
 
 import java.time.Duration;
@@ -37,12 +38,12 @@ public class TraceabilityUseCase implements ITraceabilityServicePort {
 
         List<TraceabilityModel> traceabilityModels = traceabilityPersistencePort.findAllTracesByOrderId(OrderId);
         TraceabilityModel firstTrace = traceabilityModels.stream()
-                .filter(trace -> trace.getNewState().equals(StateEnum.IN_PROGRESS.name()) )
+                .filter(trace -> trace.getNewState().equals(StatusEnum.IN_PROGRESS.name()) )
                 .findFirst()
                 .orElseThrow(NotPermissionException::new);
 
         TraceabilityModel lastTrace = traceabilityModels.stream()
-                .filter(trace -> trace.getNewState().equals(StateEnum.DELIVERED.name()) )
+                .filter(trace -> trace.getNewState().equals(StatusEnum.DELIVERED.name()) )
                 .findFirst()
                 .orElseThrow(NotPermissionException::new);
 
@@ -72,13 +73,13 @@ public class TraceabilityUseCase implements ITraceabilityServicePort {
                                 if (traceList == null) return null;
 
                                 LocalDateTime start = traceList.stream()
-                                        .filter(t -> StateEnum.IN_PROGRESS.name().equals(t.getNewState()))
+                                        .filter(t -> StatusEnum.IN_PROGRESS.name().equals(t.getNewState()))
                                         .map(TraceabilityModel::getDate)
                                         .findFirst()
                                         .orElse(null);
 
                                 LocalDateTime end = traceList.stream()
-                                        .filter(t -> StateEnum.DELIVERED.name().equals(t.getNewState()))
+                                        .filter(t -> StatusEnum.DELIVERED.name().equals(t.getNewState()))
                                         .map(TraceabilityModel::getDate)
                                         .findFirst()
                                         .orElse(null);
@@ -136,8 +137,14 @@ public class TraceabilityUseCase implements ITraceabilityServicePort {
     //valida si el propiertario es igual al id del del propietario del restaurante
     private void validateOwnerRestaurant(Long restaurantId, String userDni) {
         RestaurantModel restaurant = restaurantPersistencePort.findRestaurantById(restaurantId);
-        if (!restaurant.getIdOwner().equals(userClientPort.ownerExists(userDni).getId())) {
-            throw new NotPermissionException();
+
+        if (restaurant != null){
+            if (!restaurant.getIdOwner().equals(userClientPort.ownerExists(userDni).getId())) {
+                throw new NotPermissionException();
+            }
+        }else {
+            throw new RestaurantNotFoundException();
         }
+
     }
 }

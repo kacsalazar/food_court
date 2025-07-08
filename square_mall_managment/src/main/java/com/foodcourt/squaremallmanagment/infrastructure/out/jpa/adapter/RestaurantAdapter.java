@@ -28,8 +28,7 @@ public class RestaurantAdapter implements IRestaurantPersistencePort {
 
     @Override
     public RestaurantModel findRestaurantById(Long id) {
-        return restaurantMapper.toRestaurantModel(restaurantRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Restaurant with id " + id + " not found.")));
+        return restaurantMapper.toRestaurantModel(restaurantRepository.findById(id).get());
     }
 
     @Override

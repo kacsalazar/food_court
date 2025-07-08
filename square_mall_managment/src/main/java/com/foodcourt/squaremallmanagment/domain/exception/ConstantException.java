@@ -12,7 +12,12 @@ public enum ConstantException {
     INVALID_PIN_SECURITY("Invalid security pin provided"),
     DISHES_NOT_FROM_SAME_RESTAURANT("All dishes in the order must belong to the same restaurant"),
     UNAUTHORIZED_ORDER_ACCESS_EXCEPTION("You are not authorized to access or modify this order"),
-    NOT_PERMISSION("You do not have permission to perform this action"),;
+    NOT_PERMISSION("You do not have permission to perform this action"),
+    INVALID_NAME(""),
+    INVALID_NAME_RESTAURANT(""),
+    INVALID_NIT_RESTAURANT("The NIT must contain only numbers."),
+    INVALID_PHONE_NUMBER_RESTAURANT("The phone number must be a maximum of 13 characters and may begin with '+'."),
+    INVALID_PRICE_DISH("");
 
     private final String message;
 

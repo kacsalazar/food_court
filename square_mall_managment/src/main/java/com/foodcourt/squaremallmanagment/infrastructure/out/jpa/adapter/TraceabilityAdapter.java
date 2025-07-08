@@ -2,7 +2,7 @@ package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 
 import com.foodcourt.squaremallmanagment.domain.model.TraceabilityModel;
 import com.foodcourt.squaremallmanagment.domain.spi.ITraceabilityPersistencePort;
-import com.foodcourt.squaremallmanagment.domain.usecase.util.StateEnum;
+import com.foodcourt.squaremallmanagment.domain.usecase.util.StatusEnum;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.TraceabilityEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.impl.TraceabilityEntityMapper;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.repository.ITraceabilityRepository;
@@ -35,7 +35,7 @@ public class TraceabilityAdapter implements ITraceabilityPersistencePort {
 
         List<TraceabilityEntity> traceabilityEntities =
                 traceabilityRepository.findByOrderIdAndStates(OrderId,
-                        List.of(StateEnum.IN_PROGRESS.name(), StateEnum.DELIVERED.name()));
+                        List.of(StatusEnum.IN_PROGRESS.name(), StatusEnum.DELIVERED.name()));
         return traceabilityEntities.stream()
                 .map(TraceabilityEntityMapper::toTraceabilityModel)
                 .toList();
