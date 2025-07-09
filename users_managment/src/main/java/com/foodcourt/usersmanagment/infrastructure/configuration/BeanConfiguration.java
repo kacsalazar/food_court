@@ -16,10 +16,9 @@ public class BeanConfiguration {
 
     @Bean
     public UserUseCase userServicePort(IUserPersistencePort iUserPersistencePort,
-                                       IRolPersistencePort iRolPersistencePort,
-                                       IRestaurantClientPort iRestaurantClientPort
+                                       IRolPersistencePort iRolPersistencePort
     ) {
-        return new UserUseCase( iUserPersistencePort, iRolPersistencePort, iRestaurantClientPort);
+        return new UserUseCase( iUserPersistencePort, iRolPersistencePort );
     }
 
     @Bean

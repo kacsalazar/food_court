@@ -1,32 +1,20 @@
 package com.foodcourt.squaremallmanagment.domain.usecase;
 
-import com.foodcourt.squaremallmanagment.domain.exception.InvalidStateTransitionException;
 import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
-import com.foodcourt.squaremallmanagment.domain.model.order.NotificationOrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
-import com.foodcourt.squaremallmanagment.domain.model.order.OrderModelReturn;
 import com.foodcourt.squaremallmanagment.domain.model.UserModel;
-import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.spi.*;
-import com.foodcourt.squaremallmanagment.domain.exception.InvalidOrderException;
-import com.foodcourt.squaremallmanagment.domain.exception.OrderNotFoundException;
-import com.foodcourt.squaremallmanagment.domain.usecase.util.StateEnum;
-import com.foodcourt.squaremallmanagment.mocks.CreatorMocksUser;
-import com.foodcourt.squaremallmanagment.mocks.CreatorOrderMocks;
+import com.foodcourt.squaremallmanagment.domain.usecase.util.StatusEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.never;
-import static org.assertj.core.api.Assertions.*;
 
 class OrderUseCaseTest {
 
@@ -78,8 +66,8 @@ class OrderUseCaseTest {
         orderUseCase.makeOrder(order);
 
         // Assert
-        verify(orderPersistencePort).makeOrder(order);
-        assertEquals(StateEnum.PENDING.name(), order.getStatus());
+        verify(orderPersistencePort).makeOrder(order, 1l);
+        assertEquals(StatusEnum.PENDING.name(), order.getStatus());
     }
 
 

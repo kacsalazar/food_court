@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.foodcourt.squaremallmanagment.mocks.CreatorDishMocks.createDishesRetrieve;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.*;
@@ -218,10 +219,11 @@ class DishUseCaseTest {
 
     @Test
     void getDishesByCategory() {
-        List<ListDishesByRestaurantModel> dishes = List.of(CreatorMocksRestaurant.createListDishesByRestaurantModel());
-        when(dishPersistencePort.getDishesByCategory(10L, 5L, 0, 10)).thenReturn(dishes);
 
-        List<ListDishesByRestaurantModel> result = dishUseCase.getDishesByCategory(10L, 5L, 0, 10);
+        List<ListDishesByRestaurantModel> dishes = List.of(CreatorMocksRestaurant.createListDishesByRestaurantModel());
+        when(dishPersistencePort.getDishesByCategory(createDishesRetrieve())).thenReturn(dishes);
+
+        List<ListDishesByRestaurantModel> result = dishUseCase.getDishesByCategory(createDishesRetrieve());
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getName()).isEqualTo("Test Dish");

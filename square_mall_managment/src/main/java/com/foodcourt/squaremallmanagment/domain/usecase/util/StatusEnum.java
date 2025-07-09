@@ -1,6 +1,6 @@
 package com.foodcourt.squaremallmanagment.domain.usecase.util;
 
-public enum StateEnum {
+public enum StatusEnum {
 
     PENDING,
     IN_PROGRESS,

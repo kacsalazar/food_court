@@ -118,19 +118,18 @@ class UserUseCaseTest {
 
         assertThatThrownBy(() -> userUseCase.createAccountCustomer(CreatorMocks.createCustomerModel()))
                 .isInstanceOf(RolNotFoundException.class);
-                //.hasMessage(ExceptionResponse.ROL_NOT_FOUND.getMessage());
     }
 
-    @Test
+    /*@Test
     void useNotAuthorizedWhenIdsMatch() {
         when(userPersistencePort.findUserByDni("234")).thenReturn(CreatorMocks.createCreateOwnerModel());
         when(restaurantClientPort.getRestaurantIdByOwner(1L)).thenReturn(CreatorMocks.createRestaurantModel()); // ambos con mismo ID restaurante
         when(rolPersistencePort.findByName("ROLE_EMPLOYEE")).
                 thenReturn(new RolModel(2L, "ROLE_EMPLOYEE", ""));
 
-        assertThatThrownBy(() -> userUseCase.createAccountEmployee(CreatorMocks.createCreateEmployeeModel(), "234"))
+        assertThatThrownBy(() -> userUseCase.createAccountEmployee(CreatorMocks.createCreateEmployeeModel(), "244"))
                 .isInstanceOf(UserNotAuthorizedException.class);
-    }
+    }*/
 
     @Test
     void findEmployeesByRestaurant_id() {

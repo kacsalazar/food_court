@@ -6,6 +6,7 @@ import com.foodcourt.squaremallmanagment.domain.model.UserModel;
 import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
 import com.foodcourt.squaremallmanagment.domain.model.dish.DishUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesByRestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesRetrieved;
 import com.foodcourt.squaremallmanagment.domain.model.restaurant.RestaurantModel;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.domain.spi.IRestaurantPersistencePort;
@@ -79,8 +80,7 @@ public class DishUseCase implements IDishServicePort {
 
     @Override
     public List<ListDishesByRestaurantModel>
-    getDishesByCategory(Long idRestaurant, Long idCategory, Integer page, Integer size) {
-        Integer offset = (page - 1) * size;
-        return dishPersistencePort.getDishesByCategory(idRestaurant, idCategory, offset, size);
+    getDishesByCategory(ListDishesRetrieved listDishesRetrieved) {
+        return dishPersistencePort.getDishesByCategory(listDishesRetrieved);
     }
 }

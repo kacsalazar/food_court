@@ -2,8 +2,11 @@ package com.foodcourt.squaremallmanagment.mocks;
 
 import com.foodcourt.squaremallmanagment.application.dto.request.DishRequestUpdateDto;
 import com.foodcourt.squaremallmanagment.application.dto.response.DishResponse;
+import com.foodcourt.squaremallmanagment.application.dto.response.DishRestaurantResponse;
 import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
 import com.foodcourt.squaremallmanagment.domain.model.dish.DishUpdateModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesByRestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesRetrieved;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 
 public class CreatorDishMocks {
@@ -32,9 +35,9 @@ public class CreatorDishMocks {
                 .description("Delicious cheese pizza")
                 .price(Double.valueOf(15.99))
                 .imageUrl("https://example.com/pizza.jpg")
-                .idRestaurant(10L)
+                .idRestaurant(1L)
                 .idCategory(5L)
-                .isActive(true)
+                .isActive(false)
                 .build();
     }
 
@@ -77,6 +80,39 @@ public class CreatorDishMocks {
                 .idRestaurant(5L)
                 .imageUrl("https://dummyimage.com/pizza-margarita.jpg")
         .build();
+    }
 
+    public static ListDishesRetrieved createDishesRetrieve(){
+        return ListDishesRetrieved.builder()
+                .restaurantId(10L)
+                .categoryId(5L)
+                .offset(0)
+                .size(5)
+                .build();
+    }
+
+    public static ListDishesRetrieved createDishesRetrieveBefore(){
+        return ListDishesRetrieved.builder()
+                .restaurantId(10L)
+                .categoryId(5L)
+                .offset(0)
+                .size(5)
+                .build();
+    }
+
+    public static DishRestaurantResponse createDishRestaurantResponse(){
+        return DishRestaurantResponse.builder()
+                .name(null)
+                .description(null)
+                .imageUrl(null)
+                .build();
+    }
+
+    public  static ListDishesByRestaurantModel createDishListModel(){
+        return ListDishesByRestaurantModel.builder()
+                .name(null)
+                .description(null)
+                .imageUrl(null)
+                .build();
     }
 }

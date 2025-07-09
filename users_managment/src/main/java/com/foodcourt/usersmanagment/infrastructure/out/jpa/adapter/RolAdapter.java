@@ -27,9 +27,9 @@ public class RolAdapter implements IRolPersistencePort {
     @Override
     public RolModel findById(Long id) {
         return rolEntityMapper.toRolModel(
-                rolRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Rol not found with id: " + id))
-        );
+                rolRepository.findById(id).get());
+
+
     }
 
 

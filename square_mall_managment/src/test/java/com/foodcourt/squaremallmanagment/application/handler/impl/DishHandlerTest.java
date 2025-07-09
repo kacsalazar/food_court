@@ -19,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
+import static com.foodcourt.squaremallmanagment.mocks.CreatorDishMocks.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -108,16 +109,16 @@ class DishHandlerTest {
 
     @Test
     void getDishesByCategory() {
-        Long restaurantId = 1L;
-        Long categoryId = 2L;
-        Integer page = 0;
+        Long restaurantId = 10L;
+        Long categoryId = 5L;
+        Integer page = 1;
         Integer size = 5;
 
-        List<ListDishesByRestaurantModel> dishes = List.of(new ListDishesByRestaurantModel());
-        List<DishRestaurantResponse> expectedList = List.of(new DishRestaurantResponse());
+        List<ListDishesByRestaurantModel> dishes = List.of(createDishListModel());
+        List<DishRestaurantResponse> expectedList = List.of(createDishRestaurantResponse());
 
-        when(dishServicePort.getDishesByCategory(restaurantId, categoryId, page, size)).thenReturn(dishes);
         when(dishMapper.toListDishResponseDto(dishes)).thenReturn(expectedList);
+        when(dishServicePort.getDishesByCategory(createDishesRetrieve())).thenReturn(dishes);
 
         List<DishRestaurantResponse> result =
                 dishHandler.getDishesByCategory(restaurantId, categoryId, page, size);

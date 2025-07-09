@@ -7,11 +7,9 @@ import com.foodcourt.usersmanagment.domain.exception.RolNotFoundException;
 import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
 import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
-import com.foodcourt.usersmanagment.domain.spi.IRestaurantClientPort;
 import com.foodcourt.usersmanagment.domain.spi.IRolPersistencePort;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import com.foodcourt.usersmanagment.domain.usecase.util.UseValidationUtil;
-import com.foodcourt.usersmanagment.domain.exception.UserNotAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,8 +22,6 @@ public class UserUseCase implements IUserServicePort {
 
     private final IUserPersistencePort userPersistencePort;
     private final IRolPersistencePort rolPersistencePort;
-    private final IRestaurantClientPort restaurantClientPort;
-
 
     @Override
     public void saveOwner(CreateUserModel createUserModel) {
@@ -96,11 +92,5 @@ public class UserUseCase implements IUserServicePort {
         RolModel rol = rolPersistencePort.findByName(role);
         if (rol == null) throw new DomainException(ConstantException.ROLE_NOT_FOUND);
         return user.getIdRol().equals(rol.getId());
-    }
-
-    private void validateUserRestaurant(Long restaurantId, Long userRestaurantId) {
-        if (restaurantId.equals(userRestaurantId)) {
-            throw new UserNotAuthorizedException();
-        }
     }
 }

@@ -3,6 +3,7 @@ package com.foodcourt.squaremallmanagment.infrastructure.out.jpa.adapter;
 import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
 import com.foodcourt.squaremallmanagment.domain.model.dish.DishUpdateModel;
 import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesByRestaurantModel;
+import com.foodcourt.squaremallmanagment.domain.model.dish.ListDishesRetrieved;
 import com.foodcourt.squaremallmanagment.domain.spi.IDishPersistencePort;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.entity.DishEntity;
 import com.foodcourt.squaremallmanagment.infrastructure.out.jpa.mapper.IDishEntityMapper;
@@ -48,9 +49,11 @@ public class DishAdapter implements IDishPersistencePort {
     }
 
     @Override
-    public List<ListDishesByRestaurantModel> getDishesByCategory(Long idRestaurant, Long idCategory, Integer offset, Integer size) {
+    public List<ListDishesByRestaurantModel> getDishesByCategory(ListDishesRetrieved listDishesRetrieved) {
 
         return DishEntityMapperData.toDishesByRestaurantModelList(dishRepository
-                .findDishesByRestaurant(idRestaurant, idCategory, offset, size));
+                .findDishesByRestaurant(listDishesRetrieved.getRestaurantId(),
+                        listDishesRetrieved.getCategoryId(), listDishesRetrieved.getOffset(),
+                        listDishesRetrieved.getSize()));
     }
 }

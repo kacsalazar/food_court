@@ -5,7 +5,7 @@ import com.foodcourt.squaremallmanagment.domain.exception.*;
 import com.foodcourt.squaremallmanagment.domain.model.TraceabilityModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.*;
 import com.foodcourt.squaremallmanagment.domain.spi.*;
-import com.foodcourt.squaremallmanagment.domain.usecase.util.StateEnum;
+import com.foodcourt.squaremallmanagment.domain.usecase.util.StatusEnum;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
@@ -25,8 +25,8 @@ public class OrderUseCase implements IOrderServicePort {
     @Override
     public void makeOrder(OrderModel orderModel) {
 
-        Long userId = getValidatedUserId(orderModel.getUserDni());
-        validateDishOwnerRestaurant(orderModel);
+        Long userId = validateUserId(orderModel.getUserDni());
+        validateThatDishesBelongSameRestaurant(orderModel);
 
         List<OrderModelReturn> orders = orderPersistencePort
                 .findOrdersByIdUser(userId);
@@ -36,7 +36,7 @@ public class OrderUseCase implements IOrderServicePort {
         }
 
         orderModel.setOrderDate(new Date());
-        orderModel.setStatus(StateEnum.PENDING.name());
+        orderModel.setStatus(StatusEnum.PENDING.name());
 
         orderPersistencePort.makeOrder(orderModel, userId);
     }
@@ -44,18 +44,18 @@ public class OrderUseCase implements IOrderServicePort {
     @Override
     public void assignOrderToEmployee(Long orderId, String employeeDni) {
         OrderUpdateModel orderModel = orderPersistencePort.findOrderById(orderId);
+        Long employeeId = validateEmployeeWorkingInTheRestaurant(employeeDni, orderModel.getIdRestaurant());
 
         Optional.ofNullable(orderModel)
                 .orElseThrow(OrderNotFoundException::new);
 
-        if (!orderModel.getStatus().equals(StateEnum.PENDING.name())) {
+        if (!orderModel.getStatus().equals(StatusEnum.PENDING.name())) {
             throw new InvalidStateTransitionException();
         }
-
-        Long employeeId = validateEmployeeRestaurant(employeeDni, orderModel.getIdRestaurant());
+        
         orderModel.setIdChef(employeeId);
-        orderModel.setStatus(StateEnum.IN_PROGRESS.name());
-        saveTraceability(orderModel, StateEnum.PENDING.name(), StateEnum.IN_PROGRESS.name(), orderId);
+        orderModel.setStatus(StatusEnum.IN_PROGRESS.name());
+        saveTraceability(orderModel, StatusEnum.PENDING.name(), StatusEnum.IN_PROGRESS.name(), orderId);
         orderPersistencePort.updateOrder(orderModel);
     }
 
@@ -68,32 +68,43 @@ public class OrderUseCase implements IOrderServicePort {
     public void changeOrderToReady(NotificationOrderModel notificationOrderModel, Long orderId, String employeeDni) {
         OrderUpdateModel orderModel = orderPersistencePort.findOrderById(orderId);
 
-        validateOrderEmployee(orderModel, employeeDni);
+        validateThatEmployeeIsAssignedToOrder(orderModel, employeeDni);
+        checkIsAValidOrder(orderModel);
+
+        String randomPin = sendMessageToCustomer(notificationOrderModel, orderModel.getIdClient());
+
+        orderModel.setStatus(StatusEnum.COMPLETED.name());
+        orderModel.setSecurityPin(randomPin);
+
+        saveTraceability(orderModel, StatusEnum.IN_PROGRESS.name(), StatusEnum.COMPLETED.name(), orderId);
+        orderPersistencePort.updateOrder(orderModel);
+    }
+
+    private void checkIsAValidOrder(OrderUpdateModel orderModel){
         Optional.ofNullable(orderModel)
                 .orElseThrow(OrderNotFoundException::new);
 
-        if (!orderModel.getStatus().equals(StateEnum.IN_PROGRESS.name())) {
+        if (!orderModel.getStatus().equals(StatusEnum.IN_PROGRESS.name())) {
             throw new InvalidStateTransitionException();
         }
+    }
 
+    private String sendMessageToCustomer(NotificationOrderModel notificationOrderModel, Long customerId){
         String randomPin = generateRandomPinNumber();
 
-        notificationOrderModel.setPhoneNumber(userClientPort.getUserById(orderModel.getIdClient()).getPhoneNumber());
+        notificationOrderModel.setPhoneNumber(userClientPort.getUserById(customerId).getPhoneNumber());
         notificationOrderModel.setMessageBody(notificationOrderModel.getMessageBody().concat("Pin: ").concat(randomPin));
 
-        orderModel.setStatus(StateEnum.COMPLETED.name());
-        saveTraceability(orderModel, StateEnum.IN_PROGRESS.name(), StateEnum.COMPLETED.name(), orderId);
-        orderModel.setSecurityPin(randomPin);
-
-        orderPersistencePort.updateOrder(orderModel);
         sendNotificationPort.sendMessage(notificationOrderModel.getPhoneNumber(),
                 notificationOrderModel.getMessageBody());
+
+        return randomPin;
     }
 
     @Override
     public void deliverOrder(DeliverOrderModel deliverOrderModel, Long orderId, String employeeDni) {
         OrderUpdateModel orderModel = orderPersistencePort.findOrderById(orderId);
-        validateOrderEmployee(orderModel, employeeDni);
+        validateThatEmployeeIsAssignedToOrder(orderModel, employeeDni);
         Optional.ofNullable(orderModel)
                 .orElseThrow(OrderNotFoundException::new);
 
@@ -101,12 +112,12 @@ public class OrderUseCase implements IOrderServicePort {
             throw new InvalidPinSecurityException();
         }
 
-        if (!orderModel.getStatus().equals(StateEnum.COMPLETED.name())) {
+        if (!orderModel.getStatus().equals(StatusEnum.COMPLETED.name())) {
             throw new InvalidStateTransitionException();
         }
 
-        orderModel.setStatus(StateEnum.DELIVERED.name());
-        saveTraceability(orderModel, StateEnum.COMPLETED.name(), StateEnum.DELIVERED.name(), orderId);
+        orderModel.setStatus(StatusEnum.DELIVERED.name());
+        saveTraceability(orderModel, StatusEnum.COMPLETED.name(), StatusEnum.DELIVERED.name(), orderId);
         orderPersistencePort.updateOrder(orderModel);
     }
 
@@ -114,16 +125,16 @@ public class OrderUseCase implements IOrderServicePort {
     public void cancelOrder(Long orderId, String customerDni) {
         OrderUpdateModel orderModel = orderPersistencePort.findOrderById(orderId);
 
-        validateOrderCustomer(orderModel, customerDni);
+        validateOrderBelongingToCustomer(orderModel, customerDni);
         Optional.ofNullable(orderModel)
                 .orElseThrow(OrderNotFoundException::new);
 
-        if (!orderModel.getStatus().equals(StateEnum.PENDING.name()) ) {
+        if (!orderModel.getStatus().equals(StatusEnum.PENDING.name()) ) {
             throw new InvalidStateTransitionException();
         }
 
-        orderModel.setStatus(StateEnum.CANCELLED.name());
-        saveTraceability(orderModel, StateEnum.PENDING.name(), StateEnum.CANCELLED.name(), orderId);
+        orderModel.setStatus(StatusEnum.CANCELLED.name());
+        saveTraceability(orderModel, StatusEnum.PENDING.name(), StatusEnum.CANCELLED.name(), orderId);
         orderPersistencePort.updateOrder(orderModel);
     }
 
@@ -147,14 +158,14 @@ public class OrderUseCase implements IOrderServicePort {
         traceabilityPersistencePort.saveTraceability(traceabilityModel);
     }
 
-    private Long getValidatedUserId(String dni) {
+    private Long validateUserId(String dni) {
         return Optional.ofNullable(userClientPort.ownerExists(dni))
                 .orElseThrow(UserNotFoundException::new)
                 .getId();
     }
 
     //validar que todos los platos pertenezcan al mismo restaurante
-    private void validateDishOwnerRestaurant(OrderModel orderModel) {
+    private void validateThatDishesBelongSameRestaurant(OrderModel orderModel) {
         for (OrderModel.Dish dish : orderModel.getDishes()) {
             Long dishRestaurantId = dishPersistencePort.findDishById(dish.getDishId())
                     .getRestaurantInfo()
@@ -165,16 +176,19 @@ public class OrderUseCase implements IOrderServicePort {
         }
     }
 
+    //validate that dishes belong to the same restaurant
+
     //validar que el empleado que va a entragar la orden sea el empleado asignado a la orden
-    private void validateOrderEmployee (OrderUpdateModel order, String dni){
+    private void validateThatEmployeeIsAssignedToOrder(OrderUpdateModel order, String dni){
         Long employeeId = userClientPort.ownerExists(dni).getId();
         if (!order.getIdChef().equals(employeeId)) {
             throw new InvalidEmployeeException();
         }
     }
+    //validate that the employee is assigned to the order
 
     //validar que la orden que quiere cancelar el usuario sea de su propiedad
-    private void validateOrderCustomer (OrderUpdateModel order, String dni){
+    private void validateOrderBelongingToCustomer (OrderUpdateModel order, String dni){
         Long customerId = userClientPort.ownerExists(dni).getId();
         if (!order.getIdClient().equals(customerId)) {
             //cambiar empleado a cliente
@@ -183,7 +197,7 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     //validar que el empleado que se va a asignar a la orden sea un empleado del restaurante
-    private Long validateEmployeeRestaurant(String employeeDni, Long restaurantIdBelongingOrder) {
+    private Long validateEmployeeWorkingInTheRestaurant(String employeeDni, Long restaurantIdBelongingOrder) {
         Long employeeRestaurantId = employeeRestPort.getEmployeeByDni(employeeDni).getEmployeeRestaurantId();
         if (!employeeRestaurantId.equals(restaurantIdBelongingOrder)) {
             throw new InvalidEmployeeException();

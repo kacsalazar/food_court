@@ -1,9 +1,6 @@
 package com.foodcourt.usersmanagment.infrastructure.out.jpa.adapter;
 
-import com.foodcourt.usersmanagment.domain.exception.ConstantException;
-import com.foodcourt.usersmanagment.domain.exception.DomainException;
 import com.foodcourt.usersmanagment.domain.model.CreateUserModel;
-import com.foodcourt.usersmanagment.domain.model.RolModel;
 import com.foodcourt.usersmanagment.domain.model.UserModel;
 import com.foodcourt.usersmanagment.domain.spi.IUserPersistencePort;
 import com.foodcourt.usersmanagment.infrastructure.out.jpa.entity.UserEntity;
@@ -23,7 +20,6 @@ public class UserAdapter implements IUserPersistencePort {
 
     private final IUserRepository userRepository;
     private final IUserEntityMapper userEntityMapper;
-    private final RolAdapter rolAdapter;
     private final PasswordEncoder passwordEncoder;
 
     @Override

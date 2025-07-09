@@ -13,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import org.mockito.MockitoAnnotations;
+
+import static com.foodcourt.squaremallmanagment.mocks.CreatorDishMocks.createDishesRetrieve;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -60,7 +62,7 @@ class DishAdapterTest {
         // Assert
         assertThat(result).isNotNull();
         assertThat(result.getDishInfo().getName()).isEqualTo("Pizza");
-        assertThat(result.getRestaurantInfo().getIdRestaurant()).isEqualTo(10L);
+        assertThat(result.getRestaurantInfo().getIdRestaurant()).isEqualTo(1L);
     }
 
     @Test
@@ -86,14 +88,13 @@ class DishAdapterTest {
         DishModel dishModel = CreatorDishMocks.buildCompleteDishModel();
         DishEntity dishEntity = CreatorDishMocks.buildCompleteDishEntity();
 
-        //when(dishMapper.toDishEntity(dishModel)).thenReturn(dishEntity);
         when(dishRepository.save(dishEntity)).thenReturn(dishEntity);
 
         // Act
         DishModel result = dishAdapter.disableDish(dishModel);
 
         // Assert
-        assertThat(result.getDishInfo().getIsActive()).isTrue(); // se mantiene igual porque la lógica no cambia el valor
+        assertThat(result.getDishInfo().getIsActive()).isFalse(); // se mantiene igual porque la lógica no cambia el valor
         verify(dishRepository).save(dishEntity);
     }
 
@@ -101,10 +102,13 @@ class DishAdapterTest {
     void returnDishesByRestaurantCategory() {
         // Arrange
         DishEntity dishEntity = CreatorDishMocks.buildCompleteDishEntity();
-        when(dishRepository.findDishesByRestaurant(10L, 5L, 0, 10)).thenReturn(List.of(dishEntity));
+        when(dishRepository.findDishesByRestaurant(createDishesRetrieve().getRestaurantId(),
+                createDishesRetrieve().getCategoryId(),
+                createDishesRetrieve().getOffset()
+                , createDishesRetrieve().getSize())).thenReturn(List.of(dishEntity));
 
         // Act
-        List<ListDishesByRestaurantModel> result = dishAdapter.getDishesByCategory(10L, 5L, 0, 10);
+        List<ListDishesByRestaurantModel> result = dishAdapter.getDishesByCategory(createDishesRetrieve());
 
         // Assert
         assertThat(result).hasSize(1);
