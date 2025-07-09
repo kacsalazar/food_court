@@ -14,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class OrderUseCaseTest {
@@ -67,7 +66,7 @@ class OrderUseCaseTest {
         orderUseCase.makeOrder(order);
 
         // Assert
-        verify(orderPersistencePort).makeOrder(order);
+        verify(orderPersistencePort).makeOrder(order, 1l);
         assertEquals(StatusEnum.PENDING.name(), order.getStatus());
     }
 

@@ -47,7 +47,10 @@ public class DishHandler implements IDishHandler {
 
     @Override
     public List<DishRestaurantResponse> getDishesByCategory(Long idRestaurant, Long idCategory, Integer page, Integer size) {
-        return dishMapper.toListDishResponseDto(dishServicePort.getDishesByCategory(idRestaurant, idCategory, page, size));
+        Integer offset = (page - 1) * size;
+
+        return dishMapper.toListDishResponseDto(dishServicePort.getDishesByCategory(
+                DishRequestMapperModel.toListDishesRetrieve(idRestaurant, idCategory, offset, size)));
 
     }
 }

@@ -52,7 +52,7 @@ class OrderAdapterTest {
         });
 
         // Act
-        orderAdapter.makeOrder(orderModel);
+        orderAdapter.makeOrder(orderModel, 1L);
 
         // Assert
         verify(orderRepository, times(1)).save(any(OrderEntity.class));
