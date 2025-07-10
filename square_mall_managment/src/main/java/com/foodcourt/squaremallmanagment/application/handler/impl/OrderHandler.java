@@ -39,7 +39,8 @@ public class OrderHandler implements IOrderHandler {
 
     @Override
     public List<OrderResponse> getOrdersByEmployee(String status, Integer page, Integer size) {
-        return OrderRequestMapper.toOrderResponse(orderServicePort.getOrdersByEmployee( status, page, size,  helperClass.getUserDni()));
+        Integer offset = (page - 1) * size;
+        return OrderRequestMapper.toOrderResponse(orderServicePort.getOrdersByEmployee( status, offset, size,  helperClass.getUserDni()));
     }
 
     @Override

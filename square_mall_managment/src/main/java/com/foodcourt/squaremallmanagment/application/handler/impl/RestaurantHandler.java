@@ -33,8 +33,9 @@ public class RestaurantHandler implements IRestaurantHandler {
 
     @Override
     public List<RestaurantResponse> getAllRestaurants(Integer page, Integer size) {
+        Integer offset = (page - 1) * size;
         return restaurantMapper.toRestaurantResponseList(
-                restaurantServicePort.getAllRestaurants(page, size));
+                restaurantServicePort.getAllRestaurants(offset, size));
     }
 
     @Override

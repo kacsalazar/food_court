@@ -1,5 +1,6 @@
 package com.foodcourt.squaremallmanagment.infrastructure.documentation;
 
+import com.foodcourt.squaremallmanagment.application.dto.response.EmployeeRankingResponse;
 import com.foodcourt.squaremallmanagment.application.dto.response.TraceabilityResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -95,5 +96,46 @@ public interface ITraceabilityRestController {
                     schema = @Schema(type = "integer")
             )
             @PathVariable Long orderId
+    );
+
+    @Operation(
+            summary = "Get employee ranking by restaurant",
+            description = "Retrieves a list of employees ranked by order performance for a specific restaurant. Only accessible to users with the OWNER role.",
+            tags = {"Order Management", "Employee Ranking"}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Employee ranking retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = EmployeeRankingResponse.class))
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Restaurant not found or no ranking data available",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden - User does not have OWNER role or does not own the restaurant",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    ResponseEntity<List<EmployeeRankingResponse>> getRankingForOrderByEmployeeId(
+            @Parameter(
+                    name = "restaurantId",
+                    description = "ID of the restaurant to retrieve employee rankings for",
+                    required = true,
+                    example = "45",
+                    schema = @Schema(type = "integer")
+            )
+            @PathVariable Long restaurantId
     );
 }
