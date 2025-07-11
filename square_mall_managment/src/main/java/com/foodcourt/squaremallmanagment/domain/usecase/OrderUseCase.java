@@ -138,6 +138,15 @@ public class OrderUseCase implements IOrderServicePort {
         orderPersistencePort.updateOrder(orderModel);
     }
 
+    public OrderUpdateModel findOrderById(Long orderId){
+        return orderPersistencePort.findOrderById(orderId);
+    }
+
+    @Override
+    public List<OrderModel> findAllOrdersByEmployeeId(Long employeeId) {
+        return orderPersistencePort.findAllOrdersByEmployeeId(employeeId);
+    }
+
     private String generateRandomPinNumber() {
         return String.valueOf(1000 + (int)(Math.random() * 9000));
     }

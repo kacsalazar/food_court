@@ -4,6 +4,7 @@ import com.foodcourt.squaremallmanagment.application.dto.request.DeliverOrderReq
 import com.foodcourt.squaremallmanagment.application.dto.request.NotificationRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.response.OrderResponse;
+import com.foodcourt.squaremallmanagment.application.dto.response.OrderUpdateResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IOrderHandler;
 import com.foodcourt.squaremallmanagment.infrastructure.documentation.IOrderRestController;
 import com.foodcourt.squaremallmanagment.infrastructure.input.rest.util.SecurityExpressions;
@@ -66,5 +67,15 @@ public class OrderRestController implements IOrderRestController {
     public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId) {
         orderHandler.cancelOrder(orderId);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderUpdateResponse> findOrderById(@PathVariable Long orderId) {
+        return ResponseEntity.ok(orderHandler.findOrderById(orderId));
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<OrderResponse>> findAllOrdersByEmployeeId (Long employeeId){
+        return ResponseEntity.ok(orderHandler.findAllOrdersByEmployeeId(employeeId));
     }
 }

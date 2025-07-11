@@ -3,6 +3,7 @@ package com.foodcourt.squaremallmanagment.domain.api;
 import com.foodcourt.squaremallmanagment.domain.model.order.DeliverOrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.NotificationOrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface IOrderServicePort {
     void changeOrderToReady(NotificationOrderModel notificationOrderModel, Long orderId ,String employeeDni);
     void deliverOrder(DeliverOrderModel deliverOrderModel, Long orderId, String employeeDni);
     void cancelOrder(Long orderId, String customerDni);
+    OrderUpdateModel findOrderById(Long orderId);
+    List<OrderModel> findAllOrdersByEmployeeId(Long employeeId);
 }
