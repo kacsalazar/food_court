@@ -26,7 +26,10 @@ public class JwtSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers( new AntPathRequestMatcher("/swagger-ui/**"),
                                 new AntPathRequestMatcher("/v3/api-docs/**"),
-                                new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                                new AntPathRequestMatcher("/api/v1/order/order/**"),
+                                new AntPathRequestMatcher("/api/v1/order/employee/**"),
+                                new AntPathRequestMatcher("/api/v1/order/restaurant/**"),
+                                new AntPathRequestMatcher("/api/v1/restaurant/restaurant/**")).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

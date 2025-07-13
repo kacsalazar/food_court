@@ -42,7 +42,7 @@ public class RestaurantRestController implements IRestaurantRestController {
         return ResponseEntity.ok( restaurantHandler.getRestaurantByIdOwner(idOwner));
     }
 
-    @GetMapping("/{restaurantId}")
+    @GetMapping("/restaurant/{restaurantId}")
     public ResponseEntity<RestaurantByIdResponse> findRestaurantById(@PathVariable Long restaurantId) {
         return ResponseEntity.ok( restaurantHandler.findRestaurantById(restaurantId));
     }

@@ -71,5 +71,10 @@ public class OrderHandler implements IOrderHandler {
         return OrderRequestMapper.toOrdersResponse(orderServicePort.findAllOrdersByEmployeeId(employeeId));
     }
 
+    @Override
+    public List<OrderResponse> findAllOrdersByRestaurantId(Long restaurantId) {
+        return OrderRequestMapper.toOrdersResponse(orderServicePort.findAllOrdersByRestaurantId(restaurantId));
+    }
+
 
 }

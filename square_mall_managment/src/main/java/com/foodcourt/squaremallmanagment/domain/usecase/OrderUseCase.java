@@ -7,18 +7,20 @@ import com.foodcourt.squaremallmanagment.domain.model.order.*;
 import com.foodcourt.squaremallmanagment.domain.spi.*;
 import com.foodcourt.squaremallmanagment.domain.usecase.util.StatusEnum;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 public class OrderUseCase implements IOrderServicePort {
 
     private final IOrderPersistencePort orderPersistencePort;
     private final IUserRestPort userClientPort;
     private final ISendNotificationPort sendNotificationPort;
-    private final ITraceabilityPersistencePort traceabilityPersistencePort;
+    private final ITraceabilityRestPort traceabilityPersistencePort;
     private final IDishPersistencePort dishPersistencePort;
     private final IEmployeeRestPort employeeRestPort;
 
@@ -145,6 +147,11 @@ public class OrderUseCase implements IOrderServicePort {
     @Override
     public List<OrderModel> findAllOrdersByEmployeeId(Long employeeId) {
         return orderPersistencePort.findAllOrdersByEmployeeId(employeeId);
+    }
+
+    @Override
+    public List<OrderModel> findAllOrdersByRestaurantId(Long restaurantId) {
+        return orderPersistencePort.findAllOrdersByRestaurantId(restaurantId);
     }
 
     private String generateRandomPinNumber() {

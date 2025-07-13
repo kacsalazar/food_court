@@ -18,4 +18,5 @@ public interface IOrderHandler {
     void cancelOrder(Long orderId);
     OrderUpdateResponse findOrderById(Long orderId);
     List<OrderResponse> findAllOrdersByEmployeeId(Long employeeId);
+    List<OrderResponse> findAllOrdersByRestaurantId(Long restaurantId);
 }

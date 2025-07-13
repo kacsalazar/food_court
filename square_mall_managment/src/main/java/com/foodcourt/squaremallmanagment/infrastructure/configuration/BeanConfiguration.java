@@ -29,7 +29,7 @@ public class BeanConfiguration {
     @Bean
     public OrderUseCase orderUseCase(IOrderPersistencePort iOrderPersistencePort, IUserRestPort userClientPort,
                                    ISendNotificationPort iSendNotificationPort,
-                                     ITraceabilityPersistencePort iTraceabilityPersistencePort,
+                                     ITraceabilityRestPort iTraceabilityPersistencePort,
                                      IDishPersistencePort iDishPersistencePort,
                                      IEmployeeRestPort iEmployeeRestPort) {
         return new OrderUseCase(iOrderPersistencePort, userClientPort, iSendNotificationPort,

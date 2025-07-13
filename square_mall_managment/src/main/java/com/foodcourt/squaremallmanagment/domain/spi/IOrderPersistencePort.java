@@ -13,5 +13,6 @@ public interface IOrderPersistencePort {
     void updateOrder(OrderUpdateModel orderModel);
     List<OrderModel> getOrdersByEmployee(String status, Integer page, Integer size, Long idEmployee);
     List<OrderModel> findAllOrdersByEmployeeId(Long employeeId);
+    List<OrderModel> findAllOrdersByRestaurantId(Long restaurantId);
 
 }

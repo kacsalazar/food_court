@@ -31,6 +31,7 @@ public class OrderRequestMapper {
     public static List<OrderResponse> toOrdersResponse(List<OrderModel> orderModelReturns) {
         return orderModelReturns.stream()
                 .map(order -> OrderResponse.builder()
+                        .orderId(order.getId())
                         .restaurantId(order.getRestaurantId())
                         .employeeId(order.getEmployeeId())
                         .dishes(order.getDishes().stream()

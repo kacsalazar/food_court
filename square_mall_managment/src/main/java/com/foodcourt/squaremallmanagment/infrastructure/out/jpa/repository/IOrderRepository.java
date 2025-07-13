@@ -20,4 +20,7 @@ public interface IOrderRepository extends CrudRepository<OrderEntity, Long> {
 
     @Query("SELECT * FROM orders o WHERE o.id_chef = :employeeId")
     List<OrderEntity> findAllOrdersByEmployeeId(@Param("employeeId") Long employeeId);
+
+    @Query("SELECT * FROM orders o WHERE o.id_restaurant = :restaurantId")
+    List<OrderEntity>findAllOrdersByRestaurantId(@Param("restaurantId") Long restaurantId);
 }
