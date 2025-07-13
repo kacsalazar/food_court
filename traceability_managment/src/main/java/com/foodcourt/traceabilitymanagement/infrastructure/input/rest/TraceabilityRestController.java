@@ -5,6 +5,7 @@ import com.foodcourt.traceabilitymanagement.application.dto.response.DurationTim
 import com.foodcourt.traceabilitymanagement.application.dto.response.EmployeeRankingResponse;
 import com.foodcourt.traceabilitymanagement.application.dto.response.TraceabilityResponse;
 import com.foodcourt.traceabilitymanagement.application.handler.ITraceabilityHandler;
+import com.foodcourt.traceabilitymanagement.infrastructure.documentation.ITraceabilityRestController;
 import com.foodcourt.traceabilitymanagement.infrastructure.input.rest.util.SecurityExpressions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/traceability")
-public class TraceabilityRestController {
+public class TraceabilityRestController implements ITraceabilityRestController {
 
     private final ITraceabilityHandler traceabilityHandler;
 

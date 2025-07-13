@@ -1,5 +1,7 @@
 package com.foodcourt.traceabilitymanagement.infrastructure.documentation;
 
+import com.foodcourt.traceabilitymanagement.application.dto.request.TraceabilityRequest;
+import com.foodcourt.traceabilitymanagement.application.dto.response.DurationTimeResponse;
 import com.foodcourt.traceabilitymanagement.application.dto.response.EmployeeRankingResponse;
 import com.foodcourt.traceabilitymanagement.application.dto.response.TraceabilityResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -7,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
@@ -58,47 +61,6 @@ public interface ITraceabilityRestController {
     );
 
     @Operation(
-            summary = "Get order processing time",
-            description = "Returns the total processing time of an order (from creation to delivery). Only accessible to users with the OWNER role.",
-            tags = {"Order Management", "Traceability"}
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Order processing time returned successfully",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(type = "string", example = "00:34:12")
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Order not found or no traceability data available",
-                    content = @Content
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Forbidden - User does not have OWNER role",
-                    content = @Content
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal server error",
-                    content = @Content
-            )
-    })
-    ResponseEntity<String> getOrderProcessingTime(
-            @Parameter(
-                    name = "orderId",
-                    description = "ID of the order to calculate processing time for",
-                    required = true,
-                    example = "1234",
-                    schema = @Schema(type = "integer")
-            )
-            @PathVariable Long orderId
-    );
-
-    @Operation(
             summary = "Get employee ranking by restaurant",
             description = "Retrieves a list of employees ranked by order performance for a specific restaurant. Only accessible to users with the OWNER role.",
             tags = {"Order Management", "Employee Ranking"}
@@ -137,5 +99,80 @@ public interface ITraceabilityRestController {
                     schema = @Schema(type = "integer")
             )
             @PathVariable Long restaurantId
+    );
+
+    @Operation(
+            summary = "Get average processing time of all orders in a restaurant",
+            description = "Retrieves the processing time (duration) for all orders handled by a specific restaurant. Only accessible to users with the OWNER role.",
+            tags = {"Order Management", "Traceability"}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List of processing times retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = DurationTimeResponse.class))
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden - User does not have OWNER role or access to this restaurant",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Restaurant not found or no orders available",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    ResponseEntity<List<DurationTimeResponse>> getOrdersProcessingTime(
+            @Parameter(
+                    name = "restaurantId",
+                    description = "ID of the restaurant to retrieve order processing times for",
+                    required = true,
+                    example = "45",
+                    schema = @Schema(type = "integer")
+            )
+            @PathVariable Long restaurantId
+    );
+
+    @Operation(
+            summary = "Save traceability record",
+            description = "Creates a new traceability record for an order based on the provided data.",
+            tags = {"Traceability"}
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Traceability record created successfully",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid traceability data provided",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content
+            )
+    })
+    ResponseEntity<Void> saveTraceability(
+            @RequestBody(
+                    description = "Traceability data to be saved",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = TraceabilityRequest.class)
+                    )
+            )
+            TraceabilityRequest traceabilityRequest
     );
 }
