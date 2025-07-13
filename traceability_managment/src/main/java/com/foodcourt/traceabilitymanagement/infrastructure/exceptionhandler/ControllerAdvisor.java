@@ -36,4 +36,24 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(MESSAGE, ConstantException.RESTAURANT_NOT_FOUND.getMessage()));
     }
 
+    @ExceptionHandler(TraceabilityEmptyException.class)
+    public ResponseEntity<Map<String, String>> handleTraceabilityEmptyException(
+            TraceabilityEmptyException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.TRACEABILITY_EMPTY.getMessage()));
+    }
+
+    @ExceptionHandler(EmployeesNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleEmployeesNotFoundException(
+            EmployeesNotFoundException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.EMPLOYEES_NOT_FOUND.getMessage()));
+    }
+
+    @ExceptionHandler(OrdersNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleOrdersNotFoundException(
+            OrdersNotFoundException ignoredNoDataFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(MESSAGE, ConstantException.ORDERS_NOT_FOUND.getMessage()));
+    }
 }

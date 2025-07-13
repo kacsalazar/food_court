@@ -18,8 +18,6 @@ public class OrderRestAdapter implements IOrderRestPort {
     private final RestTemplate restTemplate;
     private final String USER_SERVICE_URL = "http://localhost:8082/api/v1/order/";
 
-
-
     @Override
     public OrderUpdateModel findOrderById(Long orderId) {
         String url = USER_SERVICE_URL + "order/" + orderId;
@@ -31,13 +29,13 @@ public class OrderRestAdapter implements IOrderRestPort {
     public List<OrderModel> findAllOrdersByEmployeeId(Long employeeId) {
         String url = USER_SERVICE_URL + "employee/" + employeeId;
         OrderModel[] orders = restTemplate.getForObject(url, OrderModel[].class);
-        return List.of(orders);
+        return orders != null ? List.of(orders) : List.of();
     }
 
     @Override
     public List<OrderModel> findAllOrdersByRestaurantId(Long restaurantId) {
         String url = USER_SERVICE_URL + "restaurant/" + restaurantId;
         OrderModel[] orders = restTemplate.getForObject(url, OrderModel[].class);
-        return List.of(orders);
+        return orders != null ? List.of(orders) : List.of();
     }
 }

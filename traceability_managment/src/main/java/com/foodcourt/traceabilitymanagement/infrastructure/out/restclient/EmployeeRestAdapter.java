@@ -22,6 +22,6 @@ public class EmployeeRestAdapter implements IEmployeeRestPort {
         String url = USER_SERVICE_URL + "employees/" + restaurantId;
         log.info("Fetching employees for restaurant ID: {}", restaurantId);
         EmployeeModel[] employees = restTemplate.getForObject(url, EmployeeModel[].class);
-        return List.of(employees);
+        return employees != null ? List.of(employees) : List.of();
     }
 }

@@ -2,7 +2,9 @@ package com.foodcourt.traceabilitymanagement.domain.usecase;
 
 import com.foodcourt.traceabilitymanagement.domain.api.ITraceabilityServicePort;
 import com.foodcourt.traceabilitymanagement.domain.exception.NotPermissionException;
+import com.foodcourt.traceabilitymanagement.domain.exception.OrdersNotFoundException;
 import com.foodcourt.traceabilitymanagement.domain.exception.RestaurantNotFoundException;
+import com.foodcourt.traceabilitymanagement.domain.exception.TraceabilityEmptyException;
 import com.foodcourt.traceabilitymanagement.domain.model.EmployeeRankingModel;
 import com.foodcourt.traceabilitymanagement.domain.model.TraceabilityModel;
 import com.foodcourt.traceabilitymanagement.domain.model.order.OrderModel;
@@ -18,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,7 +34,8 @@ public class TraceabilityUseCase implements ITraceabilityServicePort {
 
     public List<TraceabilityModel> findAllTracesByOrderId(Long orderId, String userDni) {
         validateOrderUser(orderId, userDni);
-        return traceabilityPersistencePort.findAllTracesByOrderId(orderId);
+        return Optional.ofNullable(traceabilityPersistencePort.findAllTracesByOrderId(orderId))
+                .orElseThrow(() -> new TraceabilityEmptyException());
     }
 
     public List<String> getOrdersProcessingTime(Long restaurantId, String userDni){
@@ -39,22 +43,31 @@ public class TraceabilityUseCase implements ITraceabilityServicePort {
 
         List<OrderModel> orders = orderRestPort.findAllOrdersByRestaurantId(restaurantId);
 
+        if (orders == null || orders.isEmpty()) {
+            throw new OrdersNotFoundException();
+        }
+
         return  orders.stream().map(order -> getOrderProcessingTime(order.getOrderId())).toList();
 
     }
 
-    public String getOrderProcessingTime(Long OrderId) {
+    private String getOrderProcessingTime(Long OrderId) {
 
         List<TraceabilityModel> traceabilityModels = traceabilityPersistencePort.findAllTracesByOrderId(OrderId);
+
+        if (traceabilityModels == null || traceabilityModels.isEmpty()) {
+            throw new TraceabilityEmptyException();
+        }
+
         TraceabilityModel firstTrace = traceabilityModels.stream()
                 .filter(trace -> trace.getNewState().equals(StatusEnum.IN_PROGRESS.name()) )
                 .findFirst()
-                .orElseThrow(NotPermissionException::new);
+                .orElseThrow(TraceabilityEmptyException::new);
 
         TraceabilityModel lastTrace = traceabilityModels.stream()
                 .filter(trace -> trace.getNewState().equals(StatusEnum.DELIVERED.name()) )
                 .findFirst()
-                .orElseThrow(NotPermissionException::new);
+                .orElseThrow(TraceabilityEmptyException::new);
 
         return "Elapsed time of " + calculateDuration(firstTrace.getDate(), lastTrace.getDate());
     }
@@ -64,6 +77,10 @@ public class TraceabilityUseCase implements ITraceabilityServicePort {
         validateOwnerRestaurant(restaurantId, OwnerDni);
 
         List<EmployeeModel> employees = employeeRestPort.getEmployeesByRestaurantId(restaurantId);
+
+        if (employees == null) {
+            throw new RestaurantNotFoundException();
+        }
 
         return employees.stream()
                 .map(employee -> {
@@ -101,13 +118,13 @@ public class TraceabilityUseCase implements ITraceabilityServicePort {
                             .filter(t -> StatusEnum.IN_PROGRESS.name().equals(t.getNewState()))
                             .map(TraceabilityModel::getDate)
                             .findFirst()
-                            .orElse(null);
+                            .orElseThrow(TraceabilityEmptyException::new);
 
                     LocalDateTime end = traceList.stream()
                             .filter(t -> StatusEnum.DELIVERED.name().equals(t.getNewState()))
                             .map(TraceabilityModel::getDate)
                             .findFirst()
-                            .orElse(null);
+                            .orElseThrow(TraceabilityEmptyException::new);
 
                     if (start != null && end != null) {
                         return Duration.between(start, end);
