@@ -1,7 +1,7 @@
-package com.foodcourt.squaremallmanagment.infrastructure.documentation;
+package com.foodcourt.traceabilitymanagement.infrastructure.documentation;
 
-import com.foodcourt.squaremallmanagment.application.dto.response.EmployeeRankingResponse;
-import com.foodcourt.squaremallmanagment.application.dto.response.TraceabilityResponse;
+import com.foodcourt.traceabilitymanagement.application.dto.response.EmployeeRankingResponse;
+import com.foodcourt.traceabilitymanagement.application.dto.response.TraceabilityResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

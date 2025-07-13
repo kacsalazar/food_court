@@ -37,13 +37,4 @@ public class BeanConfiguration {
                 iEmployeeRestPort);
     }
 
-    @Bean
-    public TraceabilityUseCase traceabilityUseCase(ITraceabilityPersistencePort iTraceabilityPersistencePort,
-                                                               IOrderPersistencePort iOrderPersistencePort,
-                                                               IUserRestPort iUserRestPort,
-                                                               IRestaurantPersistencePort iRestaurantPersistencePort,
-                                                               IEmployeeRestPort iEmployeeRestPort) {
-        return new TraceabilityUseCase(iTraceabilityPersistencePort, iOrderPersistencePort, iUserRestPort,
-                                       iRestaurantPersistencePort, iEmployeeRestPort);
-    }
 }
