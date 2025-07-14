@@ -1,16 +1,10 @@
 package com.foodcourt.squaremallmanagment.domain.usecase;
 
-
-import com.foodcourt.squaremallmanagment.domain.exception.InvalidStateTransitionException;
 import com.foodcourt.squaremallmanagment.domain.model.dish.DishModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.*;
 import com.foodcourt.squaremallmanagment.domain.model.UserModel;
 import com.foodcourt.squaremallmanagment.domain.spi.*;
-import com.foodcourt.squaremallmanagment.domain.exception.InvalidOrderException;
-import com.foodcourt.squaremallmanagment.domain.exception.OrderNotFoundException;
 import com.foodcourt.squaremallmanagment.domain.usecase.util.StatusEnum;
-import com.foodcourt.squaremallmanagment.mocks.CreatorMocksUser;
-import com.foodcourt.squaremallmanagment.mocks.CreatorOrderMocks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -39,7 +33,7 @@ class OrderUseCaseTest {
     private ISendNotificationPort sendNotificationPort;
 
     @Mock
-    private ITraceabilityPersistencePort traceabilityPersistencePort;
+    private ITraceabilityRestPort traceabilityPersistencePort;
 
     @InjectMocks
     private OrderUseCase orderUseCase;
