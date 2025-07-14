@@ -4,10 +4,11 @@ import com.foodcourt.squaremallmanagment.application.dto.request.DeliverOrderReq
 import com.foodcourt.squaremallmanagment.application.dto.request.NotificationRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.response.OrderResponse;
-import com.foodcourt.squaremallmanagment.application.handler.helper.HelperClass;
+import com.foodcourt.squaremallmanagment.application.dto.response.OrderUpdateResponse;
 import com.foodcourt.squaremallmanagment.domain.model.order.DeliverOrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.NotificationOrderModel;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
@@ -27,9 +28,10 @@ public class OrderRequestMapper {
                 .build();
     }
 
-    public static List<OrderResponse> toOrderResponse(List<OrderModel> orderModelReturns) {
+    public static List<OrderResponse> toOrdersResponse(List<OrderModel> orderModelReturns) {
         return orderModelReturns.stream()
                 .map(order -> OrderResponse.builder()
+                        .orderId(order.getId())
                         .restaurantId(order.getRestaurantId())
                         .employeeId(order.getEmployeeId())
                         .dishes(order.getDishes().stream()
@@ -57,4 +59,16 @@ public class OrderRequestMapper {
                 .build();
 
     }
+
+    public static OrderUpdateResponse toOrderUpdateResponse(OrderUpdateModel order) {
+            return OrderUpdateResponse.builder()
+                    .id(order.getId())
+                    .idClient(order.getIdClient())
+                    .orderDate(order.getOrderDate())
+                    .status(order.getStatus())
+                    .idChef(order.getIdChef())
+                    .idRestaurant(order.getIdRestaurant())
+                    .securityPin(order.getSecurityPin())
+                    .build();
+        }
 }

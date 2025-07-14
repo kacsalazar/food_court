@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 public class OrderResponse {
 
+    private Long orderId;
     private Long restaurantId;
     private Long employeeId;
     private List<DishResponse> dishes;

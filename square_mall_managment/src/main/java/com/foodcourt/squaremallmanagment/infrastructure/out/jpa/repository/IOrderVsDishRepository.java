@@ -13,4 +13,5 @@ public interface IOrderVsDishRepository extends CrudRepository<OrderVsDishEntity
     @Query("SELECT * FROM order_items o WHERE o.id_order = :idOrder")
     List<OrderVsDishEntity> findByOrderId(@Param("idOrder") Long idOrder);
 
+
 }

@@ -2,6 +2,7 @@ package com.foodcourt.squaremallmanagment.infrastructure.input.rest;
 
 import com.foodcourt.squaremallmanagment.application.dto.request.RestaurantRequestDto;
 import com.foodcourt.squaremallmanagment.application.dto.response.GetRestaurantByOwnerResponse;
+import com.foodcourt.squaremallmanagment.application.dto.response.RestaurantByIdResponse;
 import com.foodcourt.squaremallmanagment.application.dto.response.RestaurantResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IRestaurantHandler;
 
@@ -39,5 +40,10 @@ public class RestaurantRestController implements IRestaurantRestController {
     @GetMapping("/ownerId/{idOwner}")
     public ResponseEntity<GetRestaurantByOwnerResponse> getRestaurantByIdOwner(@PathVariable Long idOwner) {
         return ResponseEntity.ok( restaurantHandler.getRestaurantByIdOwner(idOwner));
+    }
+
+    @GetMapping("/restaurant/{restaurantId}")
+    public ResponseEntity<RestaurantByIdResponse> findRestaurantById(@PathVariable Long restaurantId) {
+        return ResponseEntity.ok( restaurantHandler.findRestaurantById(restaurantId));
     }
 }

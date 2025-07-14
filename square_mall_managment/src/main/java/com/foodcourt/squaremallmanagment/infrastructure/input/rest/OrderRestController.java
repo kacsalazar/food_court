@@ -4,10 +4,12 @@ import com.foodcourt.squaremallmanagment.application.dto.request.DeliverOrderReq
 import com.foodcourt.squaremallmanagment.application.dto.request.NotificationRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.response.OrderResponse;
+import com.foodcourt.squaremallmanagment.application.dto.response.OrderUpdateResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IOrderHandler;
 import com.foodcourt.squaremallmanagment.infrastructure.documentation.IOrderRestController;
 import com.foodcourt.squaremallmanagment.infrastructure.input.rest.util.SecurityExpressions;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/order")
@@ -66,5 +69,21 @@ public class OrderRestController implements IOrderRestController {
     public ResponseEntity<Void> cancelOrder(@PathVariable Long orderId) {
         orderHandler.cancelOrder(orderId);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<OrderUpdateResponse> findOrderById(@PathVariable Long orderId) {
+        return ResponseEntity.ok(orderHandler.findOrderById(orderId));
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<List<OrderResponse>> findAllOrdersByEmployeeId (@PathVariable Long employeeId){
+        log.info("ID" + orderHandler.findAllOrdersByEmployeeId(employeeId));
+        return ResponseEntity.ok(orderHandler.findAllOrdersByEmployeeId(employeeId));
+    }
+
+    @GetMapping("/restaurant/{restaurantId}")
+    public ResponseEntity<List<OrderResponse>> findAllOrdersByRestaurantId(@PathVariable Long restaurantId){
+        return ResponseEntity.ok(orderHandler.findAllOrdersByRestaurantId(restaurantId));
     }
 }

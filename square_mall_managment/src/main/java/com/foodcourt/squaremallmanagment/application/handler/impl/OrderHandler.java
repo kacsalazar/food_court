@@ -4,11 +4,13 @@ import com.foodcourt.squaremallmanagment.application.dto.request.DeliverOrderReq
 import com.foodcourt.squaremallmanagment.application.dto.request.NotificationRequest;
 import com.foodcourt.squaremallmanagment.application.dto.request.OrderCreateRequest;
 import com.foodcourt.squaremallmanagment.application.dto.response.OrderResponse;
+import com.foodcourt.squaremallmanagment.application.dto.response.OrderUpdateResponse;
 import com.foodcourt.squaremallmanagment.application.handler.IOrderHandler;
 import com.foodcourt.squaremallmanagment.application.handler.helper.HelperClass;
 import com.foodcourt.squaremallmanagment.application.mapper.impl.OrderRequestMapper;
 import com.foodcourt.squaremallmanagment.domain.api.IOrderServicePort;
 import com.foodcourt.squaremallmanagment.domain.model.order.OrderModel;
+import com.foodcourt.squaremallmanagment.domain.model.order.OrderUpdateModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -40,7 +42,7 @@ public class OrderHandler implements IOrderHandler {
     @Override
     public List<OrderResponse> getOrdersByEmployee(String status, Integer page, Integer size) {
         Integer offset = (page - 1) * size;
-        return OrderRequestMapper.toOrderResponse(orderServicePort.getOrdersByEmployee( status, offset, size,  helperClass.getUserDni()));
+        return OrderRequestMapper.toOrdersResponse(orderServicePort.getOrdersByEmployee( status, offset, size,  helperClass.getUserDni()));
     }
 
     @Override
@@ -57,6 +59,21 @@ public class OrderHandler implements IOrderHandler {
     @Override
     public void cancelOrder(Long orderId) {
         orderServicePort.cancelOrder(orderId,  helperClass.getUserDni());
+    }
+
+    @Override
+    public OrderUpdateResponse findOrderById(Long orderId){
+        return OrderRequestMapper.toOrderUpdateResponse(orderServicePort.findOrderById(orderId));
+    }
+
+    @Override
+    public List<OrderResponse> findAllOrdersByEmployeeId(Long employeeId) {
+        return OrderRequestMapper.toOrdersResponse(orderServicePort.findAllOrdersByEmployeeId(employeeId));
+    }
+
+    @Override
+    public List<OrderResponse> findAllOrdersByRestaurantId(Long restaurantId) {
+        return OrderRequestMapper.toOrdersResponse(orderServicePort.findAllOrdersByRestaurantId(restaurantId));
     }
 
 
